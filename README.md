@@ -1,5 +1,7 @@
 <h1 align='center'>
+
 🌉  Actuarial Analysis of Bridges 🌟
+
 </h1>
 
 ![actuarial hexagon](images/hexagon-actuarial.png)
