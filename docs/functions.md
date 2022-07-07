@@ -7,16 +7,18 @@ The following the documentation for are the function used in the model.
 | create_dummy_data | Returns a NBI dummy data | None | data - List |
 | compute_hazard_score | Returns a computed dummy hazard score | None | data - List |
 | identify_window | creates segmentation for data | from_year, to_year | data - List |
+| leaves | returns the number of bridges that leave the study at age x|list_count, list_age | leaves_dict - dictionary |
+| exposures | returns the number of bridges in the study at age x | list_count, list_age | exposures_dict - dictionary |
 
-## Usage and example 
+## 🦾 Usage and examples
 
 ### 1. create_dummy_data:
 Return a NBI dummy data
 
-#### Arguments
+#### Arguments 
 None
 
-#### Return ⏎
+#### Return 
 Data - list
 
 #### Example
@@ -66,7 +68,7 @@ computed_hazard_scored
 data = computed_hazard_scored()
 ```
 
-### 4. exposures(list_count, list_age):
+### 4. exposures:
 Returns the number of bridges in the study at age x.
 
 #### Arguments
@@ -85,7 +87,7 @@ print(exposures(count, age))
 ```zsh
 defaultdict(None, {2: -12, 3: -21, 4: -12, 5: 12, 6: 3, 7: 2, 8: 6, 9: -13, 10: 13})
 ```
-### 5. leaves(list_count, list_age):
+### 5. leaves:
 Returns the number of bridges left in the study at age x.
 
 #### Arguments
@@ -105,8 +107,7 @@ print(exposures(count, age))
 defaultdict(None, {1: 100, 2: 88, 3: 67, 4: 55, 5: 67, 6: 70, 7: 72, 8: 78, 9: 65, 10: 78})
 ```
 
-
-## Overview of the actuarial function used
+## 💡 Conceptual overview of the essential actuarial functions.  
 
 | Item         | Description |
 | ------------ | ----------- |

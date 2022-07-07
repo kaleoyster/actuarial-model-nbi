@@ -87,7 +87,6 @@ def exposures(list_count, list_age):
     return exposures_dict
 
 def main():
-
     age = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     count = [100, 88, 67, 55, 67, 70, 72, 78, 65, 78]
     print(exposures(count, age))
