@@ -121,6 +121,5 @@ def main():
     print(probabilities)
     #nbi = create_dummy_data()
 
-
 if __name__=='__main__':
     main()
