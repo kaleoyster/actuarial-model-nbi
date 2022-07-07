@@ -25,7 +25,7 @@
 
 ### 👉 References
 
-| Document | Documentation type | Description |
+| Document      | Documentation type | Description |
 | ------------- | ------------------ | ----------- |
 | [Quickstart](docs/quickstart.md) | Concept | An overview and guide to setup this project |
 | [Methodology](docs/methodology.md) | Concept, Task | Simplest possible method of implementing your API |
