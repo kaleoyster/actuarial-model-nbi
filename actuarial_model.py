@@ -1,14 +1,11 @@
 """
 Description:
     This is a script to run the actuarial model
-
 Author:
     Akshay Kale
-
-Credit:
-    O'Brien Chin
-
-Date:  29th June, 2022
+Credits:
+    This project for first initiated by O'Brien Chin
+Date: 29th June, 2022
 """
 from collections import defaultdict
 
@@ -44,24 +41,6 @@ def identify_windows(from_year, to_year, data):
         new_data.append(windowed_dataset)
     return new_data
 
-def compute_hazard_score(count, age):
-    """
-    Description:
-        returns a computed hazard score.
-        based on the leave, exposure, and
-
-    Args:
-        from_year
-        to_year
-
-    Return:
-        new_data (list)
-    """
-    leave = leaves(count, age)
-    exposure = exposures(count, age)
-    hazard = leave / exposure
-    return hazard
-
 def leaves(list_count, list_age):
     """
     Description:
@@ -79,19 +58,68 @@ def leaves(list_count, list_age):
 def exposures(list_count, list_age):
     """
     Description:
-        The number of bridges in the study at age 𝑥.
+        The number of bridges in the study at age x.
     """
     exposures_dict = defaultdict()
     for age, count in zip(list_age, list_count):
         exposures_dict[age] = count
     return exposures_dict
 
+def compute_hazard_score(list_count, list_age):
+    """
+    Description:
+        returns a computed hazard score.
+        based on the leave and exposure
+
+    Args:
+        list_count
+        list_age
+
+    Return: hazard_dictionary (dictionary)
+    """
+    # intiate dictionaries
+    hazard_dictionary = defaultdict()
+    survival_dictionary = defaultdict()
+
+    # compute leaves and exposure
+    leave_dict = leaves(list_count, list_age)
+    exposure_dict = exposures(list_count, list_age)
+
+    # compute hazard rate
+    for age in range(2, 10):
+        leave = leave_dict[age]
+        exposure = exposure_dict[age]
+        exposure_next = exposure_dict[age + 1]
+        hazard_rate = exposure_next / exposure
+        hazard_dictionary[age] = hazard_rate
+
+    # compute survival rate
+    for age in range(2, 10):
+        hazard_rate = hazard_dictionary[age]
+        survival_rate = 1 - hazard_rate
+        survival_dictionary[age] = survival_rate
+
+    return hazard_dictionary, survival_dictionary
+
+def compute_probabilities(hazard_dictionary):
+    """
+    Description:
+        Returns compute probability of survival
+        given hazard rates
+    """
+    probabilities_dict = defaultdict()
+    for age, hr in hazard_dictionary.items():
+        probabilities_dict[age] = 1 - hr
+    return probabilities_dict
+
 def main():
     age = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     count = [100, 88, 67, 55, 67, 70, 72, 78, 65, 78]
-    print(exposures(count, age))
+    hazard, survival = compute_hazard_score(count, age)
+    probabilities = compute_probabilities(hazard)
+    print(hazard)
+    print(probabilities)
     #nbi = create_dummy_data()
-    print("Hello world")
 
 
 if __name__=='__main__':

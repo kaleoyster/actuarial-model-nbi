@@ -1,7 +1,5 @@
 <h1 align='center'>
-
 🌉  Actuarial Analysis of Bridges 🌟
-
 </h1>
 
 ![actuarial hexagon](images/hexagon-actuarial.png)
@@ -31,8 +29,4 @@
 | [Methodology](docs/methodology.md) | Concept, Task | Simplest possible method of implementing your API |
 | [Functions](docs/functions.md) | Reference | List of references for the functions used|
 | [Related Projects](docs/related-projects.md) | Reference | List of projects related to this repository |
-
-### Methodology
-
-### Results
 
