@@ -12,12 +12,10 @@ There are considerations regarding the dataset and algorithms
    * **Study window 4:** 2008 - 2012
    * **Study window 5:** 2012 - 2016
    * and so and so forth.
-
 2. **Focus:** The study needs to focus on one single component of the bridge such as `deck`.
 3. **Definition:** We need to define repair and reconstruction. This could be defined using the `Bridge Intervention Matrix`.
 4. **Correct span for the study window:** By referring to older literature, we can identify the study windows.
 4. **Application:** This methodology can guide in answer the questions regarding the `average daily traffic` effect on the `deck` repiar and maintenances.
-
 ![Bridge Intervention Matrix](/Users/kale/vimwiki/assets/intervention-matrix.png)
 
 ## Assumptions
@@ -40,14 +38,14 @@ The algorithm is divied into four steps:
 4. Compute mortality
 
 #### 💡 Conceptual overview of the essential actuarial functions
-| Item           | Description |
-| -------------- | ----------- |
-| $leave(x)$     | The number of bridges that leave the study at age $x$|
-| $exposures(x)$ |  The number of bridges in the study at age $x$|
-| $h(x)$         | Hazard rate age $x$. See equation 1 |
-| $S(x)$         | Survival rate age $x$. See equation 2 |
-| $F(x)$         | The mortality rate (or cumulative probability of failure) of bridges exposed at age 1 before reaching age $x$ |
-| $_yP_1$         | Probability of survival at age $y$ for the next year. See Equation 5 |
+| Item           | Description                                                                                                    |
+| -------------- | -------------------------------------------------------------------------------------------------------------- |
+| $leave(x)$     | The number of bridges that leave the study at age $x$                                                          |
+| $exposures(x)$ | The number of bridges in the study at age $x$                                                                  |
+| $h(x)$         | Hazard rate age $x$. See equation 1                                                                            |
+| $S(x)$         | Survival rate age $x$. See equation 2                                                                          |
+| $F(x)$         | The mortality rate (or cumulative probability of failure) of bridges exposed at age 1 before reaching age $x$  |
+| $_yP_1$        | Probability of survival at age $y$ for the next year. See Equation 5                                           |
 
 #### 🪟  Select study window
 - The general concept of this approach is to establish a study period and observe the behavior of the bridges as they pass through this window.
@@ -56,11 +54,8 @@ The algorithm is divied into four steps:
 
 #### ☢ Exposures
 - Exposures represent how many bridges of each age are available to “fail" (require maintenance in the bridge case). 
-
 - For example, if there are 100 bridges aged 35, and 50 bridges aged 40 in the study, then the exposure for ages 35 and 40 are 100 and 50, respectively.
-
 - To compute the exposures, we need to know the age of each bridge in the study.
-
 - The counts for each age are incremented regardless of when in the five years in the study window a bridge reaches that age. For example, if a bridge is 45 years old in 2013 and another bridge is also 45 years old in 2016, both bridges are counted as exposures for age 45.
 
 #### ☣️  Hazard rate
@@ -70,7 +65,6 @@ The algorithm is divied into four steps:
     * This requirement reduces the number of observations in the dataset (Richards 2011). 
 
 - In contrast, we use a simpler maximum likelihood estimator that can accommodate partial year exposures to capture maintenance patterns.
-
 - Hence, if $leave(x)$ is the number of bridges that leave the study at age $x$ and $exposures(x)$ is the number of exposures at age $x$ 
 
 The hazard rate is defined as the following:
@@ -93,4 +87,3 @@ $$F(x) = 1 − (P(x))$$
     $$ _3Q_1 = 1 - _3P_1 $$
     $$ _4Q_1 = 1 - _4P_1 $$
     $$ _5Q_1 = 1 - _5P_1 $$
-
