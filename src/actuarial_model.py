@@ -1,8 +1,10 @@
 """
 Description:
     This is a script to run the actuarial model
+
 Author:
     Akshay Kale
+
 Credits:
     This project for first initiated by O'Brien Chin
 Date: 29th June, 2022
@@ -119,7 +121,6 @@ def main():
     probabilities = compute_probabilities(hazard)
     print(hazard)
     print(probabilities)
-    #nbi = create_dummy_data()
 
 if __name__=='__main__':
     main()
