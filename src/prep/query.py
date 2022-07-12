@@ -147,7 +147,8 @@ def generate_encoding(keys):
 
 def update_encoding(record, encoding):
     """
-    Description: A utility function for group records
+    Description:
+        A utility function for group records
     Args:
         records (dictionary)
         encoding (empty dictionary)
@@ -162,8 +163,13 @@ def update_encoding(record, encoding):
 def group_records(records, fields):
     """
     Description:
+        Group records by the structure number
+
     Args:
+        records
+
     Returns:
+        fields
     """
     # instantiate empty encoding
     keys = fields.keys()
@@ -302,7 +308,7 @@ def create_individual_records(grouped_records):
     individual_records = []
     for key, value in grouped_records.items():
         total_len = len(value['structureNumber'])
-        structure_numbers = [key]*total_len
+        structure_numbers = [key] * total_len
         # Error checking here
         temp_val = defaultdict()
         for v_key, v_val in value.items():
@@ -397,7 +403,7 @@ def segmentize(groupedRecords, component="deck"):
     """
     Description:
         Return the records by segmenting them into several parts
-        marked by the improvement in the conditin ratings
+        marked by the improvement in the condition ratings
     Args:
         groupedRecords
     Returns:
@@ -408,8 +414,9 @@ def segmentize(groupedRecords, component="deck"):
                                     groupedRecords.values()):
         newRecord = defaultdict()
         # TODO: May be we don't have condition ratings
-        # create a condition that calculates the following step
+        # Create a condition that calculates the following step
         # only for the condition ratings
+
         conditionRatings = record[component]
         indexes = list()
         indexes = segmentize_index_utility(conditionRatings)
@@ -983,8 +990,9 @@ def tocsv_list(groupedRecords, csvfile, header=None):
     if header == None:
         header = groupedRecords[0].keys()
 
-    directory = '../../data' + '/' + csvfile
-    with open(directory,'w') as csvFile:
+    directory = 'data' + '/' + csvfile
+
+    with open(csvfile, 'w') as csvFile:
         csvWriter = csv.writer(csvFile, delimiter=",")
         csvWriter.writerow(header)
         for record in groupedRecords:

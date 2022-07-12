@@ -20,6 +20,7 @@ import csv
 import pprint
 from query import *
 from maps import *
+
 pp = pprint.PrettyPrinter(indent=3)
 
 def main():
@@ -29,7 +30,7 @@ def main():
     nbiDB = get_db()
     collection = nbiDB['nbi']
 
-    # select features:
+    # Select features
     fields = {
                 "_id":0,
                 "year":1,
@@ -57,11 +58,11 @@ def main():
                 "coordinates":"$loc.coordinates"
             }
 
-    # Select states:
+    # Select states
     states = ['31'] # Nebraska
 
-    # years:
-    years = [year for year in range(1992, 2020)]
+    # Years
+    years = [year for year in range(1992, 2021)]
 
     # Query
     individual_records = query(fields, states, years, collection)
@@ -74,12 +75,11 @@ def main():
     individual_records = compute_adt_cat(individual_records)
     paved_ind_rec, gravel_ind_rec = filter_gravel_paved(individual_records)
 
-    #individual_records = paved_ind_rec
+    individual_records = paved_ind_rec
 
     # Group records and segmentize
     groupedRecords = group_records(individual_records, fields)
-    #groupedRecords = segmentize(groupedRecords)
-    #groupedRecords = reorganize_segmented_data(groupedRecords)
+
     groupedRecords = compute_intervention(groupedRecords,
                                           from_to_matrix_kent)
 
@@ -91,71 +91,42 @@ def main():
                                           from_to_matrix_kent,
                                           component='superstructure')
 
+    json_dictionary = {}
+    for record in groupedRecords.values():
+        structure_number = record['structureNumber'][0]
+        year = record['year']
+        year_built = record['yearBuilt']
+        deck =  record['deck']
+        age = record['age']
+        deck_age = record['deckAge']
+        substructure  =  record['substructure']
+        superstructure  =  record['superstructure']
+        deck_intervention = record['deckIntervention']
+        sub_intervention = record['substructureIntervention']
+        sup_intervention = record['superstructureIntervention']
+        sup_no_intervention = record['superstructureNumberOfInterventions']
+        sub_no_intervention = record['substructureNumberOfInterventions']
+        deck_no_intervention = record['deckNumberOfInterventions']
+        values = {
+            'year': year,
+            'year built': year_built,
+            'age': age,
+            'deck age': deck_age,
+            'deck': deck,
+            'substructure': substructure,
+            'superstructure': superstructure,
+            'deck intervention': deck_intervention,
+            'substructure intervention': sub_intervention,
+            'superstructure intervention': sup_intervention,
+            'superstructure intervention num': sup_no_intervention,
+            'substructure intervention num': sub_no_intervention,
+            'deck intervention num': deck_no_intervention,
+        }
 
-    #pp.pprint(groupedRecords)
-    individual_records = create_individual_records(groupedRecords)
+        json_dictionary[structure_number] = values
+    output_file = open("../../data/nebraska.json", "w")
+    json.dump(json_dictionary, output_file, indent=3)
+    output_file.close()
 
-    # Create a function to identify paved bridges and gravel bridges
-    #print(individual_records)
-
-    # Compute baseline difference score:
-    groupedRecords, baselineDeck = compute_bds_score(groupedRecords,
-                                                     component='deck')
-
-    groupedRecords, baselineSubstructure = compute_bds_score(groupedRecords,
-                                                             component='substructure')
-
-    groupedRecords, baselineSuperstructure = compute_bds_score(groupedRecords,
-                                                               component='superstructure')
-    ### Creating BDS map
-    deckBDSMap = create_map(groupedRecords, column='deckBDSScore')
-    substructureBDSMap = create_map(groupedRecords, column='substructureBDSScore')
-    superstructureBDSMap = create_map(groupedRecords, column='superstructureBDSScore')
-
-    ### Compute slope
-    groupedRecords = compute_deterioration_slope(groupedRecords, component='deck')
-    #groupedRecords = compute_deterioration_slope(groupedRecords, component='substructure')
-    #groupedRecords = compute_deterioration_slope(groupedRecords, component='superstructure')
-
-    ### Creating slope map
-    deckSlopeMap = create_map(groupedRecords, column='deckDeteriorationScore')
-    #substructSlopeMap = create_map(groupedRecords, column='substructureDeteriorationScore')
-    #superstructureSlopeMap = create_map(groupedRecords, column='superstructureDeteriorationScore')
-
-    with open('deck-slope-ne.csv', 'w') as f:
-        f.write("StructureNumber, Slope")
-        for key in deckSlopeMap.keys():
-            f.write("%s, %s\n" % (key, deckSlopeMap[key]))
-
-    # TODO: Integration is the problem
-    # Create an individual Record 
-    indivudal_records = integrate_ext_dataset_list(deckBDSMap,
-                                                  individual_records,
-                                                   'deckBDSScore')
-
-    individual_records = integrate_ext_dataset_list(substructureBDSMap,
-                                                   individual_records,
-                                                   'substructureBDSScore')
-
-    individual_records = integrate_ext_dataset_list(superstructureBDSMap,
-                                                   individual_records,
-                                                   'superstructureBDSScore')
-
-    individual_records = integrate_ext_dataset_list(deckSlopeMap,
-                                                   individual_records,
-                                                   'deckDeteriorationScore')
-
-    #individual_records = integrate_ext_dataset_list(substructureSlopeMap,
-    #                                               individual_records,
-    #                                               'substructureDeteriorationScore')
-
-    #individual_records = integrate_ext_dataset_list(superstructureSlopeMap,
-    #                                               individual_records,
-    #                                               'superstructureDeteriorationScore')
-
-    ### Save to the file
-    csvfile = 'nebraska-1992-2020-deck.csv'
-    tocsv_list(individual_records, csvfile)
-    create_df(baselineDeck, baselineSubstructure, baselineSuperstructure)
-
-main()
+if __name__ == '__main__':
+    main()
