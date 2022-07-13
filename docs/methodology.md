@@ -91,7 +91,6 @@ A period life table is baed on the mortality expeirence of a population during a
 - $H(x):$ Cumulative hazard function.
 
 #### Previous understanding of the methodology
-
 - Instead of the absolute number of surviving bridges at age $x$ life tables commonly compute a probability of survival. 
 - The probability of survival for bridges exposed from age 1 to age $x$ is:  $_1P_x$, or simply $P_x$. 
 - It is computed from the hazard rate as shown in Equation 3:
@@ -107,8 +106,7 @@ $$F(x) = 1 − _t(P(x))$$
     $$ _5Q_1 = 1 - _5P_1 $$
 
 ## References
-
 1. [Intuition for cumulative hazard function -- survival analysis](https://stats.stackexchange.com/questions/60238/intuition-for-cumulative-hazard-function-survival-analysis)
-
+2. [Methodology to calculating national life tables](https://www.ons.gov.uk/peoplepopulationandcommunity/healthandsocialcare/healthandlifeexpectancies/methodologies/guidetocalculatingnationallifetables)
 
 
