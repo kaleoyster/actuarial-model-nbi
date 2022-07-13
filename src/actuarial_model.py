@@ -11,6 +11,7 @@ Date: 29th June, 2022
 """
 
 from collections import defaultdict
+import json
 
 def create_dummy_data():
     """
@@ -101,7 +102,6 @@ def compute_hazard_score(list_count, list_age):
         hazard_rate = hazard_dictionary[age]
         survival_rate = 1 - hazard_rate
         survival_dictionary[age] = survival_rate
-
     return hazard_dictionary, survival_dictionary
 
 def compute_probabilities(hazard_dictionary):
@@ -115,13 +115,75 @@ def compute_probabilities(hazard_dictionary):
         probabilities_dict[age] = 1 - hr
     return probabilities_dict
 
+
+def read_json(path):
+    """
+    Description:
+       reads json file
+    Args:
+        path (string)
+    Returns:
+        dictionary
+    """
+    file_obj = open(path)
+    data = json.load(file_obj)
+    file_obj.close()
+    return data
+
+def compute_counts(data):
+    """
+    Description:
+        read data and
+        compute the number of bridges per age
+    Args:
+        path
+    Returns:
+        data
+    """
+    count_dictionary = defaultdict()
+    ages = [value['age'] for value in data.values()]
+    for age_list in ages:
+        for age in age_list:
+            if count_dictionary.get(age) is None:
+                count_dictionary[age] = 1
+            else:
+                count_dictionary[age] = count_dictionary[age] + 1
+    return count_dictionary
+
+def age_counter(ages, dictionary):
+    """
+    Description:
+        return a list of counts
+    for each age
+
+    Args:
+        ages (list)
+        dictionary (dictionary):
+
+    Returns:
+        list_of_counts
+    """
+    list_of_counts = []
+    for age in ages:
+       list_of_counts.append(dictionary[age])
+    return list_of_counts
+
+
 def main():
-    age = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-    count = [100, 88, 67, 55, 67, 70, 72, 78, 65, 78]
-    hazard, survival = compute_hazard_score(count, age)
+    path = '../data/nebraska.json'
+    data = read_json(path)
+    count_dictionary = compute_counts(data)
+    ages = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    counts = age_counter(ages, count_dictionary)
+    hazard, survival = compute_hazard_score(counts, ages)
     probabilities = compute_probabilities(hazard)
     print(hazard)
+    print(survival)
     print(probabilities)
+
+    # TODO: get ages and corresponding counts
+
+
 
 if __name__=='__main__':
     main()

@@ -1,7 +1,23 @@
 <h1 align='center'>
-Methodology 🧭
+Data 
 </h1>
+
 There are considerations regarding the dataset and algorithms
+
+## Assumptions
+* Some assumptions were made about the bridges in generating the dataset. When a maintenance event occurs on a bridge and that event is recorded, the bridge is permanently removed from the study. 
+* There are other options on how to handle a bridge once a maintenance event occurs, each with its own consequences. These include:
+    - Allow the bridge to re-enter the study at the same age.
+    - Allow the bridge to re-enter the study at a younger age, given the type of maintenance which occurred.
+- The data generation scripts takes into account all the aspects of the assumptions.
+
+## Getting started
+1. Clone / download `nbi-json-csv-convertor`, `data-chef`
+2. Download `NBI` files
+3. Process / Install MongoDB
+4. Generate dataset
+
+## Attributes in the data files
 
 ## 📝 Points
 1. The hazard rate computes instantaneous rate of failure.
@@ -17,12 +33,6 @@ There are considerations regarding the dataset and algorithms
 4. **Correct span for the study window:** By referring to older literature, we can identify the study windows.
 4. **Application:** This methodology can guide in answer the questions regarding the `average daily traffic` effect on the `deck` repiar and maintenances.
 ![Bridge Intervention Matrix](/Users/kale/vimwiki/assets/intervention-matrix.png)
-
-## Assumptions
-* Some assumptions were made about the bridges. When a maintenance event occurs on a bridge and that event is recorded, the bridge is permanently removed from the study. 
-* There are other options on how to handle a bridge once a maintenance event occurs, each with its own consequences. These include:
-    - Allow the bridge to re-enter the study at the same age.
-    - Allow the bridge to re-enter the study at a younger age, given the type of maintenance which occurred.
 
 ## Data 
 * **Source:** National Bridge Inventory
@@ -75,11 +85,11 @@ $$ {S(x) = 1 - h(x)}$$
 
 #### ☁️  Probabilities
 - Instead of the absolute number of surviving bridges at age $x$ life tables commonly compute a probability of survival. 
-- The probability of survival for bridges exposed from age 1 to age $x$ is:  $_1P_x$, or simply $P_x$. 
+- The probability of survival for bridges exposed from age 1 to age 𝑥 is:  $_1P_x$, or simply $P_x$. 
 - It is computed from the hazard rate as shown in Equation 3:
 - The mortality rate (or cumulative probability of failure), $F(x)$ of bridges exposed at age 1
-before reaching age $x$ is then calculated from the probability of survival, as shown in Equation 4:
-$$F(x) = 1 − _t(P(x))$$
+before reaching age 𝑥 is then calculated from the probability of survival, as shown in Equation 4:
+$$F(x) = 1 − (P(x))$$
 - Note that $F(x)$ can also be expressed as $_1Q_x$ or simply $Q_x$. $_1Q_1$ is the cumulative probability of failure within the next year. $_1Q_1$ is computed from the probabilities of surviving within the next year $_1P_1$ and subtracting that from 1. Similarly, the probability of failure for years two, three, four, and five are computed. These are $_2Q_1$, $_3Q_1$, $_4Q_1$, $_5Q_1$ respectively.
 - $_4Q_1$ and $_5Q_1$ respectively. These relationships are shown in Equation 5.
     $$ _1Q_1 = 1 - _1P_1 $$
