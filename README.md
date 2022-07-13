@@ -12,7 +12,7 @@
 - The objective of this research study is to develop a measure / method for computing bridge maintenance frequency.
 
 ### 💪 Challenge
-- In the NBI dataset, it is a **challenge** to identify maintainance patterns. Because, the use of `reconstruction_year` does not provide an valuable information about the type of repair or reconstruction done.
+- In the NBI dataset, it is a **challenge** to identify maintenance patterns. Because, the use of `reconstruction_year` does not provide an valuable information about the type of repair or reconstruction done.
 
 ### 🧪 Solution
 - To address this challenge we can use bridge intervention matrix, that utilizes the bridge intervention matrix for `deck` to identify various types of intervention depending on the probability of the transition.
@@ -20,7 +20,6 @@
 ![Deck Bridge Intervention Matrix](assets/intervention-matrix.png)
 
 ### 👉 References
-
 | Document      | Documentation type | Description |
 | ------------- | ------------------ | ----------- |
 | [Quickstart](docs/quickstart.md) | Concept | An overview and guide to setup this project |
