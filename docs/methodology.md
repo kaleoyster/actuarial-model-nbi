@@ -12,10 +12,15 @@ There are considerations regarding the dataset and algorithms
    * **Study window 4:** 2008 - 2012
    * **Study window 5:** 2012 - 2016
    * and so and so forth.
+
+- The study windows represent bridges built durning these time windows and then surviving for the next windows.
+
 2. **Focus:** The study needs to focus on one single component of the bridge such as `deck`.
 3. **Definition:** We need to define repair and reconstruction. This could be defined using the `Bridge Intervention Matrix`.
+- Instead of calling the death of the bridge, we can introduce a term `surviving untill maintenance`.
+
 4. **Correct span for the study window:** By referring to older literature, we can identify the study windows.
-4. **Application:** This methodology can guide in answer the questions regarding the `average daily traffic` effect on the `deck` repiar and maintenances.
+5. **Application:** This methodology can guide in answer the questions regarding the `average daily traffic` effect on the `deck` repiar and maintenances.
 ![Bridge Intervention Matrix](/Users/kale/vimwiki/assets/intervention-matrix.png)
 
 ## Assumptions
@@ -74,6 +79,19 @@ The survival rate $S(x)$ can be computed as show in the equation 2:
 $$ {S(x) = 1 - h(x)}$$
 
 #### ☁️  Probabilities
+
+A period life table is baed on the mortality expeirence of a population during a relative short period of time. 
+#### New understanding of the methodology
+- $f(x):$ Starting at the start time, the probability distribution of when you will die.
+- $F(x):$ Just the cumulative distribution, at time $T$, what % of the population will be dead?
+- $S(x):$ $1-F(x)$, at time $T$, what % of the population will be alive?
+- $h(x):$  Hazard function, at a given time $T$, of the people still alive, this can be used to estimate how many people will die in the next time interval, or if interval → 0, `instantaneous` death rate.
+    - Hazard rate: It measures the total amount of risk that has been accumulated up to time t.
+    - Count data interpration: `It gives the number of times we would expect to observe failures over a given period, if only the failure events were repeatable`
+- $H(x):$ Cumulative hazard function.
+
+#### Previous understanding of the methodology
+
 - Instead of the absolute number of surviving bridges at age $x$ life tables commonly compute a probability of survival. 
 - The probability of survival for bridges exposed from age 1 to age $x$ is:  $_1P_x$, or simply $P_x$. 
 - It is computed from the hazard rate as shown in Equation 3:
@@ -87,3 +105,10 @@ $$F(x) = 1 − _t(P(x))$$
     $$ _3Q_1 = 1 - _3P_1 $$
     $$ _4Q_1 = 1 - _4P_1 $$
     $$ _5Q_1 = 1 - _5P_1 $$
+
+## References
+
+1. [Intuition for cumulative hazard function -- survival analysis](https://stats.stackexchange.com/questions/60238/intuition-for-cumulative-hazard-function-survival-analysis)
+
+
+
