@@ -15,16 +15,17 @@ Notes:
     2. Adjust the study windows to mimic bridges born during the same year.
         - Done
 
-    3. Re-create the life table.
+    3. Re-create the life table. [ Done ]
         - Some of the bridges  appear in the later time but do not appear in the earlier timeline.
         - Look for bridges that do not appear at all in the later time line.
 
 Date: 29th June, 2022
 """
 
+import json
+import numpy as np
 from collections import defaultdict
 from collections import Counter
-import json
 
 def create_dummy_data():
     """
@@ -128,7 +129,6 @@ def compute_probabilities(hazard_dictionary):
         probabilities_dict[age] = 1 - hr
     return probabilities_dict
 
-
 def read_json(path):
     """
     Description:
@@ -182,80 +182,100 @@ def age_counter(ages, dictionary):
     return list_of_counts
 
 def filter_data(data, column, val):
+    """
+    Description:
+        returns filtered data
+    Args:
+        data (JSON)
+        column (list)
+        val (list)
+    Returns
+        filtered_data (JSON)
+    """
     filtered_data = defaultdict()
     for key, value in data.items():
         if value[column][-1] == val:
             filtered_data[key] = value
     return filtered_data
 
-def main():
-    path = '../data/nebraska.json'
-    data = read_json(path)
+def compute_table(year_total_bridge):
+    """
+    Description:
+        Return a computed table
+    Args:
+        year_total_bridge (dict)
+    Returns:
+        year_list (list)
+        total_bridge_list (list)
+        percentages_list (list)
+    """
+    year_list = list()
+    total_bridge_list = list()
+    percentages_list = list()
+    for year, total_bridges in year_total_bridge.items():
+        if year > 1992:
+            lookup_year = year - 1
+            lookup_total_bridges = year_total_bridge[lookup_year]
+            try:
+                percentage = (lookup_total_bridges - total_bridges) / lookup_total_bridges
+                year_list.append(year)
+                total_bridge_list.append(total_bridges)
+                percentages_list.append(percentage)
+            except:
+                pass
+        else:
+            year_list.append(year)
+            total_bridge_list.append(total_bridges)
+            percentages_list.append(0.0)
+    return year_list, total_bridge_list, percentages_list
 
-    # TODO: filter data, get bridges built only 1992
-    study_window = (1992, 1998)
-    data = filter_data(data, 'year built', 1992)
-
-    #bridge_records = defaultdict(list)
-    #for bridge, record in data.items():
-    #    survey_year = record['year']
-    #    count_obj = Counter(survey_year)
-    #    for year, value in count_obj.items():
-    #        if bridge_counter.get(year) is None:
-    #            bridge_counter[year] = value
-    #        else:
-    #            bridge_counter[year] = bridge_counter[year] + value
-    #print(len(data))
-    #print(bridge_counter)
-
+def compute_bridge_count(study_window, data):
+    """
+    Descriptions:
+        Computes the count of the bridges at each year
+    Args:
+        study_window (years)
+        data (JSON)
+    Returns:
+        year_total_bridge (dictionary)
+    """
+    total_bridge = len(data.keys())
     bridge_last_year = defaultdict()
+    year_total_bridge = defaultdict()
+
     for bridge, record in data.items():
         last_year = record['year'][-1]
         if bridge_last_year.get(last_year) is None:
             bridge_last_year[last_year] = 1
         else:
             bridge_last_year[last_year] = bridge_last_year[last_year] + 1
-    print(bridge_last_year)
 
-## TODO: Create this life table
-## Note: length of the list for each bridge can be decided by repair criteria
-    ## 1992  33  0
-    ## 1993  33  0
-    ## 1994  33  0
-    ## 1995  33  0.1818
-    ## 1996  27  0.037
-    ## 1997  26  0.038
-    ## 1998  25  0.04
-    ## 1999  25  0
-    ## 2000  25  0
-    ## 2001  25  0.086
-    ## 2002  23  0
-    ## 2003  23  0
-    ## 2004  23  0
-    ## 2005  23  0
-    ## 2006  23  0
-    ## 2007  23  0
-    ## 2008  23  0
-    ## 2009  23  0
-    ## 2010  23  0
-    ## 2011  23  0
-    ## 2012  23  0
-    ## 2013  23  0
-    ## 2014  23  0
-    ## 2015  23  0
-    ## 2016  23  0
-    ## 2017  23  0
-    ## 2018  21  0.0952 
-    ## 2018  0   1
+    for year in range(study_window[0], study_window[1]):
+        lookup_year = year - 1
+        if bridge_last_year.get(lookup_year) is not None:
+            total_bridge = total_bridge - bridge_last_year[lookup_year]
+        year_total_bridge[year] = total_bridge
+    return year_total_bridge
 
+
+def main():
+    # Path of the Nebraska
+    path = '../data/nebraska.json'
+    data = read_json(path)
+
+    # Study window
+    study_window = [1992, 2022]
+    data = filter_data(data, 'year built', 1992)
+    year_total_bridge = compute_bridge_count(study_window, data)
+    year_list, total_bridge_list, percentages_list = compute_table(year_total_bridge)
+
+    print(year_list, total_bridge_list, percentages_list)
 
     #count_dictionary = compute_counts(data)
     #ages = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     #counts = age_counter(ages, count_dictionary)
     #hazard, survival = compute_hazard_score(counts, ages)
     #probabilities = compute_probabilities(hazard)
-
-
 
 
 if __name__=='__main__':
