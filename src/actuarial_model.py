@@ -6,7 +6,7 @@ Author:
     Akshay Kale
 
 Credits:
-    This project for first initiated by O'Brien Chin
+    The idea and implementation of this project was first initiated by O'Brien Chin
 
 Notes:
     1. Exposures is the same as count_dictionary
@@ -24,6 +24,7 @@ Date: 29th June, 2022
 
 import json
 import numpy as np
+import pandas as pd
 from collections import defaultdict
 from collections import Counter
 
@@ -268,8 +269,12 @@ def main():
     data = filter_data(data, 'year built', 1992)
     year_total_bridge = compute_bridge_count(study_window, data)
     year_list, total_bridge_list, percentages_list = compute_table(year_total_bridge)
+    df = pd.DataFrame({'Year': year_list,
+                       'Total':total_bridge_list,
+                       'Percentage':percentages_list})
+    print(df)
 
-    print(year_list, total_bridge_list, percentages_list)
+    #print(year_list, total_bridge_list, percentages_list)
 
     #count_dictionary = compute_counts(data)
     #ages = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
