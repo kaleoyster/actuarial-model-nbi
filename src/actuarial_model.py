@@ -19,7 +19,8 @@ Notes:
         - Some of the bridges  appear in the later time but do not appear in the earlier timeline.
         - Look for bridges that do not appear at all in the later time line.
 
-Date: 29th June, 2022
+Date:
+    29th June, 2022
 """
 
 import json
@@ -258,24 +259,154 @@ def compute_bridge_count(study_window, data):
         year_total_bridge[year] = total_bridge
     return year_total_bridge
 
+def compute_window_statistics(data_new, year_built):
+    saving_indexes = []
+    for bridge, record in data_new.items():
+        intervention = record['deck intervention']
+        year = record['year built']
+        if np.mean(year) == year_built:
+            try:
+                saved_index = intervention.index('Repair')
+                saving_indexes.append(saved_index)
+            except:
+                saved_index = -1
+
+    total_indexes = len(saving_indexes)
+    total_data = len(data_new)
+    percent_intervention_data = (total_indexes / total_data) * 100
+    min_intervention = np.min(saving_indexes)
+    max_intervention = np.max(saving_indexes)
+    median_intervention = np.median(saving_indexes)
+    mean_intervention = np.mean(saving_indexes)
+
+    stats = {
+              'total bridges': total_data,
+              'total no of bridges with intervention': total_indexes,
+              'percentage of bridge with intervention': percent_intervention_data,
+              'mean time before intervention': mean_intervention,
+              'min time before intervention': min_intervention,
+              'max time before intervention': max_intervention,
+              'median time before intervention': median_intervention
+            }
+
+    return stats
+
+def study_window(data, study_window_year):
+    """
+    Description:
+        Return data by filtering study_window
+
+    Args:
+        study_window_year
+    Return:
+        data
+    """
+    new_data = defaultdict()
+    starting_year, ending_year = study_window_year
+    for bridge, record in data.items():
+        years = record['year']
+        ages = record['age']
+        interventions = record['deck intervention']
+        new_years = []
+        new_ages = []
+        new_interventions = []
+        try:
+            start_index = years.index(starting_year)
+            end_index = years.index(ending_year)
+            new_years = years[start_index:end_index]
+            new_ages = ages[start_index:end_index]
+            new_interventions = interventions[start_index:end_index]
+
+            temp_dict = {
+                'year':new_years,
+                'age':new_ages,
+                'intervention':new_interventions
+            }
+            new_data[bridge] = temp_dict
+        except:
+            pass
+    return new_data
+
+def compute_life_table(data, study_window_years, intervention_type):
+    """
+    Description:
+        compute table
+    """
+    initial_population = 100000
+    intervention_type = 'Repair'
+
+    # get data from study
+    new_data = study_window(data, study_window_years)
+    age_intervention = defaultdict(list)
+    age_count = defaultdict()
+
+    # Compute age_intervention dictionary
+    for bridge, record in new_data.items():
+        ages = record['age']
+        interventions = record['intervention']
+        for age, intervention in zip(ages, interventions):
+            age_intervention[age].append(intervention)
+
+    age_list = []
+    population_list = []
+    mortality_rate_list = []
+    for age in range(1, 100):
+        total_number_bridges = len(age_intervention[age])
+        counter_intervention = Counter(age_intervention[age])
+        mortality_rate = counter_intervention[intervention_type] / total_number_bridges
+        death = initial_population * mortality_rate
+        death = round(death)
+        age_list.append(age)
+        population_list.append(initial_population)
+        mortality_rate_list.append(mortality_rate)
+        initial_population = initial_population - death
+        df = pd.DataFrame({'Age':age_list,
+                           'Population':population_list,
+                           'Mortality rate':mortality_rate_list})
+    return df
+
 
 def main():
     # Path of the Nebraska
     path = '../data/nebraska.json'
     data = read_json(path)
+    study_window_years = [1992, 1996]
+    df1 = compute_life_table(data, study_window_years, 'Repair')
+    df2 = compute_life_table(data, [1992, 1996], 'Repair')
+    df3 = compute_life_table(data, [1996, 2004], 'Repair')
+    df4 = compute_life_table(data, [2004, 2008], 'Repair')
+    df5 = compute_life_table(data, [2008, 2012], 'Repair')
+    df6 = compute_life_table(data, [2012, 2016], 'Repair')
+
+    #    df7 = compute_life_table(data, [2016, 2020], 'Repair')
+    print(df1)
+    print(df2)
+    print(df3)
+    print(df4)
+    print(df5)
+
+    #for age, intervention in age_intervention.items():
+    #    print(age, len(intervention))
+    #print(len(data))
+    #year = 1992
+    #data_new = filter_data(data, 'year built', year)
 
     # Study window
-    study_window = [1992, 2022]
-    data = filter_data(data, 'year built', 1992)
-    year_total_bridge = compute_bridge_count(study_window, data)
-    year_list, total_bridge_list, percentages_list = compute_table(year_total_bridge)
-    df = pd.DataFrame({'Year': year_list,
-                       'Total':total_bridge_list,
-                       'Percentage':percentages_list})
-    print(df)
+    #for year in range(1992, 2010):
+    #    data_new = filter_data(data, 'year built', year)
+    #    print(year)
+    #    print(compute_window_statistics(data_new, year))
+
+    # Exists until maintenance
+    # Absolutely no exisitance
+    #year_total_bridge = compute_bridge_count(study_window, data)
+    #year_list, total_bridge_list, percentages_list = compute_table(year_total_bridge)
+    #df = pd.DataFrame({'Year': year_list,
+    #                   'Total':total_bridge_list,
+    #                   'Percentage':percentages_list})
+    #print(df)
 
     #print(year_list, total_bridge_list, percentages_list)
-
     #count_dictionary = compute_counts(data)
     #ages = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     #counts = age_counter(ages, count_dictionary)

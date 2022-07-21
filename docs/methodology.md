@@ -4,28 +4,60 @@ Methodology 🧭
 There are considerations regarding the dataset and algorithms
 
 ## 📝 Points
-1. The hazard rate computes instantaneous rate of failure.
-- It would be much more wiser to have an instantaneous rate of failure for several study windows.
-   * **Study window 1:** 1992 - 1998
+1. In an attempt to find the most appropriate study window:
+* Determining the appropriate length of the study window by historical evidence.
+- For all the bridges built in the year from 1992 to 2010. Determine the average time for first major intervention.
+    - Out of 17536 bridges, only 2 % of the bridges are built in 1992.
+    * And, a total of 4,479 bridges (~35%) bridges were built in between 1992 to 2020.
+    * For 333 bridges built in 1992, only 77 (23%) of the bridges have any intervention, moreover, the average length is 4.79 years before intervention, max(26), min(1), and median is 2. However, due to the inconsistent year built data, where year built of the bridges change over a period of time. One might observe that number of records available may be higher than expected.
+        - For instance in 2022, a bridge built in 2014, may have a total of 29 records as opposed to 9 records.
+    * Mean and median time before intervention in these bridges.
+- Can we bridge the all bridges around this four year time together, and treat them as bridges built in within a study window.
+
+- Overall, the idea of study window of last four-years or last-three years, would guide in calculating lifetable. Each of the study window will provide an understanding of changing life expectancy of the bridges.
+
+   * **Study window 1:** 1992 - 1998 → defined by `BIM` → Compute average length 
    * **Study window 2:** 1998 - 2004
    * **Study window 3:** 2004 - 2008 
    * **Study window 4:** 2008 - 2012
    * **Study window 5:** 2012 - 2016
+   * **Study window 6:** 2016 - 2020
+   * and so and so forth.
+   
+- New method:
+   * **Study window 1:** 1992 - 1998 → defined by `BIM` → Compute average length 
+        - for each of the new study window:
+            * Create life table I
+
+   * **Study window 2:** 1998 - 2004
+   * **Study window 3:** 2004 - 2008 
+   * **Study window 4:** 2008 - 2012
+   * **Study window 5:** 2012 - 2016
+   * **Study window 6:** 2016 - 2020
    * and so and so forth.
 
-- The study windows represent bridges built durning these time windows and then surviving for the next windows.
+- It would be much more wiser to have an instantaneous rate of failure for several study windows. These study windows are four years apart.
 
-2. **Focus:** The study needs to focus on one single component of the bridge such as `deck`.
+- The study windows represent bridges built during these time windows and then surviving for the next windows.
+
+
+2. The hazard rate computes instantaneous rate of failure.
+  2. **Focus:** The study needs to focus on one single component of the bridge such as `deck`.
+
 3. **Definition:** We need to define repair and reconstruction. This could be defined using the `Bridge Intervention Matrix`.
-- Instead of calling the death of the bridge, we can introduce a term `surviving untill maintenance`.
 
-4. **Correct span for the study window:** By referring to older literature, we can identify the study windows.
-5. **Application:** This methodology can guide in answer the questions regarding the `average daily traffic` effect on the `deck` repiar and maintenances.
+- Instead of calling the death of the bridge, we can introduce a term `deterioration until maintenance`.
+
+4. **Correct span for the study window:** By referring to older literature, we can identify the study windows. → *Research question: How to find the appropriate span for the study window using data driven methods?*
+
+5. **Application:** This methodology can guide in answering the questions regarding the `average daily traffic` effect on the `deck` repair and maintenances.
 ![Bridge Intervention Matrix](/Users/kale/vimwiki/assets/intervention-matrix.png)
 
 ## Assumptions
-* Some assumptions were made about the bridges. When a maintenance event occurs on a bridge and that event is recorded, the bridge is permanently removed from the study. 
-* There are other options on how to handle a bridge once a maintenance event occurs, each with its own consequences. These include:
+
+* What is the average time-span before there
+- When a maintenance event occurs on a bridge and that maintenance event is recorded, the bridge is permanently removed from the study. 
+- There are other options on how to handle a bridge once a maintenance event occurs, each with its own consequences. These include:
     - Allow the bridge to re-enter the study at the same age.
     - Allow the bridge to re-enter the study at a younger age, given the type of maintenance which occurred.
 
@@ -79,7 +111,6 @@ The survival rate $S(x)$ can be computed as show in the equation 2:
 $$ {S(x) = 1 - h(x)}$$
 
 #### ☁️  Probabilities
-
 A period life table is baed on the mortality expeirence of a population during a relative short period of time. 
 #### New understanding of the methodology
 - $f(x):$ Starting at the start time, the probability distribution of when you will die.
