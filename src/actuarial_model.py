@@ -378,12 +378,11 @@ def main():
     df5 = compute_life_table(data, [2008, 2012], 'Repair')
     df6 = compute_life_table(data, [2012, 2016], 'Repair')
 
-    #    df7 = compute_life_table(data, [2016, 2020], 'Repair')
-    print(df1)
-    print(df2)
-    print(df3)
-    print(df4)
-    print(df5)
+    df1.to_csv('life-table-1992-1996.csv')
+    df2.to_csv('life-table-1996-2004.csv')
+    df3.to_csv('life-table-2004-2008.csv')
+    df4.to_csv('life-table-2008-2012.csv')
+    df5.to_csv('life-table-2012-2016.csv')
 
     #for age, intervention in age_intervention.items():
     #    print(age, len(intervention))
