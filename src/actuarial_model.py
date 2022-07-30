@@ -1,12 +1,12 @@
 """
 Description:
-    This is a script to run the actuarial model
+    This is a script to run the actuarial model.
 
 Author:
     Akshay Kale
 
 Credits:
-    The idea and implementation of this project was first initiated by O'Brien Chin
+    The idea and implementation of this project was first initiated by O'Brien Chin.
 
 Notes:
     1. Exposures is the same as count_dictionary
@@ -26,6 +26,7 @@ Date:
 import json
 import numpy as np
 import pandas as pd
+from tqdm import tqdm
 from collections import defaultdict
 from collections import Counter
 
@@ -288,7 +289,6 @@ def compute_window_statistics(data_new, year_built):
               'max time before intervention': max_intervention,
               'median time before intervention': median_intervention
             }
-
     return stats
 
 def study_window(data, study_window_year):
@@ -316,7 +316,6 @@ def study_window(data, study_window_year):
             new_years = years[start_index:end_index]
             new_ages = ages[start_index:end_index]
             new_interventions = interventions[start_index:end_index]
-
             temp_dict = {
                 'year':new_years,
                 'age':new_ages,
@@ -332,10 +331,11 @@ def compute_life_table(data, study_window_years, intervention_type):
     Description:
         compute table
     """
+    # Initial population
     initial_population = 100000
     intervention_type = 'Repair'
 
-    # get data from study
+    # Get data from study
     new_data = study_window(data, study_window_years)
     age_intervention = defaultdict(list)
     age_count = defaultdict()
@@ -346,7 +346,6 @@ def compute_life_table(data, study_window_years, intervention_type):
         interventions = record['intervention']
         for age, intervention in zip(ages, interventions):
             age_intervention[age].append(intervention)
-
     age_list = []
     population_list = []
     mortality_rate_list = []
@@ -370,19 +369,12 @@ def main():
     # Path of the Nebraska
     path = '../data/nebraska.json'
     data = read_json(path)
-    study_window_years = [1992, 1996]
-    df1 = compute_life_table(data, study_window_years, 'Repair')
-    df2 = compute_life_table(data, [1992, 1996], 'Repair')
-    df3 = compute_life_table(data, [1996, 2004], 'Repair')
-    df4 = compute_life_table(data, [2004, 2008], 'Repair')
-    df5 = compute_life_table(data, [2008, 2012], 'Repair')
-    df6 = compute_life_table(data, [2012, 2016], 'Repair')
+    study_window_years = [[1992, 1996], [1996, 2004], [2004, 2008], [2008, 2012], [2012, 2016]]
 
-    df1.to_csv('life-table-1992-1996.csv')
-    df2.to_csv('life-table-1996-2004.csv')
-    df3.to_csv('life-table-2004-2008.csv')
-    df4.to_csv('life-table-2008-2012.csv')
-    df5.to_csv('life-table-2012-2016.csv')
+    for window in tqdm(study_window_years):
+        csv_file = 'life-table-'+ str(window[0]) + '-' + str(window[1]) + '.csv'
+        df1 = compute_life_table(data, window, 'Repair')
+        df1.to_csv(csv_file)
 
     #for age, intervention in age_intervention.items():
     #    print(age, len(intervention))
