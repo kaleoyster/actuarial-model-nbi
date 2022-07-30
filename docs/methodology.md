@@ -54,7 +54,6 @@ There are considerations regarding the dataset and algorithms
 ![Bridge Intervention Matrix](/Users/kale/vimwiki/assets/intervention-matrix.png)
 
 ## Assumptions
-
 * What is the average time-span before there
 - When a maintenance event occurs on a bridge and that maintenance event is recorded, the bridge is permanently removed from the study. 
 - There are other options on how to handle a bridge once a maintenance event occurs, each with its own consequences. These include:
@@ -100,12 +99,11 @@ The algorithm is divied into four steps:
     * For a very small change in time $x$, the probability that a life who has attained age $x$, fails before attaining age $x + dx$.
     * However, computing this instantaneous rate of failure requires that a bridge be part of the study for the entire year for it to contribute to the exposures for that year.
     * This requirement reduces the number of observations in the dataset (Richards 2011). 
-
 - In contrast, we use a simpler maximum likelihood estimator that can accommodate partial year exposures to capture maintenance patterns.
 - Hence, if $leave(x)$ is the number of bridges that leave the study at age $x$ and $exposures(x)$ is the number of exposures at age $x$ 
 
 The hazard rate is defined as the following:
-$$ h(x) = { exposures(x + 1) \over exposures(x)} $$
+$$ h(x) = {exposures(x + 1) \over exposures(x)} $$
 
 The survival rate $S(x)$ can be computed as show in the equation 2:
 $$ {S(x) = 1 - h(x)}$$
