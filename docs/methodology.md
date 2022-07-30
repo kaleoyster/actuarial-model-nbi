@@ -13,7 +13,6 @@ There are considerations regarding the dataset and algorithms
         - For instance in 2022, a bridge built in 2014, may have a total of 29 records as opposed to 9 records.
     * Mean and median time before intervention in these bridges.
 - Can we bridge the all bridges around this four year time together, and treat them as bridges built in within a study window.
-
 - Overall, the idea of study window of last four-years or last-three years, would guide in calculating lifetable. Each of the study window will provide an understanding of changing life expectancy of the bridges.
 
    * **Study window 1:** 1992 - 1998 → defined by `BIM` → Compute average length 
@@ -25,10 +24,8 @@ There are considerations regarding the dataset and algorithms
    * and so and so forth.
    
 - New method:
+- For each window, create a life table I
    * **Study window 1:** 1992 - 1998 → defined by `BIM` → Compute average length 
-        - for each of the new study window:
-            * Create life table I
-
    * **Study window 2:** 1998 - 2004
    * **Study window 3:** 2004 - 2008 
    * **Study window 4:** 2008 - 2012
@@ -37,9 +34,7 @@ There are considerations regarding the dataset and algorithms
    * and so and so forth.
 
 - It would be much more wiser to have an instantaneous rate of failure for several study windows. These study windows are four years apart.
-
 - The study windows represent bridges built during these time windows and then surviving for the next windows.
-
 
 2. The hazard rate computes instantaneous rate of failure.
   2. **Focus:** The study needs to focus on one single component of the bridge such as `deck`.
