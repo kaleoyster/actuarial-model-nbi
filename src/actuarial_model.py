@@ -430,9 +430,14 @@ def plot_line(ages, mrates):
 
     fig.show()
 
-def plot_heatmap(mrates):
+def plot_heatmap(ages, mrates):
+    """
+    Description:
+    """
     fig = go.Figure(data=go.Heatmap(
-                z=mrates
+                z=mrates,
+                x=ages,
+                y=['Study window 1', 'Study window 2', 'Study window 3', 'Study window 4', 'Study window 5']
             ))
     fig.show()
 
@@ -450,7 +455,7 @@ def main():
         mRates.append(list(df1['Mortality rate']))
         df1.to_csv(csv_file)
     plot_line(ages, mRates)
-    plot_heatmap(mRates)
+    plot_heatmap(ages, mRates)
     print(ages)
     print(mRates)
 
