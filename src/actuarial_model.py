@@ -329,7 +329,10 @@ def study_window(data, study_window_year):
             pass
     return new_data
 
-def compute_life_table(data, study_window_years, intervention_type):
+def compute_life_table(data,
+                       study_window_years,
+                       intervention_type,
+                       end_age=70):
     """
     Description:
         compute table
@@ -352,10 +355,14 @@ def compute_life_table(data, study_window_years, intervention_type):
     age_list = []
     population_list = []
     mortality_rate_list = []
-    for age in range(1, 100):
+    for age in range(1, end_age):
         total_number_bridges = len(age_intervention[age])
         counter_intervention = Counter(age_intervention[age])
-        mortality_rate = counter_intervention[intervention_type] / total_number_bridges
+        try:
+            mortality_rate = counter_intervention[intervention_type] / total_number_bridges
+        except:
+            mortality_rate = 0.0
+
         death = initial_population * mortality_rate
         death = round(death)
         age_list.append(age)
@@ -430,15 +437,16 @@ def plot_line(ages, mrates):
 
     fig.show()
 
-def plot_heatmap(ages, mrates):
+def plot_heatmap(ages, mrates, yNames):
     """
     Description:
     """
+    y=['Study window 1', 'Study window 2', 'Study window 3', 'Study window 4', 'Study window 5', 'Study window 6']
+
     fig = go.Figure(data=go.Heatmap(
                 z=mrates,
                 x=ages,
-                y=['Study window 1', 'Study window 2', 'Study window 3', 'Study window 4', 'Study window 5']
-            ))
+                y=yNames))
     fig.show()
 
 def main():
@@ -454,10 +462,103 @@ def main():
         ages = list(df1['Age'])
         mRates.append(list(df1['Mortality rate']))
         df1.to_csv(csv_file)
-    plot_line(ages, mRates)
-    plot_heatmap(ages, mRates)
-    print(ages)
-    print(mRates)
+    #print(mRates)
+    #plot_line(age, mRates)
+#    plot_heatmap(ages, mRates)
+
+
+    # Prepare dataset for only 'High ADT'
+    highADT = defaultdict()
+    for key, record in data.items():
+        adtCat = record['adt category']
+        if adtCat[-1] == 'High':
+            highADT[key] = record
+
+    # Prepare dataset for only 'Ultra Light ADT'
+    ultraLightADT = defaultdict()
+    for key, record in data.items():
+        adtCat = record['adt category']
+        if adtCat[-1] == 'Ultra Light':
+            ultraLightADT[key] = record
+
+    # Prepare dataset for only 'light adt'
+    lightADT = defaultdict()
+    for key, record in data.items():
+        adtcat = record['adt category']
+        if adtcat[-1] == 'Light':
+            lightADT[key] = record
+
+    # Prepare dataset for only 'light adt'
+    veryLightADT = defaultdict()
+    for key, record in data.items():
+        adtcat = record['adt category']
+        if adtcat[-1] == 'Very Light':
+            veryLightADT[key] = record
+
+    # Prepare dataset for only 'light adt'
+    moderateADT = defaultdict()
+    for key, record in data.items():
+        adtcat = record['adt category']
+        if adtcat[-1] == 'Moderate':
+            moderateADT[key] = record
+
+    # Ultra light
+    ultraLightMorRates = []
+    for window in tqdm(study_window_years):
+        csv_file = 'life-table-'+ str(window[0]) + '-' + str(window[1]) + '.csv'
+        dfUltraLight = compute_life_table(ultraLightADT, window, 'Repair')
+        ages = list(dfUltraLight['Age'])
+        ultraLightMorRates.append(list(dfUltraLight['Mortality rate']))
+        dfUltraLight.to_csv(csv_file)
+
+    # Very light
+    veryLightMorRates = []
+    for window in tqdm(study_window_years):
+        csv_file = 'life-table-'+ str(window[0]) + '-' + str(window[1]) + '.csv'
+        dfVeryLight = compute_life_table(veryLightADT, window, 'Repair')
+        ages = list(dfVeryLight['Age'])
+        veryLightMorRates.append(list(dfVeryLight['Mortality rate']))
+        dfVeryLight.to_csv(csv_file)
+
+    # Light
+    lightMorRates = []
+    for window in tqdm(study_window_years):
+        csv_file = 'life-table-'+ str(window[0]) + '-' + str(window[1]) + '.csv'
+        dfLight = compute_life_table(lightADT, window, 'Repair')
+        ages = list(dfLight['Age'])
+        lightMorRates.append(list(dfLight['Mortality rate']))
+        dfLight.to_csv(csv_file)
+
+
+    # Moderate
+    moderateMorRates = []
+    for window in tqdm(study_window_years):
+        csv_file = 'life-table-'+ str(window[0]) + '-' + str(window[1]) + '.csv'
+        dfMod = compute_life_table(moderateADT, window, 'Repair')
+        ages = list(dfMod['Age'])
+        moderateMorRates.append(list(dfMod['Mortality rate']))
+        dfMod.to_csv(csv_file)
+
+    # High
+    highMorRates = []
+    for window in tqdm(study_window_years):
+        csv_file = 'life-table-'+ str(window[0]) + '-' + str(window[1]) + '.csv'
+        dfHi = compute_life_table(highADT, window, 'Repair')
+        ages = list(dfHi['Age'])
+        highMorRates.append(list(dfHi['Mortality rate']))
+        dfHi.to_csv(csv_file)
+
+    heatmaps = []
+    yNames = ['Baseline', 'Ultra Light', 'Very Light', 'Light', 'Moderate', 'High']
+    heatmaps.append(mRates[0])
+    heatmaps.append(ultraLightMorRates[0])
+    heatmaps.append(veryLightMorRates[0])
+    heatmaps.append(lightMorRates[0])
+    heatmaps.append(moderateMorRates[0])
+    heatmaps.append(highMorRates[0])
+
+    plot_heatmap(ages, heatmaps, yNames)
+
 
     #for age, intervention in age_intervention.items():
     #    print(age, len(intervention))

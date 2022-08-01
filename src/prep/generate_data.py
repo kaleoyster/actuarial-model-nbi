@@ -107,6 +107,7 @@ def main():
         sup_no_intervention = record['superstructureNumberOfInterventions']
         sub_no_intervention = record['substructureNumberOfInterventions']
         deck_no_intervention = record['deckNumberOfInterventions']
+        adt_category = record['adtCategory']
         values = {
             'year': year,
             'year built': year_built,
@@ -121,6 +122,7 @@ def main():
             'superstructure intervention num': sup_no_intervention,
             'substructure intervention num': sub_no_intervention,
             'deck intervention num': deck_no_intervention,
+            'adt category': adt_category,
         }
 
         json_dictionary[structure_number] = values

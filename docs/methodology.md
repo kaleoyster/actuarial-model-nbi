@@ -27,7 +27,7 @@ The following is the new approach
 
 - New method:
     - For each window, create a life table for each study window.
-    * **Study window 1:** 1992 - 1998 → defined by `BIM` → Compute average length 
+    * **Study window 1:** 1992 - 1998 → defined by `BIM` → Compute average length, treating the each study window mortality rate as a baseline.
     * **Study window 2:** 1998 - 2004
     * **Study window 3:** 2004 - 2008 
     * **Study window 4:** 2008 - 2012
@@ -35,14 +35,23 @@ The following is the new approach
     * **Study window 6:** 2016 - 2020
     * and so and so forth.
 
+    - Using the mortality rate as the baseline may prove complementary to the BDS score:
+        - Baseline difference score accounts for performance of the bridge health
+        - The baseline based on mortality may account for maintenance.
+        * However, the maintenance based baseline may not be useful in computing a score. 
+
+- When using the mortality rates as baseline:
+    - Does computing with a denominator of 0 useful / valid as concluding 0 for life-table.
+    - Zero in the denominator suggest that there are no available records for that age. That doesn't necessarily translate to no deaths.
+
 - It would be much more wiser to have an instantaneous rate of failure for several study windows. These study windows are four years apart.
 - The study windows represent bridges built during these time windows and then surviving for the next windows.
 
 2. The hazard rate computes instantaneous rate of failure.
-
 3. **Focus:** The study needs to focus on one single component of the bridge such as `deck`.
 4. **Definition:** We need to define repair and reconstruction. This could be defined using the `Bridge Intervention Matrix`.
-    - Instead of calling the death of the bridge, we can introduce a term `deterioration until maintenance`.
+    - Instead of calling the death of the bridge, we can introduce a term `deterioration until maintenance`. Do we need to compute the total number of deterioration until maintenance?
+
 5. **Correct span for the study window:** By referring to older literature, we can identify the study windows. 
     → *Research question: How to find the appropriate span for the study window using data driven methods?*
 6. **Application:** This methodology can guide in answering the questions regarding the `average daily traffic` effect on the `deck` repair and maintenances.
