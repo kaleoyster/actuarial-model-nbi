@@ -1,52 +1,55 @@
 <h1 align='center'>
 Methodology 🧭
 </h1>
-There are considerations regarding the dataset and algorithms
 
 ## 📝 Points
-1. In an attempt to find the most appropriate study window:
-* Determining the appropriate length of the study window by historical evidence.
-- For all the bridges built in the year from 1992 to 2010. Determine the average time for first major intervention.
-    - Out of 17536 bridges, only 2 % of the bridges are built in 1992.
-    * And, a total of 4,479 bridges (~35%) bridges were built in between 1992 to 2020.
-    * For 333 bridges built in 1992, only 77 (23%) of the bridges have any intervention, moreover, the average length is 4.79 years before intervention, max(26), min(1), and median is 2. However, due to the inconsistent year built data, where year built of the bridges change over a period of time. One might observe that number of records available may be higher than expected.
-        - For instance in 2022, a bridge built in 2014, may have a total of 29 records as opposed to 9 records.
-    * Mean and median time before intervention in these bridges.
-- Can we bridge the all bridges around this four year time together, and treat them as bridges built in within a study window.
-- Overall, the idea of study window of last four-years or last-three years, would guide in calculating lifetable. Each of the study window will provide an understanding of changing life expectancy of the bridges.
 
-   * **Study window 1:** 1992 - 1998 → defined by `BIM` → Compute average length 
-   * **Study window 2:** 1998 - 2004
-   * **Study window 3:** 2004 - 2008 
-   * **Study window 4:** 2008 - 2012
-   * **Study window 5:** 2012 - 2016
-   * **Study window 6:** 2016 - 2020
-   * and so and so forth.
-   
+The following are considerations regarding the dataset and algorithms:
+1. We need to find the appropriate length of the study window.
+    - Determining the appropriate length of the study window using historical evidence.
+        - For all the bridges built in the year from 1992 to 2010. Determine the average time for first major intervention.
+        - Out of 17536 bridges, only 2 % of the bridges are built in 1992.
+        * And, a total of 4,479 bridges (~35%) bridges were built in between 1992 to 2020.
+        * For 333 bridges built in 1992, only 77 (23%) of the bridges have any intervention, moreover, the average length is 4.79 years before intervention, max(26), min(1), and median is 2.
+        * Mean and median time before intervention in these bridges.
+    - Do we need to have variable study window, as the the mortality rate of observing one intervention changes over a period of time?
+2. There are challenges in understanding the true mortality of the bridges as not all bridges are tracked every year over the their life cycle.
+    - However, due to the inconsistent year built data, where year built of the bridges change over a period of time. One might observe that number of records available may be higher than expected.
+    - For instance in 2022, a bridge built in 2014, may have a total of 29 records as opposed to 9 records.
+3. There are revised considerations for each of the study window:
+    - Overall, the idea of study window of last four-years or last-three years, would guide in calculating lifetable. Each of the study window will provide an understanding of changing life expectancy of the bridges.
+4. In an attempt to find the most appropriate study window:
+    - Can we bridge the all bridges around this four year time together, and treat them as bridges built in within a study window.
+
+
+### Improvement to the existing approach
+The following is the new approach
+
 - New method:
-- For each window, create a life table I
-   * **Study window 1:** 1992 - 1998 → defined by `BIM` → Compute average length 
-   * **Study window 2:** 1998 - 2004
-   * **Study window 3:** 2004 - 2008 
-   * **Study window 4:** 2008 - 2012
-   * **Study window 5:** 2012 - 2016
-   * **Study window 6:** 2016 - 2020
-   * and so and so forth.
+    - For each window, create a life table for each study window.
+    * **Study window 1:** 1992 - 1998 → defined by `BIM` → Compute average length 
+    * **Study window 2:** 1998 - 2004
+    * **Study window 3:** 2004 - 2008 
+    * **Study window 4:** 2008 - 2012
+    * **Study window 5:** 2012 - 2016
+    * **Study window 6:** 2016 - 2020
+    * and so and so forth.
 
 - It would be much more wiser to have an instantaneous rate of failure for several study windows. These study windows are four years apart.
 - The study windows represent bridges built during these time windows and then surviving for the next windows.
 
 2. The hazard rate computes instantaneous rate of failure.
-  2. **Focus:** The study needs to focus on one single component of the bridge such as `deck`.
 
-3. **Definition:** We need to define repair and reconstruction. This could be defined using the `Bridge Intervention Matrix`.
-
-- Instead of calling the death of the bridge, we can introduce a term `deterioration until maintenance`.
-
-4. **Correct span for the study window:** By referring to older literature, we can identify the study windows. → *Research question: How to find the appropriate span for the study window using data driven methods?*
-
-5. **Application:** This methodology can guide in answering the questions regarding the `average daily traffic` effect on the `deck` repair and maintenances.
+3. **Focus:** The study needs to focus on one single component of the bridge such as `deck`.
+4. **Definition:** We need to define repair and reconstruction. This could be defined using the `Bridge Intervention Matrix`.
+    - Instead of calling the death of the bridge, we can introduce a term `deterioration until maintenance`.
+5. **Correct span for the study window:** By referring to older literature, we can identify the study windows. 
+    → *Research question: How to find the appropriate span for the study window using data driven methods?*
+6. **Application:** This methodology can guide in answering the questions regarding the `average daily traffic` effect on the `deck` repair and maintenances.
 ![Bridge Intervention Matrix](/Users/kale/vimwiki/assets/intervention-matrix.png)
+
+7. 
+
 
 ## Assumptions
 * What is the average time-span before there
@@ -115,7 +118,7 @@ A period life table is baed on the mortality expeirence of a population during a
 - $H(x):$ Cumulative hazard function.
 
 #### Previous understanding of the methodology
-- Instead of the absolute number of surviving bridges at age $x$ life tables commonly compute a probability of survival. 
+- Instead of the computing the absolute number of surviving bridges at age $x$ life tables commonly compute a probability of survival. 
 - The probability of survival for bridges exposed from age 1 to age $x$ is:  $_1P_x$, or simply $P_x$. 
 - It is computed from the hazard rate as shown in Equation 3:
 - The mortality rate (or cumulative probability of failure), $F(x)$ of bridges exposed at age 1

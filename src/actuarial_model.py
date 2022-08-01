@@ -26,6 +26,9 @@ Date:
 import json
 import numpy as np
 import pandas as pd
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
+
 from tqdm import tqdm
 from collections import defaultdict
 from collections import Counter
@@ -364,6 +367,74 @@ def compute_life_table(data, study_window_years, intervention_type):
                            'Mortality rate':mortality_rate_list})
     return df
 
+def plot_line(ages, mrates):
+    """
+    Description:
+        plot line graph
+    args:
+        ages
+        mrates
+    return:
+        plot
+    """
+    # Create figure with secondary y-axis
+    fig = make_subplots(specs=[[{"secondary_y": True}]])
+
+
+    # Add traces
+    fig.add_trace(
+        go.Scatter(
+                   x=ages,
+                   y=mrates[0],
+                   name="Study window 1992-1996"),
+    )
+
+    fig.add_trace(
+        go.Scatter(x=ages,
+                   y=mrates[1],
+                   name="Study window 1996-2004"),
+    )
+
+
+    fig.add_trace(
+        go.Scatter(x=ages,
+                   y=mrates[2],
+                   name="Study window 2004-2008"),
+    )
+
+    fig.add_trace(
+        go.Scatter(x=ages,
+                   y=mrates[3],
+                   name="Study window 2008-2012"),
+    )
+
+
+    fig.add_trace(
+        go.Scatter(x=ages,
+                   y=mrates[4],
+                   name="Study window 2012-2016"),
+    )
+
+
+    # Add figure title
+    fig.update_layout(
+        title_text="Mortality rates of Bridges across age 1 to 100"
+    )
+
+    # Set x-axis title
+    fig.update_xaxes(title_text="Age")
+
+    # Set y-axes titles
+    fig.update_yaxes(title_text="<b>Mortality Rates</b> ", secondary_y=False)
+    #fig.update_yaxes(title_text="<b>secondary</b> yaxis title", secondary_y=True)
+
+    fig.show()
+
+def plot_heatmap(mrates):
+    fig = go.Figure(data=go.Heatmap(
+                z=mrates
+            ))
+    fig.show()
 
 def main():
     # Path of the Nebraska
@@ -371,10 +442,17 @@ def main():
     data = read_json(path)
     study_window_years = [[1992, 1996], [1996, 2004], [2004, 2008], [2008, 2012], [2012, 2016]]
 
+    mRates = []
     for window in tqdm(study_window_years):
         csv_file = 'life-table-'+ str(window[0]) + '-' + str(window[1]) + '.csv'
         df1 = compute_life_table(data, window, 'Repair')
+        ages = list(df1['Age'])
+        mRates.append(list(df1['Mortality rate']))
         df1.to_csv(csv_file)
+    plot_line(ages, mRates)
+    plot_heatmap(mRates)
+    print(ages)
+    print(mRates)
 
     #for age, intervention in age_intervention.items():
     #    print(age, len(intervention))
