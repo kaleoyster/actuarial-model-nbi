@@ -387,7 +387,6 @@ def plot_line(ages, mrates):
     # Create figure with secondary y-axis
     fig = make_subplots(specs=[[{"secondary_y": True}]])
 
-
     # Add traces
     fig.add_trace(
         go.Scatter(
@@ -441,7 +440,12 @@ def plot_heatmap(ages, mrates, yNames):
     """
     Description:
     """
-    y=['Study window 1', 'Study window 2', 'Study window 3', 'Study window 4', 'Study window 5', 'Study window 6']
+    y=['Study window 1',
+       'Study window 2',
+       'Study window 3',
+       'Study window 4',
+       'Study window 5',
+       'Study window 6']
 
     fig = go.Figure(data=go.Heatmap(
                 z=mrates,
@@ -454,7 +458,6 @@ def main():
     path = '../data/nebraska.json'
     data = read_json(path)
     study_window_years = [[1992, 1996], [1996, 2004], [2004, 2008], [2008, 2012], [2012, 2016]]
-
     mRates = []
     for window in tqdm(study_window_years):
         csv_file = 'life-table-'+ str(window[0]) + '-' + str(window[1]) + '.csv'
@@ -464,7 +467,7 @@ def main():
         df1.to_csv(csv_file)
     #print(mRates)
     #plot_line(age, mRates)
-#    plot_heatmap(ages, mRates)
+    #plot_heatmap(ages, mRates)
 
 
     # Prepare dataset for only 'High ADT'
@@ -556,7 +559,6 @@ def main():
     heatmaps.append(lightMorRates[0])
     heatmaps.append(moderateMorRates[0])
     heatmaps.append(highMorRates[0])
-
     plot_heatmap(ages, heatmaps, yNames)
 
 

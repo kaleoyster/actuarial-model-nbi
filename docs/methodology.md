@@ -43,7 +43,6 @@ The following is the new approach
 - When using the mortality rates as baseline:
     - Does computing with a denominator of 0 useful / valid as concluding 0 for life-table.
     - Zero in the denominator suggest that there are no available records for that age. That doesn't necessarily translate to no deaths.
-
 - It would be much more wiser to have an instantaneous rate of failure for several study windows. These study windows are four years apart.
 - The study windows represent bridges built during these time windows and then surviving for the next windows.
 
@@ -53,7 +52,8 @@ The following is the new approach
     - Instead of calling the death of the bridge, we can introduce a term `deterioration until maintenance`. Do we need to compute the total number of deterioration until maintenance?
 
 5. **Correct span for the study window:** By referring to older literature, we can identify the study windows. 
-    → *Research question: How to find the appropriate span for the study window using data driven methods?*
+    → **Research question: How to find the appropriate span for the study window using data driven methods?**
+
 6. **Application:** This methodology can guide in answering the questions regarding the `average daily traffic` effect on the `deck` repair and maintenances.
 ![Bridge Intervention Matrix](/Users/kale/vimwiki/assets/intervention-matrix.png)
 
