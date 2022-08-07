@@ -4,7 +4,7 @@ Description:
 Author:
     Akshay Kale
 Credits:
-    The idea and implementation of this project was first initiated by O'Brien Chin.
+ #   The idea and implementation of this project was first initiated by O'Brien Chin.
 Notes:
     1. Exposures is the same as count_dictionary
     compute counts can be renamed as exposures.
@@ -464,7 +464,9 @@ def main():
         df1.to_csv(csv_file)
     #print(mRates)
     #plot_line(age, mRates)
-    #plot_heatmap(ages, mRates)
+    yNames = ['1992-1996', '1996-2000', '2000-2004', '2004-2008', '2008-2012', '2012-2016']
+
+    plot_heatmap(ages, mRates, yNames)
 
 
     # Prepare dataset for only 'High ADT'
