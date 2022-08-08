@@ -450,12 +450,46 @@ def plot_heatmap(ages, mrates, yNames):
                 y=yNames))
     fig.show()
 
+def create_categorical_comparison(data, study_window_years):
+    """
+    Description:
+        Create categorical comparisons
+    Args:
+    Returns:
+    """
+    field = 'adt category'
+    category =  'Moderate'
+    intervention = 'Repair'
+
+    # Prepare dataset for only 'light adt'
+    categoryTemp = defaultdict()
+    for key, record in data.items():
+        cat = record['adt category']
+        if cat[-1] == category:
+            categoryTemp[key] = record
+
+    # High
+    tempValues = []
+    for window in tqdm(study_window_years):
+        csv_file = 'life-table-'+ str(window[0]) + '-' + str(window[1])+'-'+ category + '.csv'
+        tempDf = compute_life_table(categoryTemp, window, intervention)
+        ages = list(tempDf['Age'])
+        tempValues.append(list(tempDf['Mortality rate']))
+        tempDf.to_csv(csv_file)
+
+    print(tempDf)
+
+
+
 def main():
     # Path of the Nebraska
     path = '../data/nebraska.json'
     data = read_json(path)
     study_window_years = [[1992, 1996], [1996, 2004], [2004, 2008], [2008, 2012], [2012, 2016]]
+
+
     mRates = []
+
     for window in tqdm(study_window_years):
         csv_file = 'life-table-'+ str(window[0]) + '-' + str(window[1]) + '.csv'
         df1 = compute_life_table(data, window, 'Repair')
@@ -475,8 +509,9 @@ def main():
 
     plot_heatmap(ages, mRates, yNames)
 
-
     # Prepare dataset for only 'High ADT'
+    create_categorical_comparison(data, study_window_years)
+
     highADT = defaultdict()
     for key, record in data.items():
         adtCat = record['adt category']
@@ -538,7 +573,6 @@ def main():
         lightMorRates.append(list(dfLight['Mortality rate']))
         dfLight.to_csv(csv_file)
 
-
     # Moderate
     moderateMorRates = []
     for window in tqdm(study_window_years):
@@ -558,7 +592,13 @@ def main():
         dfHi.to_csv(csv_file)
 
     heatmaps = []
-    yNames = ['Baseline', 'Ultra Light', 'Very Light', 'Light', 'Moderate', 'High']
+    yNames = ['Baseline',
+              'Ultra Light',
+              'Very Light',
+              'Light',
+              'Moderate',
+              'High']
+
     heatmaps.append(mRates[0])
     heatmaps.append(ultraLightMorRates[0])
     heatmaps.append(veryLightMorRates[0])
@@ -566,6 +606,7 @@ def main():
     heatmaps.append(moderateMorRates[0])
     heatmaps.append(highMorRates[0])
     plot_heatmap(ages, heatmaps, yNames)
+
 
 
     #for age, intervention in age_intervention.items():
