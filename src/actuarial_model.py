@@ -371,7 +371,7 @@ def compute_life_table(data,
                            'Mortality rate':mortality_rate_list})
     return df
 
-def plot_line(ages, mrates):
+def plot_line(ages, mRates, yNames):
     """
     Description:
         plot line graph
@@ -383,41 +383,14 @@ def plot_line(ages, mrates):
     """
     # Create figure with secondary y-axis
     fig = make_subplots(specs=[[{"secondary_y": True}]])
-
     # Add traces
-    fig.add_trace(
-        go.Scatter(
+    for index, mrates in enumerate(mRates):
+        fig.add_trace(
+            go.Scatter(
                    x=ages,
-                   y=mrates[0],
-                   name="Study window 1992-1996"),
-    )
-
-    fig.add_trace(
-        go.Scatter(x=ages,
-                   y=mrates[1],
-                   name="Study window 1996-2004"),
-    )
-
-
-    fig.add_trace(
-        go.Scatter(x=ages,
-                   y=mrates[2],
-                   name="Study window 2004-2008"),
-    )
-
-    fig.add_trace(
-        go.Scatter(x=ages,
-                   y=mrates[3],
-                   name="Study window 2008-2012"),
-    )
-
-
-    fig.add_trace(
-        go.Scatter(x=ages,
-                   y=mrates[4],
-                   name="Study window 2012-2016"),
-    )
-
+                   y=mrates,
+                   name=yNames[index]),
+        )
 
     # Add figure title
     fig.update_layout(
@@ -437,13 +410,6 @@ def plot_heatmap(ages, mrates, yNames):
     """
     Description:
     """
-    y=['Study window 1',
-       'Study window 2',
-       'Study window 3',
-       'Study window 4',
-       'Study window 5',
-       'Study window 6']
-
     fig = go.Figure(data=go.Heatmap(
                 z=mrates,
                 x=ages,
@@ -458,7 +424,7 @@ def compute_life_table_utility(categoryTemp, study_window_years, category, inter
         ages = list(tempDf['Age'])
         tempValues.append(list(tempDf['Mortality rate']))
         tempDf.to_csv(csv_file)
-    return tempValues
+    return tempValues, ages
 
 def compute_categorical_lifetable(data, study_window_years, field, category):
     """
@@ -480,7 +446,7 @@ def compute_categorical_lifetable(data, study_window_years, field, category):
         if cat[-1] == category:
             categoryTemp[key] = record
 
-    tempValues = compute_life_table_utility(categoryTemp,
+    tempValues, ages = compute_life_table_utility(categoryTemp,
                                             study_window_years,
                                             category,
                                             intervention)
@@ -492,21 +458,16 @@ def main():
     path = '../data/nebraska.json'
     data = read_json(path)
     study_window_years = [[1992, 1996],
-                          [1996, 2004],
+                          [1996, 2000],
+                          [2000, 2004],
                           [2004, 2008],
                           [2008, 2012],
                           [2012, 2016]]
-    mRates = []
 
-    for window in tqdm(study_window_years):
-        csv_file = 'life-table-'+ str(window[0]) + '-' + str(window[1]) + '.csv'
-        df1 = compute_life_table(data, window, 'Repair')
-        ages = list(df1['Age'])
-        mRates.append(list(df1['Mortality rate']))
-        df1.to_csv(csv_file)
-
-    plot_line(ages, mRates)
-
+    mRates, ages = compute_life_table_utility(data,
+                               study_window_years,
+                               '',
+                               'Repair')
     yNames = ['1992-1996',
               '1996-2000',
               '2000-2004',
@@ -514,18 +475,20 @@ def main():
               '2008-2012',
               '2012-2016']
 
-    #plot_heatmap(ages, mRates, yNames)
-    field = 'adt category'
+    plot_line(ages, mRates, yNames)
+    #for rates in mRates:
+    #    print(len(rates))
+    plot_heatmap(ages, mRates, yNames)
 
-    yNames = [ 'Ultra Light',
+    field = 'adt category'
+    yNames = ['Ultra Light',
               'Very Light',
               'Light',
               'Moderate',
               'High']
 
-    categories = ['Ultra Light', 'Very Light', 'Light', 'Moderate', 'High']
     heatmaps = []
-    for category in categories:
+    for category in yNames:
         rates = compute_categorical_lifetable(data,
                                           study_window_years,
                                           field,
@@ -533,8 +496,22 @@ def main():
         heatmaps.append(rates[0])
     plot_heatmap(ages, heatmaps, yNames)
 
+    # Owner
+    #field = 'adt category'
+    #yNames = ['Ultra Light',
+    #          'Very Light',
+    #          'Light',
+    #          'Moderate',
+    #          'High']
 
-
+    #heatmaps = []
+    #for category in yNames:
+    #    rates = compute_categorical_lifetable(data,
+    #                                      study_window_years,
+    #                                      field,
+    #                                      category)
+    #    heatmaps.append(rates[0])
+    #plot_heatmap(ages, heatmaps, yNames)
 
     #for age, intervention in age_intervention.items():
     #    print(age, len(intervention))
