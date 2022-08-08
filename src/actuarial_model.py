@@ -475,7 +475,6 @@ def main():
               '2004-2008',
               '2008-2012',
               '2012-2016']
-
     plot_line(ages, mRates, yNames)
     plot_heatmap(ages, mRates, yNames)
 
@@ -495,6 +494,18 @@ def main():
                                           category)
         heatmaps.append(rates[0])
     plot_heatmap(ages, heatmaps, yNames)
+
+    # Owner
+    field = 'owner'
+    yNames = ['1', '2', '3', '4']
+    heatmaps = []
+    for category in yNames:
+        rates = compute_categorical_lifetable(data,
+                                          study_window_years,
+                                          field,
+                                          category)
+        heatmaps.append(rates[0])
+    #plot_heatmap(ages, heatmaps, yNames)
 
     #for age, intervention in age_intervention.items():
     #    print(age, len(intervention))
