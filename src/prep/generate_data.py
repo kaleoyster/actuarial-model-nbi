@@ -94,6 +94,7 @@ def main():
     json_dictionary = {}
     for record in groupedRecords.values():
         structure_number = record['structureNumber'][0]
+        owner = record['owner']
         year = record['year']
         year_built = record['yearBuilt']
         deck =  record['deck']
@@ -123,6 +124,7 @@ def main():
             'substructure intervention num': sub_no_intervention,
             'deck intervention num': deck_no_intervention,
             'adt category': adt_category,
+            'owner': owner,
         }
 
         json_dictionary[structure_number] = values
