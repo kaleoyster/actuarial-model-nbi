@@ -464,6 +464,7 @@ def main():
                           [2008, 2012],
                           [2012, 2016]]
 
+    # Overall rates <- baseline
     mRates, ages = compute_life_table_utility(data,
                                study_window_years,
                                '',
@@ -476,10 +477,9 @@ def main():
               '2012-2016']
 
     plot_line(ages, mRates, yNames)
-    #for rates in mRates:
-    #    print(len(rates))
     plot_heatmap(ages, mRates, yNames)
 
+    # Average daily traffic
     field = 'adt category'
     yNames = ['Ultra Light',
               'Very Light',
@@ -495,23 +495,6 @@ def main():
                                           category)
         heatmaps.append(rates[0])
     plot_heatmap(ages, heatmaps, yNames)
-
-    # Owner
-    #field = 'adt category'
-    #yNames = ['Ultra Light',
-    #          'Very Light',
-    #          'Light',
-    #          'Moderate',
-    #          'High']
-
-    #heatmaps = []
-    #for category in yNames:
-    #    rates = compute_categorical_lifetable(data,
-    #                                      study_window_years,
-    #                                      field,
-    #                                      category)
-    #    heatmaps.append(rates[0])
-    #plot_heatmap(ages, heatmaps, yNames)
 
     #for age, intervention in age_intervention.items():
     #    print(age, len(intervention))
