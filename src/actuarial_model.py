@@ -462,9 +462,16 @@ def main():
         ages = list(df1['Age'])
         mRates.append(list(df1['Mortality rate']))
         df1.to_csv(csv_file)
+
     #print(mRates)
     #plot_line(age, mRates)
-    yNames = ['1992-1996', '1996-2000', '2000-2004', '2004-2008', '2008-2012', '2012-2016']
+
+    yNames = ['1992-1996',
+              '1996-2000',
+              '2000-2004',
+              '2004-2008',
+              '2008-2012',
+              '2012-2016']
 
     plot_heatmap(ages, mRates, yNames)
 

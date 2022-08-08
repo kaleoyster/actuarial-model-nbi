@@ -8,7 +8,7 @@ The following are considerations regarding the dataset and algorithms:
 1. We need to find the appropriate length of the study window.
     - Determining the appropriate length of the study window using historical evidence.
         - For all the bridges built in the year from 1992 to 2010. Determine the average time for first major intervention.
-        - Out of 17536 bridges, only 2 % of the bridges are built in 1992.
+        - Out of 17,536 bridges, only 2 % of the bridges are built in 1992.
         * And, a total of 4,479 bridges (~35%) bridges were built in between 1992 to 2020.
         * For 333 bridges built in 1992, only 77 (23%) of the bridges have any intervention, moreover, the average length is 4.79 years before intervention, max(26), min(1), and median is 2.
         * Mean and median time before intervention in these bridges.
@@ -43,6 +43,7 @@ The following is the new approach
 - When using the mortality rates as baseline:
     - Does computing with a denominator of 0 useful / valid as concluding 0 for life-table.
     - Zero in the denominator suggest that there are no available records for that age. That doesn't necessarily translate to no deaths.
+
 - It would be much more wiser to have an instantaneous rate of failure for several study windows. These study windows are four years apart.
 - The study windows represent bridges built during these time windows and then surviving for the next windows.
 
