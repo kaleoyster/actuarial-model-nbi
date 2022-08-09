@@ -1,10 +1,12 @@
 """
 Description:
     This is a script to run the actuarial model.
+
 Author:
     Akshay Kale
+
 Credits:
- #   The idea and implementation of this project was first initiated by O'Brien Chin.
+   The idea and implementation of this project was first initiated by O'Brien Chin.
 Notes:
     1. Exposures is the same as count_dictionary
     compute counts can be renamed as exposures.
