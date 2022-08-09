@@ -58,7 +58,6 @@ The following is the new approach
 6. **Application:** This methodology can guide in answering the questions regarding the `average daily traffic` effect on the `deck` repair and maintenances.
 ![Bridge Intervention Matrix](/Users/kale/vimwiki/assets/intervention-matrix.png)
 
-7. 
 
 
 ## Assumptions
@@ -142,8 +141,11 @@ $$F(x) = 1 − _t(P(x))$$
     $$ _4Q_1 = 1 - _4P_1 $$
     $$ _5Q_1 = 1 - _5P_1 $$
 
+#### Validation
+We validate the use of our function by usinng the same functions we implemented on bridges to understand the life expectancy of the population used in the following reference [3].
+
 ## References
 1. [Intuition for cumulative hazard function -- survival analysis](https://stats.stackexchange.com/questions/60238/intuition-for-cumulative-hazard-function-survival-analysis)
 2. [Methodology to calculating national life tables](https://www.ons.gov.uk/peoplepopulationandcommunity/healthandsocialcare/healthandlifeexpectancies/methodologies/guidetocalculatingnationallifetables)
-
+3. [Computing Life Tables](https://www.measureevaluation.org/resources/training/online-courses-and-resources/non-certificate-courses-and-mini-tutorials/multiple-decrement-life-tables/lesson-3.html)
 
