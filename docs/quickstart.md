@@ -41,7 +41,6 @@ python Downloadv1.py
 ```
 
 
-
 ### Generate application datasets
 
 #### Generate dataset
