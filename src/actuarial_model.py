@@ -328,6 +328,37 @@ def study_window(data, study_window_year):
             pass
     return new_data
 
+def compute_periodic_life_table(initial_population, intervention_type, age_intervention, end_age=70):
+    age_list = []
+    population_list = []
+    mortality_rate_list = []
+
+    for age in range(1, end_age):
+        total_number_bridges = len(age_intervention[age])
+        counter_intervention = Counter(age_intervention[age])
+        # For every age -> Counter({Interventions: Intervention number})
+
+        # TODO: A separate function that takes population and death and outputs all statistics
+        # Population = Bridges alive
+        # Death (D) = Bridges died (Intervened)
+
+        # computation of mortality rate
+        try:
+            mortality_rate = counter_intervention[intervention_type] / total_number_bridges
+        except:
+            mortality_rate = 0.0
+
+        death = initial_population * mortality_rate
+        death = round(death)
+
+        # Append all computed statistics to the list
+        age_list.append(age)
+        population_list.append(initial_population)
+        mortality_rate_list.append(mortality_rate)
+        initial_population = initial_population - death
+
+    return age_list, population_list, mortality_rate_list, initial_population
+
 def compute_life_table(data,
                        study_window_years,
                        intervention_type,
@@ -356,34 +387,12 @@ def compute_life_table(data,
     population_list = []
     mortality_rate_list = []
 
-    for age in range(1, end_age):
-        total_number_bridges = len(age_intervention[age])
-        counter_intervention = Counter(age_intervention[age])
-        # For every age -> Counter({Interventions: Intervention number})
+    age_list, population_list, mortality_rate_list, initial_population = compute_periodic_life_table(initial_population, intervention_type, age_intervention, end_age=70)
 
-        # TODO: A separate function that takes population and death and outputs all statistics
-        # Population = Bridges alive
-        # Death (D) = Bridges died (Intervened)
-        
-        # computation of mortality rate
-        try:
-            mortality_rate = counter_intervention[intervention_type] / total_number_bridges
-        except:
-            mortality_rate = 0.0
-
-        death = initial_population * mortality_rate
-        death = round(death)
-
-        # Append all computed statistics to the list
-        age_list.append(age)
-        population_list.append(initial_population)
-        mortality_rate_list.append(mortality_rate)
-        initial_population = initial_population - death
-
-        # Create the dataframes
-        df = pd.DataFrame({'Age':age_list,
-                           'Population':population_list,
-                           'Mortality rate':mortality_rate_list})
+    # Create the dataframes
+    df = pd.DataFrame({'Age':age_list,
+                        'Population':population_list,
+                        'Mortality rate':mortality_rate_list})
     return df
 
 def plot_line(ages, mRates, yNames):
@@ -494,32 +503,33 @@ def main():
     plot_heatmap(ages, mRates, yNames)
 
     # Average daily traffic
-    field = 'adt category'
-    yNames = ['Ultra Light',
-              'Very Light',
-              'Light',
-              'Moderate',
-              'High']
+    #field = 'adt category'
+    #yNames = ['Ultra Light',
+    #          'Very Light',
+    #          'Light',
+    #          'Moderate',
+    #          'High']
 
-    heatmaps = []
-    for category in yNames:
-        rates = compute_categorical_lifetable(data,
-                                          study_window_years,
-                                          field,
-                                          category)
-        heatmaps.append(rates[0])
-    plot_heatmap(ages, heatmaps, yNames)
+    #heatmaps = []
+    #for category in yNames:
+    #    rates = compute_categorical_lifetable(data,
+    #                                      study_window_years,
+    #                                      field,
+    #                                      category)
+    #    heatmaps.append(rates[0])
+    #plot_heatmap(ages, heatmaps, yNames)
 
     # Owner
-    field = 'owner'
-    yNames = ['1', '2', '3', '4']
-    heatmaps = []
-    for category in yNames:
-        rates = compute_categorical_lifetable(data,
-                                          study_window_years,
-                                          field,
-                                          category)
-        heatmaps.append(rates[0])
+    #field = 'owner'
+    #yNames = ['1', '2', '3', '4']
+    #heatmaps = []
+    #for category in yNames:
+    #    rates = compute_categorical_lifetable(data,
+    #                                      study_window_years,
+    #                                      field,
+    #                                      category)
+    #    heatmaps.append(rates[0])
+
     #plot_heatmap(ages, heatmaps, yNames)
 
     #for age, intervention in age_intervention.items():
