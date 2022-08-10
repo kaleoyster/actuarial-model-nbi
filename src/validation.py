@@ -14,7 +14,6 @@ import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
-
 from tqdm import tqdm
 from collections import defaultdict
 from collections import Counter
@@ -60,8 +59,7 @@ def main():
              2,
              3,
              2,
-             1,
-            ]
+             1]
     print(len(population))
     print(len(death))
     print('Hello World!')
