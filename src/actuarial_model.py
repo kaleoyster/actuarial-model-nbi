@@ -328,25 +328,66 @@ def study_window(data, study_window_year):
             pass
     return new_data
 
-def compute_periodic_life_table(initial_population, intervention_type, age_intervention, end_age=70):
+def compute_periodic_life_table(intervention_type, age_intervention, end_age=70):
+    """
+    Description
+        Compute a periodic lifetable
+    """
     age_list = []
+    list_P_x = []
+    list_D_x = []
+    list_m_x = []
+    list_q_x = []
+    list_p_x = []
+    list_l_x = []
+    list_L_x = []
+    list_T_x = []
+    list_e_x = []
+
     population_list = []
     mortality_rate_list = []
+    initial_population = 100000
 
-    for age in range(1, end_age):
+    for age in range(0, end_age):
         total_number_bridges = len(age_intervention[age])
         counter_intervention = Counter(age_intervention[age])
+
         # For every age -> Counter({Interventions: Intervention number})
 
         # TODO: A separate function that takes population and death and outputs all statistics
         # Population = Bridges alive
-        # Death (D) = Bridges died (Intervened)
+        # Death (D) = Bridges died (Intervened) <- mortality rate
+        # Conditional_probability_of_death <- Death_age / ( population_age + (0.5 * Death_age) )
+        # Conditional_probability_of_survival <- 1 - mortality_rate
 
-        # computation of mortality rate
-        try:
-            mortality_rate = counter_intervention[intervention_type] / total_number_bridges
-        except:
-            mortality_rate = 0.0
+        # Computation of mortality rate
+
+
+        P_x = total_number_bridges
+        D_x = counter_intervention[intervention_type]
+        m_x = D_x / P_x
+        q_x = (D_x / (P_x + (0.5 * D_x)))
+        p_x = 1 - q_x
+        l_x = initial_population * p_x
+
+        list_P_x.append(P_x)
+        list_D_x.append(D_x)
+        list_m_x.append(m_x)
+        list_q_x.append(q_x)
+        list_p_x.append(p_x)
+        list_l_x.append(l_x)
+
+        # (l(x) + l_(x+1))/ 2
+        #L_x =
+        #T_x=Sum(L_x[1:])
+        # e_x = T_x/l_x
+
+
+        mortality_rate = counter_intervention[intervention_type] / total_number_bridges
+        #try:
+        #    mortality_rate = counter_intervention[intervention_type] / total_number_bridges
+        #except:
+        #    mortality_rate = 0.0
 
         death = initial_population * mortality_rate
         death = round(death)
@@ -357,7 +398,24 @@ def compute_periodic_life_table(initial_population, intervention_type, age_inter
         mortality_rate_list.append(mortality_rate)
         initial_population = initial_population - death
 
-    return age_list, population_list, mortality_rate_list, initial_population
+    # Calculate L_x
+    for i in range(0, (len(list_l_x) - 1)):
+        L_x = (list_l_x[i] + list_l_x[i+1]) / 2
+        list_L_x.append(L_x)
+
+    # Caclculate T_x
+    for i in range(0, len(list_L_x)):
+        T_x = sum(list_L_x[i:])
+        list_T_x.append(T_x)
+
+    # Caclculate e_x
+    for i in range(0, len(list_T_x)):
+        e_x = list_T_x[i] / list_l_x[i]
+        list_e_x.append(e_x)
+
+
+
+    return age_list, population_list, mortality_rate_list
 
 def compute_life_table(data,
                        study_window_years,
@@ -368,7 +426,6 @@ def compute_life_table(data,
         computes period life table based on the period
     """
     # Initial population
-    initial_population = 100000
     intervention_type = 'Repair'
 
     # Get data from study
@@ -380,14 +437,11 @@ def compute_life_table(data,
     for bridge, record in new_data.items():
         ages = record['age']
         interventions = record['intervention']
+
         for age, intervention in zip(ages, interventions):
             age_intervention[age].append(intervention)
 
-    age_list = []
-    population_list = []
-    mortality_rate_list = []
-
-    age_list, population_list, mortality_rate_list, initial_population = compute_periodic_life_table(initial_population, intervention_type, age_intervention, end_age=70)
+    age_list, population_list, mortality_rate_list = compute_periodic_life_table(intervention_type, age_intervention, end_age=70)
 
     # Create the dataframes
     df = pd.DataFrame({'Age':age_list,
