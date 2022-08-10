@@ -334,7 +334,7 @@ def compute_life_table(data,
                        end_age=70):
     """
     Description:
-        compute table
+        computes period life table based on the period
     """
     # Initial population
     initial_population = 100000
@@ -351,12 +351,21 @@ def compute_life_table(data,
         interventions = record['intervention']
         for age, intervention in zip(ages, interventions):
             age_intervention[age].append(intervention)
+
     age_list = []
     population_list = []
     mortality_rate_list = []
+
     for age in range(1, end_age):
         total_number_bridges = len(age_intervention[age])
         counter_intervention = Counter(age_intervention[age])
+        # For every age -> Counter({Interventions: Intervention number})
+
+        # TODO: A separate function that takes population and death and outputs all statistics
+        # Population = Bridges alive
+        # Death (D) = Bridges died (Intervened)
+        
+        # computation of mortality rate
         try:
             mortality_rate = counter_intervention[intervention_type] / total_number_bridges
         except:
@@ -364,10 +373,14 @@ def compute_life_table(data,
 
         death = initial_population * mortality_rate
         death = round(death)
+
+        # Append all computed statistics to the list
         age_list.append(age)
         population_list.append(initial_population)
         mortality_rate_list.append(mortality_rate)
         initial_population = initial_population - death
+
+        # Create the dataframes
         df = pd.DataFrame({'Age':age_list,
                            'Population':population_list,
                            'Mortality rate':mortality_rate_list})

@@ -60,18 +60,21 @@ The following is an example of the a configuration.
 ```python
 def main():
     
-    # Average daily traffic
-    # Initialize variables
-    fieldname = 'ADT'
-    fieldnames = ['Light', 'Heavy', 'Moderate']
+    # Owner
+    field = 'owner'
+    yNames = ['1', '2', '3', '4']
+
+    # Study window years
     studywindow = [[1992, 2002], # Study window 1
                    [2002, 2004]] # Study window 2
+    heatmaps = []
+    for category in yNames:
+        rates = compute_categorical_lifetable(data,
+                                          study_window_years,
+                                          field,
+                                          category)
+        heatmaps.append(rates[0])
 
-    # Generate lifetable values
-    data_adt = compute_lifetable_utility(data, fieldname, fieldnames, studywindow)
-
-    # Print heatmap
-    print_heatmap(data_adt, fieldnames)
 ```
 
 #### Execution
