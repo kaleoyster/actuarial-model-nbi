@@ -353,13 +353,11 @@ def compute_periodic_life_table(intervention_type, age_intervention, end_age=70)
         counter_intervention = Counter(age_intervention[age])
 
         # For every age -> Counter({Interventions: Intervention number})
-
         # TODO: A separate function that takes population and death and outputs all statistics
         # Population = Bridges alive
         # Death (D) = Bridges died (Intervened) <- mortality rate
         # Conditional_probability_of_death <- Death_age / ( population_age + (0.5 * Death_age) )
         # Conditional_probability_of_survival <- 1 - mortality_rate
-
         # Computation of mortality rate
 
 
@@ -381,8 +379,6 @@ def compute_periodic_life_table(intervention_type, age_intervention, end_age=70)
         #L_x =
         #T_x=Sum(L_x[1:])
         # e_x = T_x/l_x
-
-
         mortality_rate = counter_intervention[intervention_type] / total_number_bridges
         #try:
         #    mortality_rate = counter_intervention[intervention_type] / total_number_bridges
@@ -412,10 +408,9 @@ def compute_periodic_life_table(intervention_type, age_intervention, end_age=70)
     for i in range(0, len(list_T_x)):
         e_x = list_T_x[i] / list_l_x[i]
         list_e_x.append(e_x)
+    return age_list, list_P_x, list_D_x, list_m_x, list_q_x, list_p_x, list_L_x, list_T_x, list_e_x
 
-
-
-    return age_list, population_list, mortality_rate_list
+    #return age_list, population_list, mortality_rate_list
 
 def compute_life_table(data,
                        study_window_years,
@@ -441,12 +436,26 @@ def compute_life_table(data,
         for age, intervention in zip(ages, interventions):
             age_intervention[age].append(intervention)
 
-    age_list, population_list, mortality_rate_list = compute_periodic_life_table(intervention_type, age_intervention, end_age=70)
+    #age_list, population_list, mortality_rate_list = compute_periodic_life_table(intervention_type, age_intervention, end_age=70)
+    age_list, P, D, m, q, p, L, T, e = compute_periodic_life_table(intervention_type, age_intervention, end_age=70)
 
     # Create the dataframes
-    df = pd.DataFrame({'Age':age_list,
-                        'Population':population_list,
-                        'Mortality rate':mortality_rate_list})
+    #df = pd.DataFrame({'Age':age_list,
+    #                    'Population':population_list,
+    #                    'Mortality rate':mortality_rate_list})
+
+    print(len(age_list[:-1]), len(P[:-1]), len(D[:-1]), len(m[:-1]), len(q[:-1]), len(p[:-1]), len(L), len(T), len(e))
+    df = pd.DataFrame({'Age': age_list[:-1],
+                       'P': P[:-1],
+                       'D': D[:-1],
+                       'm': m[:-1],
+                       'q': q[:-1],
+                       'p': p[:-1],
+                       'L': L,
+                       'T': T,
+                       'E': e
+    })
+    print(df)
     return df
 
 def plot_line(ages, mRates, yNames):
