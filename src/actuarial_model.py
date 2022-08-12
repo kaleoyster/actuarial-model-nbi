@@ -526,6 +526,7 @@ def main():
               '2004-2008',
               '2008-2012',
               '2012-2016']
+
     plot_line(ages, mRates, yNames)
     plot_heatmap(ages, mRates, yNames)
 
