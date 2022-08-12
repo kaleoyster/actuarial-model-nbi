@@ -387,7 +387,6 @@ def main():
     #                                      field,
     #                                      category)
     #    heatmaps.append(rates[0])
-
     #plot_heatmap(ages, heatmaps, yNames)
 
     #for age, intervention in age_intervention.items():
