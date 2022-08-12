@@ -550,6 +550,7 @@ def main():
     #field = 'owner'
     #yNames = ['1', '2', '3', '4']
     #heatmaps = []
+
     #for category in yNames:
     #    rates = compute_categorical_lifetable(data,
     #                                      study_window_years,

@@ -18,22 +18,40 @@ from tqdm import tqdm
 from collections import defaultdict
 from collections import Counter
 
-
-
-def compute_periodic_life_table(intervention_type, age_intervention, end_age=51):
+def compute_periodic_life_table(intervention_type,
+                                age_intervention,
+                                end_age=51):
     """
     Description
         Compute a periodic lifetable
     """
     age_list = []
+
+    # Population
     list_P_x = []
+
+    # Death
     list_D_x = []
+
+    # Central death rate
     list_m_x = []
+
+    # Conditional probability of death
     list_q_x = []
+
+    # Conditional probability of survival
     list_p_x = []
+
+    # Number surviving to age x
     list_l_x = []
+
+    # Person year lived at age 1
     list_L_x = []
+
+    # Total years lived from age X
     list_T_x = []
+
+    # Total life expectancy e_x
     list_e_x = []
     initial_population = 100000
 
@@ -99,10 +117,9 @@ def compute_life_table(data,
 
         for age, intervention in zip(ages, interventions):
             age_intervention[age].append(intervention)
-
-    age_list, P, D, m, q, p, L, T, e = compute_periodic_life_table(intervention_type, age_intervention, end_age=51)
-
-
+    age_list, P, D, m, q, p, L, T, e = compute_periodic_life_table(intervention_type,
+                                                                   age_intervention,
+                                                                   end_age=51)
     df = pd.DataFrame({'Age': age_list[:-1],
                        'P': P[:-1],
                        'D': D[:-1],
@@ -114,5 +131,3 @@ def compute_life_table(data,
                        'E': e
     })
     return df
-
-
