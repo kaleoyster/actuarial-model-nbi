@@ -81,9 +81,11 @@ def study_window(data, study_window_year):
     return new_data
 
 
-def compute_periodic_life_table(intervention_type,
-                                age_intervention,
-                                end_age=51):
+#def compute_periodic_life_table(intervention_type,
+#                                age_intervention,
+#                                end_age=51):
+
+def compute_periodic_life_table(ages, total_number_of_bridges, number_of_interventions, end_age=51):
     """
     Description
         Compute a periodic lifetable
@@ -118,12 +120,17 @@ def compute_periodic_life_table(intervention_type,
     list_e_x = []
     initial_population = 100000
 
-    for age in range(1, end_age):
-        total_number_bridges = len(age_intervention[age])
-        counter_intervention = Counter(age_intervention[age])
-
-        P_x = total_number_bridges
-        D_x = counter_intervention[intervention_type]
+    #for age in range(1, end_age):
+        #total_number_bridges = len(age_intervention[age])
+        #counter_intervention = Counter(age_intervention[age])
+    for i in range(2, end_age):
+        # TODO: Compute the intervention
+        # for 
+        #P_x = total_number_bridges
+        age = ages[i]
+        P_x = total_number_of_bridges[i]
+        #D_x = counter_intervention[intervention_type]
+        D_x =  number_of_interventions[i]
         m_x = D_x / P_x
         q_x = (D_x / (P_x + (0.5 * D_x)))
         p_x = 1 - q_x
@@ -168,21 +175,33 @@ def compute_life_table(data,
     # Initial population
     intervention_type = 'Repair'
 
-    # Get data from study
+    # Get data from study, by study_window_years
     new_data = study_window(data, study_window_years)
     age_intervention = defaultdict(list)
     age_count = defaultdict()
 
     # Compute age_intervention dictionary
+    number_of_interventions = []
+    total_number_of_bridges = []
+    all_ages = []
+
     for bridge, record in new_data.items():
         ages = record['age']
         interventions = record['intervention']
-
         for age, intervention in zip(ages, interventions):
             age_intervention[age].append(intervention)
-    age_list, P, D, m, q, p, L, T, e = compute_periodic_life_table(intervention_type,
-                                                                   age_intervention,
-                                                                   end_age=51)
+
+    for counter in range(0, end_age):
+        all_ages.append(counter)
+        interventions = age_intervention[counter]
+        total_number_of_bridges.append(len(interventions))
+        intervention_counter = Counter(interventions)
+        intervention = intervention_counter[intervention_type]
+        number_of_interventions.append(intervention)
+
+    print(total_number_of_bridges, number_of_interventions)
+    age_list, P, D, m, q, p, L, T, e = compute_periodic_life_table(all_ages, total_number_of_bridges, number_of_interventions)
+
     df = pd.DataFrame({'Age': age_list[:-1],
                        'P': P[:-1],
                        'D': D[:-1],

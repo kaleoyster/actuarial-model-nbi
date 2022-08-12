@@ -34,18 +34,6 @@ from collections import Counter
 
 from actuarial_functions import *
 
-def create_dummy_data():
-    """
-    Description:
-        returns dummy nbi data
-    """
-    data = [
-        [1992, 1993, 1994, 1995], # year
-        [1934, 1934, 1934, 1934], # year built
-        [9, 9, 9, 8], # condition rating (deck)
-        [1954, 1954, 1994, 1994], # condition rating (deck)
-    ]
-    return data
 
 def identify_windows(from_year, to_year, data):
     """
@@ -61,7 +49,6 @@ def identify_windows(from_year, to_year, data):
     """
     new_data = []
     for bridge in data:
-        # There must be a new function for windowed data
         windowed_dataset = data[from_year: to_year]
         new_data.append(windowed_dataset)
     return new_data
@@ -71,6 +58,7 @@ def leaves(list_count, list_age):
     Description:
         The number of bridges that leave the study at age x.
     """
+    # TODO: Do not need 
     leaves_dict = defaultdict()
     for index in range(0, len(list_count)):
         if index - 1 >= 0:
@@ -85,6 +73,7 @@ def exposures(list_count, list_age):
     Description:
         The number of bridges in the study at age x.
     """
+    # TODO: Do not need 
     exposures_dict = defaultdict()
     for age, count in zip(list_age, list_count):
         exposures_dict[age] = count
@@ -92,6 +81,7 @@ def exposures(list_count, list_age):
 
 def compute_hazard_score(list_count, list_age):
     """
+    TODO: Do Not need
     Description:
         returns a computed hazard score.
         based on the leave and exposure
@@ -102,6 +92,8 @@ def compute_hazard_score(list_count, list_age):
 
     Return: hazard_dictionary (dictionary)
     """
+
+    # TODO: Do not need 
     # intiate dictionaries
     hazard_dictionary = defaultdict()
     survival_dictionary = defaultdict()
@@ -131,6 +123,7 @@ def compute_probabilities(hazard_dictionary):
         Returns compute probability of survival
         given hazard rates
     """
+    # TODO: Do not need 
     probabilities_dict = defaultdict()
     for age, hr in hazard_dictionary.items():
         probabilities_dict[age] = 1 - hr
@@ -388,7 +381,6 @@ def main():
     #field = 'owner'
     #yNames = ['1', '2', '3', '4']
     #heatmaps = []
-
     #for category in yNames:
     #    rates = compute_categorical_lifetable(data,
     #                                      study_window_years,
