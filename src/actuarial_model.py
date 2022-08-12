@@ -32,6 +32,8 @@ from tqdm import tqdm
 from collections import defaultdict
 from collections import Counter
 
+from actuarial_functions import *
+
 def create_dummy_data():
     """
     Description:
@@ -293,136 +295,6 @@ def compute_window_statistics(data_new, year_built):
             }
     return stats
 
-def study_window(data, study_window_year):
-    """
-    Description:
-        Return data by filtering study_window
-
-    Args:
-        study_window_year
-    Return:
-        data
-    """
-    new_data = defaultdict()
-    starting_year, ending_year = study_window_year
-    for bridge, record in data.items():
-        years = record['year']
-        ages = record['age']
-        interventions = record['deck intervention']
-        new_years = []
-        new_ages = []
-        new_interventions = []
-        try:
-            start_index = years.index(starting_year)
-            end_index = years.index(ending_year)
-            new_years = years[start_index:end_index]
-            new_ages = ages[start_index:end_index]
-            new_interventions = interventions[start_index:end_index]
-            temp_dict = {
-                'year':new_years,
-                'age':new_ages,
-                'intervention':new_interventions
-            }
-            new_data[bridge] = temp_dict
-        except:
-            pass
-    return new_data
-
-def compute_periodic_life_table(intervention_type, age_intervention, end_age=51):
-    """
-    Description
-        Compute a periodic lifetable
-    """
-    age_list = []
-    list_P_x = []
-    list_D_x = []
-    list_m_x = []
-    list_q_x = []
-    list_p_x = []
-    list_l_x = []
-    list_L_x = []
-    list_T_x = []
-    list_e_x = []
-    initial_population = 100000
-
-    for age in range(1, end_age):
-        total_number_bridges = len(age_intervention[age])
-        counter_intervention = Counter(age_intervention[age])
-
-        P_x = total_number_bridges
-        D_x = counter_intervention[intervention_type]
-        m_x = D_x / P_x
-        q_x = (D_x / (P_x + (0.5 * D_x)))
-        p_x = 1 - q_x
-        l_x = initial_population * p_x
-
-        list_P_x.append(P_x)
-        list_D_x.append(D_x)
-        list_m_x.append(m_x)
-        list_q_x.append(q_x)
-        list_p_x.append(p_x)
-        list_l_x.append(l_x)
-
-        # Append all computed statistics to the list
-        age_list.append(age)
-
-    # Calculate L_x
-    for i in range(0, (len(list_l_x) - 1)):
-        L_x = (list_l_x[i] + list_l_x[i+1]) / 2
-        list_L_x.append(L_x)
-
-    # Calculate T_x
-    for i in range(0, len(list_L_x)):
-        T_x = sum(list_L_x[i:])
-        list_T_x.append(T_x)
-
-    # Calculate e_x
-    for i in range(0, len(list_T_x)):
-        e_x = list_T_x[i] / list_l_x[i]
-        list_e_x.append(e_x)
-
-    return age_list, list_P_x, list_D_x, list_m_x, list_q_x, list_p_x, list_L_x, list_T_x, list_e_x
-
-
-def compute_life_table(data,
-                       study_window_years,
-                       intervention_type,
-                       end_age=51):
-    """
-    Description:
-        computes period life table based on the period
-    """
-    # Initial population
-    intervention_type = 'Repair'
-
-    # Get data from study
-    new_data = study_window(data, study_window_years)
-    age_intervention = defaultdict(list)
-    age_count = defaultdict()
-
-    # Compute age_intervention dictionary
-    for bridge, record in new_data.items():
-        ages = record['age']
-        interventions = record['intervention']
-
-        for age, intervention in zip(ages, interventions):
-            age_intervention[age].append(intervention)
-
-    age_list, P, D, m, q, p, L, T, e = compute_periodic_life_table(intervention_type, age_intervention, end_age=51)
-
-
-    df = pd.DataFrame({'Age': age_list[:-1],
-                       'P': P[:-1],
-                       'D': D[:-1],
-                       'm': m[:-1],
-                       'q': q[:-1],
-                       'p': p[:-1],
-                       'L': L,
-                       'T': T,
-                       'E': e
-    })
-    return df
-
 def plot_line(ages, mRates, yNames):
     """
     Description:
@@ -468,41 +340,6 @@ def plot_heatmap(ages, mrates, yNames):
                 x=ages,
                 y=yNames))
     fig.show()
-
-def compute_life_table_utility(categoryTemp, study_window_years, category, intervention):
-    tempValues = []
-    for window in tqdm(study_window_years):
-        csv_file = 'life-table-'+ str(window[0]) + '-' + str(window[1]) + '-' + category + '.csv'
-        tempDf = compute_life_table(categoryTemp, window, intervention)
-        ages = list(tempDf['Age'])
-        tempValues.append(list(tempDf['q']))
-        tempDf.to_csv(csv_file)
-    return tempValues, ages
-
-def compute_categorical_lifetable(data, study_window_years, field, category):
-    """
-    Description:
-        Create categorical life tables
-
-    Args:
-        data
-
-    Returns:
-        study window years
-    """
-
-    intervention = 'Repair'
-    # Prepare dataset for only category 
-    categoryTemp = defaultdict()
-    for key, record in data.items():
-        cat = record['adt category']
-        if cat[-1] == category:
-            categoryTemp[key] = record
-    tempValues, ages = compute_life_table_utility(categoryTemp,
-                                            study_window_years,
-                                            category,
-                                            intervention)
-    return tempValues
 
 def main():
     # Path of the Nebraska

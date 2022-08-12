@@ -18,6 +18,69 @@ from tqdm import tqdm
 from collections import defaultdict
 from collections import Counter
 
+def compute_categorical_lifetable(data, study_window_years, field, category):
+    """
+    Description:
+        Create categorical life tables
+
+    Args:
+        data
+
+    Returns:
+        study window years
+    """
+
+    intervention = 'Repair'
+
+    # Prepare dataset for only category 
+    categoryTemp = defaultdict()
+    for key, record in data.items():
+        cat = record['adt category']
+        if cat[-1] == category:
+            categoryTemp[key] = record
+    tempValues, ages = compute_life_table_utility(categoryTemp,
+                                            study_window_years,
+                                            category,
+                                            intervention)
+    return tempValues
+
+
+def study_window(data, study_window_year):
+    """
+    Description:
+        Return data by filtering study_window
+
+    Args:
+        study_window_year
+    Return:
+        data
+    """
+    new_data = defaultdict()
+    starting_year, ending_year = study_window_year
+    for bridge, record in data.items():
+        years = record['year']
+        ages = record['age']
+        interventions = record['deck intervention']
+        new_years = []
+        new_ages = []
+        new_interventions = []
+        try:
+            start_index = years.index(starting_year)
+            end_index = years.index(ending_year)
+            new_years = years[start_index:end_index]
+            new_ages = ages[start_index:end_index]
+            new_interventions = interventions[start_index:end_index]
+            temp_dict = {
+                'year':new_years,
+                'age':new_ages,
+                'intervention':new_interventions
+            }
+            new_data[bridge] = temp_dict
+        except:
+            pass
+    return new_data
+
+
 def compute_periodic_life_table(intervention_type,
                                 age_intervention,
                                 end_age=51):
@@ -131,3 +194,15 @@ def compute_life_table(data,
                        'E': e
     })
     return df
+
+def compute_life_table_utility(categoryTemp, study_window_years, category, intervention):
+    tempValues = []
+    for window in tqdm(study_window_years):
+        csv_file = 'life-table-'+ str(window[0]) + '-' + str(window[1]) + '-' + category + '.csv'
+        tempDf = compute_life_table(categoryTemp, window, intervention)
+        ages = list(tempDf['Age'])
+        tempValues.append(list(tempDf['q']))
+        tempDf.to_csv(csv_file)
+    return tempValues, ages
+
+
