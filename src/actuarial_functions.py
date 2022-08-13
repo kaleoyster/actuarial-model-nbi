@@ -85,7 +85,7 @@ def study_window(data, study_window_year):
 def compute_periodic_life_table(ages,
                                 total_number_of_bridges,
                                 number_of_interventions,
-                                end_age=51):
+                                end_age):
     """
     Description
         Compute a periodic lifetable
@@ -126,7 +126,7 @@ def compute_periodic_life_table(ages,
     # Initiation
     initial_population = 100000
 
-    for i in range(2, end_age):
+    for i in range(0, end_age):
         age = ages[i]
 
         # Population

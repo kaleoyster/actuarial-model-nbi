@@ -17,6 +17,7 @@ from plotly.subplots import make_subplots
 from tqdm import tqdm
 from collections import defaultdict
 from collections import Counter
+from actuarial_functions import *
 
 def read_csv():
     """
@@ -24,16 +25,24 @@ def read_csv():
     """
     return data
 
-def create_life_tables():
-    """
-    """
-    apple = []
-    return apple
-
 def main():
     """
     driver function
     """
+    ages = [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+    ]
     population = [48283,
                   47195,
                   48140,
@@ -60,9 +69,24 @@ def main():
              3,
              2,
              1]
-    print(len(population))
-    print(len(death))
-    print('Hello World!')
+
+    age_list, P, D, m, q, p, L, T, e = compute_periodic_life_table(ages,
+                               population,
+                               death,
+                               end_age=11)
+
+    df = pd.DataFrame({'Age': age_list[:-1],
+                       'P': P[:-1],
+                       'D': D[:-1],
+                       'm': m[:-1],
+                       'q': q[:-1],
+                       'p': p[:-1],
+                       'L': L,
+                       'T': T,
+                       'E': e
+    })
+
+    print(df)
 
 if __name__ == '__main__':
     main()
