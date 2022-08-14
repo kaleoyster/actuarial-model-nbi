@@ -370,7 +370,7 @@ def main():
 
     heatmaps = []
     for category in yNames:
-        rates = compute_categorical_lifetable(data,
+        rates = periodic_lifetable_by_category(data,
                                           study_window_years,
                                           field,
                                           category)

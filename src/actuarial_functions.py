@@ -11,21 +11,18 @@ Credits:
 Date:
     11th August, 2022
 """
-
 import numpy as np
 import pandas as pd
 from tqdm import tqdm
 from collections import defaultdict
 from collections import Counter
 
-def compute_categorical_lifetable(data, study_window_years, field, category):
+def periodic_lifetable_by_category(data, study_window_years, field, category):
     """
     Description:
         Create categorical life tables
-
     Args:
         data
-
     Returns:
         study window years
     """
@@ -38,6 +35,7 @@ def compute_categorical_lifetable(data, study_window_years, field, category):
         cat = record['adt category']
         if cat[-1] == category:
             categoryTemp[key] = record
+
     tempValues, ages = compute_life_table_utility(categoryTemp,
                                             study_window_years,
                                             category,
@@ -126,7 +124,7 @@ def compute_periodic_life_table(ages,
     # Initiation
     initial_population = 100000
 
-    for i in range(0, end_age):
+    for i in range(1, end_age):
         age = ages[i]
 
         # Population
@@ -144,7 +142,10 @@ def compute_periodic_life_table(ages,
         # Condition probability of Survival 
         p_x = 1 - q_x
 
+        # Number of surviving to age x
         l_x = initial_population * p_x
+        #l_x = l_dict[2] / l_x
+
         age_list.append(age)
         list_P_x.append(P_x)
         list_D_x.append(D_x)
@@ -153,12 +154,12 @@ def compute_periodic_life_table(ages,
         list_p_x.append(p_x)
         list_l_x.append(l_x)
 
-    # Calculate L_x
+    # Calculate L_x (person year lived at age x)
     for i in range(0, (len(list_l_x) - 1)):
         L_x = (list_l_x[i] + list_l_x[i+1]) / 2
         list_L_x.append(L_x)
 
-    # Calculate T_x: Total 
+    # Calculate T_x: Total years lived from age x 
     for i in range(0, len(list_L_x)):
         T_x = sum(list_L_x[i:])
         list_T_x.append(T_x)
@@ -168,7 +169,7 @@ def compute_periodic_life_table(ages,
         e_x = list_T_x[i] / list_l_x[i]
         list_e_x.append(e_x)
 
-    return age_list, list_P_x, list_D_x, list_m_x, list_q_x, list_p_x, list_L_x, list_T_x, list_e_x
+    return age_list, list_P_x, list_D_x, list_m_x, list_q_x, list_p_x, list_l_x, list_L_x, list_T_x, list_e_x
 
 
 def compute_life_table(data,
@@ -203,9 +204,10 @@ def compute_life_table(data,
         intervention = intervention_counter[intervention_type]
         number_of_interventions.append(intervention)
 
-    age_list, P, D, m, q, p, L, T, e = compute_periodic_life_table(all_ages,
+    age_list, P, D, m, q, p, l, L, T, e = compute_periodic_life_table(all_ages,
                                                                    total_number_of_bridges,
-                                                                   number_of_interventions)
+                                                                   number_of_interventions,
+                                                                    end_age=51)
     df = pd.DataFrame({'Age': age_list[:-1],
                        'P': P[:-1],
                        'D': D[:-1],
@@ -219,6 +221,11 @@ def compute_life_table(data,
     return df
 
 def compute_life_table_utility(categoryTemp, study_window_years, category, intervention):
+    """
+    Description:
+    Agrs:
+    Return:
+    """
     tempValues = []
     for window in tqdm(study_window_years):
         csv_file = 'life-table-'+ str(window[0]) + '-' + str(window[1]) + '-' + category + '.csv'
@@ -227,5 +234,3 @@ def compute_life_table_utility(categoryTemp, study_window_years, category, inter
         tempValues.append(list(tempDf['q']))
         tempDf.to_csv(csv_file)
     return tempValues, ages
-
-
