@@ -7,12 +7,14 @@ Methodology 🧭
 <p center='align'> <b>Figure 1: Research methodology of the study</b></p>
 
 ## Data 
+
 * **Source:** National Bridge Inventory
 * **Timeline:** 1992 to 2021
 * **State:** All U.S. states 🇺🇸
 * 👉 [**Data acqusition and transformation**](https://github.com/kaleoyster/nbi/tree/b5fb41950ee0a44c1d8967a1a672c0e3ea47b07f)
 
 ## Assumptions
+
 * What is the average time-span before there
 - When a maintenance event occurs on a bridge and that maintenance event is recorded, the bridge is permanently removed from the study. 
 - There are other options on how to handle a bridge once a maintenance event occurs, each with its own consequences. These include:
@@ -21,6 +23,7 @@ Methodology 🧭
 
 
 ## 📝 There are few consideration regarding the computation of the actuarial model
+
 1. We need to find the appropriate length of the study window.
     - Determining the appropriate length of the study window using historical evidence.
         - For all the bridges built in the year from 1992 to 2010. Determine the average time for first major intervention.
@@ -46,6 +49,7 @@ Methodology 🧭
 
 
 ## Previous understanding of the methodology
+
 - Instead of the computing the absolute number of surviving bridges at age $x$ life tables commonly compute a probability of survival. 
 - The probability of survival for bridges exposed from age 1 to age $x$ is:  $_1P_x$, or simply $P_x$. 
 - It is computed from the hazard rate as shown in Equation 3:
@@ -62,17 +66,20 @@ $$F(x) = 1 − _t(P(x))$$
 
 
 #### 🪟  Select study window
+
 - The general concept of this approach is to establish a study period and observe the behavior of the bridges as they pass through this window.
 - For this study, we have compared the performance of the bridges with respect to several different chosen windows as five years, across the available time line from 1992 to 2021: for intance one study window might be 2013 to 2017, inclusively. 
 - This selection was based on the length of our available time series data; yet in general, a different window can be chosen for longer or shorter time series data.
 
 #### ☢ Exposures / available records number of observations in the study window  
+
 - Exposures represent how many bridges of each age are available to “fail" (require maintenance in the bridge case). 
 - For example, if there are 100 bridges aged 35, and 50 bridges aged 40 in the study, then the exposure for ages 35 and 40 are 100 and 50, respectively.
 - To compute the exposures, we need to know the age of each bridge in the study.
 - The counts for each age are incremented regardless of when in the five years in the study window a bridge reaches that age. For example, if a bridge is 45 years old in 2013 and another bridge is also 45 years old in 2016, both bridges are counted as exposures for age 45.
 
 ## ☣️  Hazard rate / Conditional probability of maintenance
+
 - Hazard function is also referred to as the force of mortality, or also thought as the instantaneous rate of failure.
     * For a very small change in time $x$, the probability that a life who has attained age $x$, fails before attaining age $x + dx$.
     * However, computing this instantaneous rate of failure requires that a bridge be part of the study for the entire year for it to contribute to the exposures for that year.
@@ -142,6 +149,7 @@ The following is the new approach:
 
 
 #### 💡 Conceptual overview of the essential actuarial functions
+
 | Item           | Description                                                                                                    |
 | -------------- | -------------------------------------------------------------------------------------------------------------- |
 | $leave(x)$     | The number of bridges that leave the study at age $x$                                                          |
@@ -152,9 +160,11 @@ The following is the new approach:
 | $_yP_1$        | Probability of survival at age $y$ for the next year. See Equation 5                                           |
 
 #### ☁️  Probabilities
+
 A period life table is baed on the mortality expeirence of a population during a relative short period of time. 
 
 #### New understanding of the methodology
+
 - $f(x):$ Starting at the start time, the probability distribution of when you will die.
 - $F(x):$ Just the cumulative distribution, at time $T$, what % of the population will be dead?
 - $S(x):$ $1-F(x)$, at time $T$, what % of the population will be alive?

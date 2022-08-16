@@ -169,7 +169,8 @@ def compute_periodic_life_table(ages,
         e_x = list_T_x[i] / list_l_x[i]
         list_e_x.append(e_x)
 
-    return age_list, list_P_x, list_D_x, list_m_x, list_q_x, list_p_x, list_l_x, list_L_x, list_T_x, list_e_x
+    return age_list, list_P_x, list_D_x, list_m_x, \
+           list_q_x, list_p_x, list_l_x, list_L_x, list_T_x, list_e_x
 
 
 def compute_life_table(data,
@@ -179,6 +180,13 @@ def compute_life_table(data,
     """
     Description:
         computes period life table based on the period
+
+    Args:
+        study_window_years:
+        intervention_type:
+
+    Returns:
+        A life table
     """
     # Get data from study, by study_window_years
     new_data = study_window(data, study_window_years)
