@@ -78,8 +78,6 @@ def study_window(data, study_window_year):
             pass
     return new_data
 
-
-
 def compute_periodic_life_table(ages,
                                 total_number_of_bridges,
                                 number_of_interventions,
