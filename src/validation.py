@@ -70,7 +70,7 @@ def main():
              2,
              1]
 
-    age_list, P, D, m, q, p, L, T, e = compute_periodic_life_table(ages,
+    age_list, P, D, m, q, p, l, L, T, e = compute_periodic_life_table(ages,
                                population,
                                death,
                                end_age=11)
