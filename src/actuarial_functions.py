@@ -122,7 +122,7 @@ def compute_periodic_life_table(ages,
     # Initiation
     initial_population = 100000
 
-    for i in range(1, end_age):
+    for i in range(3, end_age):
         age = ages[i]
 
         # Population
