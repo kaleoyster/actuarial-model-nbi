@@ -338,7 +338,7 @@ def main():
     # Path of the Nebraska
     path = '../data/nebraska.json'
     data = read_json(path)
-    study_window_years = [[1992, 1996],
+    study_window_years = [[1992, 1998],
                           [1996, 2000],
                           [2000, 2004],
                           [2004, 2008],

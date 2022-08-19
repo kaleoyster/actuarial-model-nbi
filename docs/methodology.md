@@ -47,7 +47,6 @@ Methodology 🧭
 5. In computing the life table statistics, there is a very narrow range ages, that we can compute the statistics. 
 
 
-
 ## Previous understanding of the methodology
 
 - Instead of the computing the absolute number of surviving bridges at age $x$ life tables commonly compute a probability of survival. 
