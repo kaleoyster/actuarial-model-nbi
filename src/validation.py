@@ -92,10 +92,10 @@ def main():
     """
     Driver function
     """
-    bridge_data, bridge_age = simulation_bridge_life_cycle(1000,
-                                                           1992,
-                                                           2022)
-    print(bridge_data)
+    bridge_dict = simulation_bridge_life_cycle(1000, 1992, 2022)
+    print(bridge_dict)
+
+    #print(bridge_data)
     #print(bridge_age)
 
 if __name__ == '__main__':

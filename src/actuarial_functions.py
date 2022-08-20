@@ -287,6 +287,83 @@ def generate_condition_rating(age):
     rating = round(rating)
     return rating
 
+def compute_intervention_utility(condition_ratings):
+    """
+    Description:
+        A utility function for computing possible intervention
+    by taking into consideration changes in condition rating.
+        The function implemented is based on
+        Bridge Intervention Matrix by Tariq et al.
+
+    Note:
+         Check for the representation of condition ratings.
+         Often the condition ratings are defined as a string,
+         Then, these condition rating have to be transformed into interger
+
+    Args:
+        condition_ratings (list)
+
+    Returns:
+        interventions (list)
+        count (int)
+    """
+    intervention_map = {
+                   ('8', '9'):'Insp. Variance',
+                   ('7', '9'):'Repair',
+                   ('6', '9'):'Repair',
+                   ('5', '9'):'Rehab',
+                   ('4', '9'):'Replace',
+                   ('3', '9'):'Replace',
+                   ('2', '9'):'Replace',
+                   ('1', '9'):'Not applicable',
+
+                   ('7', '8'):'Insp. Variance',
+                   ('6', '8'):'Repair',
+                   ('5', '8'):'Repair',
+                   ('4', '8'):'Replace',
+                   ('3', '8'):'Replace',
+                   ('2', '8'):'Replace',
+                   ('1', '8'):'Not applicable',
+
+                   ('6', '7'):'Insp. Variance',
+                   ('5', '7'):'Repair',
+                   ('4', '7'):'Rehab',
+                   ('3', '7'):'Rehab',
+                   ('2', '7'):'Rehab',
+                   ('1', '7'):'Not applicable',
+
+                   ('5', '6'):'Insp. Variance',
+                   ('4', '6'):'Repair',
+                   ('3', '6'):'Repair',
+                   ('2', '6'):'Repair',
+                   ('1', '6'):'Not applicable',
+
+                   ('4', '5'):'Insp. Variance',
+                   ('3', '5'):'Repair',
+                   ('2', '5'):'Repair',
+                   ('1', '5'):'Not applicable',
+
+                   ('3', '4'):'Insp. Variance',
+                   ('2', '4'):'Repair',
+                   ('1', '4'):'Not applicable',
+
+                   ('2', '3'):'Repair',
+                   ('1', '3'):'Not applicable',
+
+                   ('1', '2'):'Not applicable'
+                  }
+
+
+    i = 0
+    interventions = list()
+    interventions.append(None)
+    for i in range(len(condition_ratings)-1):
+       j = i + 1
+       interv = intervention_map.get((str(condition_ratings[i]), str(condition_ratings[j])))
+       interventions.append(interv)
+    count = len([count for count in interventions if count !=None ])
+    return interventions, count
+
 
 def simulation_bridge_life_cycle(population,
                                  start_year,
@@ -295,18 +372,19 @@ def simulation_bridge_life_cycle(population,
     simulate bridge life cycle of bridges with
     respect to condition ratings
     """
-    population = 1000
+    population = 1001
     start_year = 1992
     end_year = 2022
-
     start_age = 1
     end_age = (end_year - start_year)
 
-    bridge_data = []
+    bridge_dict = {}
     bridge_ages = []
-    for bridge in range(1, population):
-        #bridge = 'bridge' + string(bridge)
+    bridge_condition_ratings = []
 
+    for bridge in range(1, population):
+        bridge = 'bridge' + ' ' + str(bridge)
+        temp_dict = {}
         temp_condition_ratings = []
         temp_ages = []
         #age = random.choice(start_age, end_age)
@@ -319,8 +397,12 @@ def simulation_bridge_life_cycle(population,
             temp_ages.append(age)
             age = age + 1
 
-        bridge_data.append(temp_condition_ratings)
-        bridge_ages.append(temp_ages)
-    return bridge_data, bridge_ages
+        temp_dict['age'] =  temp_ages
+        temp_dict['deck'] =  temp_condition_ratings
+        temp_deck_inter, count = compute_intervention_utility(temp_condition_ratings)
+        temp_dict['deck intervention'] = temp_deck_inter
+        bridge_dict[bridge] = temp_dict
+
+    return bridge_dict
 
 
