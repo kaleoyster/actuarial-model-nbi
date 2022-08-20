@@ -2,7 +2,6 @@
 Methodology 🧭
 </h1>
 
-
 ![Methodology](../images/actuarial-methodology.png)
 <p center='align'> <b>Figure 1: Research methodology of the study</b></p>
 
@@ -173,7 +172,23 @@ A period life table is baed on the mortality expeirence of a population during a
 - $H(x):$ Cumulative hazard function.
 
 #### Validation
-We validate the use of our functions by applying to publicly available data to match the resultant results.  we implemented on bridges to understand the life expectancy of the population used in the following reference [3].
+We validate the use of our functions by applying to publicly available data to match the resultant results. We implemented on bridges to understand the life expectancy of the population used in the following reference [3].
+
+### Pipeline
+We validated our data pipeline to ensure all data processing and compuation operations are conducted as expected. As a result, we require our validation process to have consistency. We created a dummy data, such that the results of the lifetable are expected.
+
+#### Bridge life cycle:
+- The lifetable will mimic the life cycle of a an average bridge:
+- **Starting year:** 1992
+- **Ending year:** 2021
+- **Starting condition rating:** 9
+- **Average time it takes for maintenances:** 5 yrs
+
+#### Simulation of the bridge life cycle:
+
+```python
+
+```
 
 ## References
 1. [Intuition for cumulative hazard function -- survival analysis](https://stats.stackexchange.com/questions/60238/intuition-for-cumulative-hazard-function-survival-analysis)

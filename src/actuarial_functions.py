@@ -13,6 +13,7 @@ Date:
 """
 import numpy as np
 import pandas as pd
+import random
 from tqdm import tqdm
 from collections import defaultdict
 from collections import Counter
@@ -226,7 +227,10 @@ def compute_life_table(data,
     })
     return df
 
-def compute_life_table_utility(categoryTemp, study_window_years, category, intervention):
+def compute_life_table_utility(categoryTemp,
+                               study_window_years,
+                               category,
+                               intervention):
     """
     Description:
     Agrs:
@@ -240,3 +244,83 @@ def compute_life_table_utility(categoryTemp, study_window_years, category, inter
         tempValues.append(list(tempDf['q']))
         tempDf.to_csv(csv_file)
     return tempValues, ages
+
+
+def generate_condition_rating(age):
+    condition_ratings = {
+                        1:  [9, 9],
+                        2:  [8, 9],
+                        3:  [8, 9],
+                        4:  [8, 9],
+                        5:  [8, 9],
+                        6:  [7, 9],
+                        7:  [7, 9],
+                        8:  [7, 9],
+                        9:  [7, 9],
+                        10: [6, 8],
+                        11: [6, 8],
+                        12: [6, 8],
+                        13: [6, 8],
+                        14: [6, 8],
+                        15: [5, 7],
+                        16: [5, 7],
+                        17: [5, 7],
+                        18: [5, 7],
+                        19: [5, 7],
+                        20: [4, 6],
+                        21: [4, 6],
+                        22: [4, 6],
+                        23: [4, 6],
+                        24: [3, 5],
+                        25: [3, 5],
+                        26: [3, 5],
+                        27: [3, 5],
+                        28: [3, 5],
+                        29: [3, 5],
+                        30: [3, 5],
+                        31: [3, 5],
+                    }
+
+    low_rating, high_rating = condition_ratings[age]
+    rating = np.random.uniform(low=low_rating,
+                               high=high_rating)
+    rating = round(rating)
+    return rating
+
+
+def simulation_bridge_life_cycle(population,
+                                 start_year,
+                                 end_year):
+    """
+    simulate bridge life cycle of bridges with
+    respect to condition ratings
+    """
+    population = 1000
+    start_year = 1992
+    end_year = 2022
+
+    start_age = 1
+    end_age = (end_year - start_year)
+
+    bridge_data = []
+    bridge_ages = []
+    for bridge in range(1, population):
+        #bridge = 'bridge' + string(bridge)
+
+        temp_condition_ratings = []
+        temp_ages = []
+        #age = random.choice(start_age, end_age)
+        age = 1
+
+        # For the survey years from 1992 to 2023
+        for year in range(1992, 2023):
+            rating = generate_condition_rating(age)
+            temp_condition_ratings.append(rating)
+            temp_ages.append(age)
+            age = age + 1
+
+        bridge_data.append(temp_condition_ratings)
+        bridge_ages.append(temp_ages)
+    return bridge_data, bridge_ages
+
+

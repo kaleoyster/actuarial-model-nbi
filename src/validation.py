@@ -25,7 +25,7 @@ def read_csv():
     """
     return data
 
-def main():
+def test1():
     """
     driver function
     """
@@ -87,6 +87,16 @@ def main():
     })
 
     print(df)
+
+def main():
+    """
+    Driver function
+    """
+    bridge_data, bridge_age = simulation_bridge_life_cycle(1000,
+                                                           1992,
+                                                           2022)
+    print(bridge_data)
+    #print(bridge_age)
 
 if __name__ == '__main__':
     main()
