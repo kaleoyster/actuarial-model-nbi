@@ -25,7 +25,7 @@ def read_csv():
     """
     return data
 
-def main():
+def test1():
     """
     driver function
     """
@@ -70,7 +70,7 @@ def main():
              2,
              1]
 
-    age_list, P, D, m, q, p, L, T, e = compute_periodic_life_table(ages,
+    age_list, P, D, m, q, p, l, L, T, e = compute_periodic_life_table(ages,
                                population,
                                death,
                                end_age=11)
@@ -87,6 +87,23 @@ def main():
     })
 
     print(df)
+
+def main():
+    """
+    Driver function
+    """
+    study_window_years = [[1992, 2022]]
+    bridge_data = simulation_bridge_life_cycle(1000, 1992, 2022)
+    df, mRates, ages = compute_life_table_utility(bridge_data,
+                               study_window_years,
+                               '',
+                               'Repair')
+    yNames = ['Apple']
+    plot_line(ages, mRates, yNames)
+    plot_heatmap(ages, mRates, yNames)
+    print(df)
+
+
 
 if __name__ == '__main__':
     main()

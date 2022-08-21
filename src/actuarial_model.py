@@ -334,29 +334,38 @@ def plot_heatmap(ages, mrates, yNames):
                 y=yNames))
     fig.show()
 
+def get_yLabels(study_window_years):
+    """
+    Description:
+        Get study window years and return string y-labels
+    """
+    yNames = []
+    for year in study_window_years:
+        string = str(year[0]) + '-' + str(year[1])
+        yNames.append(string)
+    return yNames
+
 def main():
     # Path of the Nebraska
     path = '../data/nebraska.json'
     data = read_json(path)
-    study_window_years = [[1992, 1996],
-                          [1996, 2000],
-                          [2000, 2004],
+    study_window_years = [[1992, 1998],
+                          [1996, 2002],
+                          [1998, 2004],
+                          [2002, 2006],
                           [2004, 2008],
+                          [2006, 2010],
                           [2008, 2012],
+                          [2010, 2014],
                           [2012, 2016]]
 
     # Overall rates <- baseline
-    mRates, ages = compute_life_table_utility(data,
+    df, mRates, ages = compute_life_table_utility(data,
                                study_window_years,
                                '',
-                               'Repair')
-    yNames = ['1992-1996',
-              '1996-2000',
-              '2000-2004',
-              '2004-2008',
-              '2008-2012',
-              '2012-2016']
+                              'Repair')
 
+    yNames = get_yLabels(study_window_years)
     plot_line(ages, mRates, yNames)
     plot_heatmap(ages, mRates, yNames)
 

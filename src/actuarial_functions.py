@@ -11,11 +11,16 @@ Credits:
 Date:
     11th August, 2022
 """
+
+import json
+import plotly.graph_objects as go
 import numpy as np
 import pandas as pd
+import random
 from tqdm import tqdm
 from collections import defaultdict
 from collections import Counter
+from plotly.subplots import make_subplots
 
 def periodic_lifetable_by_category(data, study_window_years, field, category):
     """
@@ -36,7 +41,7 @@ def periodic_lifetable_by_category(data, study_window_years, field, category):
         if cat[-1] == category:
             categoryTemp[key] = record
 
-    tempValues, ages = compute_life_table_utility(categoryTemp,
+    df, tempValues, ages = compute_life_table_utility(categoryTemp,
                                             study_window_years,
                                             category,
                                             intervention)
@@ -174,7 +179,7 @@ def compute_periodic_life_table(ages,
 def compute_life_table(data,
                        study_window_years,
                        intervention_type,
-                       end_age=51):
+                       end_age=31):
     """
     Description:
         computes period life table based on the period
@@ -213,7 +218,8 @@ def compute_life_table(data,
     age_list, P, D, m, q, p, l, L, T, e = compute_periodic_life_table(all_ages,
                                                                    total_number_of_bridges,
                                                                    number_of_interventions,
-                                                                    end_age=51)
+                                                                   end_age=31)
+
     df = pd.DataFrame({'Age': age_list[:-1],
                        'P': P[:-1],
                        'D': D[:-1],
@@ -226,7 +232,10 @@ def compute_life_table(data,
     })
     return df
 
-def compute_life_table_utility(categoryTemp, study_window_years, category, intervention):
+def compute_life_table_utility(categoryTemp,
+                               study_window_years,
+                               category,
+                               intervention):
     """
     Description:
     Agrs:
@@ -239,4 +248,219 @@ def compute_life_table_utility(categoryTemp, study_window_years, category, inter
         ages = list(tempDf['Age'])
         tempValues.append(list(tempDf['q']))
         tempDf.to_csv(csv_file)
-    return tempValues, ages
+    return tempDf, tempValues, ages
+
+
+def generate_condition_rating(age):
+    """
+    Return a corresponding condition rating for the age
+    """
+    condition_ratings = {
+                        1:  [9, 9],
+                        2:  [7, 9],
+                        3:  [6, 9],
+                        4:  [6, 9],
+                        5:  [6, 9],
+                        6:  [6, 9],
+                        7:  [6, 9],
+                        8:  [6, 9],
+                        9:  [6, 9],
+                        10: [6, 8],
+                        11: [6, 8],
+                        12: [6, 8],
+                        13: [6, 8],
+                        14: [6, 8],
+                        15: [5, 8],
+                        16: [5, 8],
+                        17: [5, 8],
+                        18: [5, 8],
+                        19: [5, 8],
+                        20: [3, 6],
+                        21: [3, 6],
+                        22: [3, 6],
+                        23: [3, 6],
+                        24: [3, 5],
+                        25: [3, 5],
+                        26: [3, 5],
+                        27: [3, 5],
+                        28: [3, 5],
+                        29: [3, 5],
+                        30: [3, 5],
+                        31: [3, 5],
+                    }
+
+    low_rating, high_rating = condition_ratings[age]
+    rating = np.random.uniform(low=low_rating,
+                               high=high_rating)
+    rating = round(rating)
+    return rating
+
+def compute_intervention_utility(condition_ratings):
+    """
+    Description:
+        A utility function for computing possible intervention
+    by taking into consideration changes in condition rating.
+        The function implemented is based on
+        Bridge Intervention Matrix by Tariq et al.
+
+    Note:
+         Check for the representation of condition ratings.
+         Often the condition ratings are defined as a string,
+         Then, these condition rating have to be transformed into interger
+
+    Args:
+        condition_ratings (list)
+
+    Returns:
+        interventions (list)
+        count (int)
+    """
+    intervention_map = {
+                   ('8', '9'):'Insp. Variance',
+                   ('7', '9'):'Repair',
+                   ('6', '9'):'Repair',
+                   ('5', '9'):'Rehab',
+                   ('4', '9'):'Replace',
+                   ('3', '9'):'Replace',
+                   ('2', '9'):'Replace',
+                   ('1', '9'):'Not applicable',
+
+                   ('7', '8'):'Insp. Variance',
+                   ('6', '8'):'Repair',
+                   ('5', '8'):'Repair',
+                   ('4', '8'):'Replace',
+                   ('3', '8'):'Replace',
+                   ('2', '8'):'Replace',
+                   ('1', '8'):'Not applicable',
+
+                   ('6', '7'):'Insp. Variance',
+                   ('5', '7'):'Repair',
+                   ('4', '7'):'Rehab',
+                   ('3', '7'):'Rehab',
+                   ('2', '7'):'Rehab',
+                   ('1', '7'):'Not applicable',
+
+                   ('5', '6'):'Insp. Variance',
+                   ('4', '6'):'Repair',
+                   ('3', '6'):'Repair',
+                   ('2', '6'):'Repair',
+                   ('1', '6'):'Not applicable',
+
+                   ('4', '5'):'Insp. Variance',
+                   ('3', '5'):'Repair',
+                   ('2', '5'):'Repair',
+                   ('1', '5'):'Not applicable',
+
+                   ('3', '4'):'Insp. Variance',
+                   ('2', '4'):'Repair',
+                   ('1', '4'):'Not applicable',
+
+                   ('2', '3'):'Repair',
+                   ('1', '3'):'Not applicable',
+
+                   ('1', '2'):'Not applicable'
+                  }
+
+
+    i = 0
+    interventions = list()
+    interventions.append(None)
+    for i in range(len(condition_ratings)-1):
+       j = i + 1
+       interv = intervention_map.get((str(condition_ratings[i]), str(condition_ratings[j])))
+       interventions.append(interv)
+    count = len([count for count in interventions if count !=None ])
+    return interventions, count
+
+def plot_line(ages, mRates, yNames):
+    """
+    Description:
+        plot line graph
+    args:
+        ages
+        mrates
+    return:
+        plot
+    """
+    # Create figure with secondary y-axis
+    fig = make_subplots(specs=[[{"secondary_y": True}]])
+
+    # Add traces
+    for index, mrates in enumerate(mRates):
+        fig.add_trace(
+            go.Scatter(
+                   x=ages,
+                   y=mrates,
+                   name=yNames[index]),
+        )
+
+    # Add figure title
+    fig.update_layout(
+        title_text="Mortality rates of Bridges across age 1 to 100"
+    )
+
+    # Set x-axis title
+    fig.update_xaxes(title_text="Age")
+
+    # Set y-axes titles
+    fig.update_yaxes(title_text="<b>Mortality Rates</b> ", secondary_y=False)
+    #fig.update_yaxes(title_text="<b>secondary</b> yaxis title", secondary_y=True)
+
+    fig.show()
+
+def plot_heatmap(ages, mrates, yNames):
+    """
+    Description:
+    """
+    fig = go.Figure(data=go.Heatmap(
+                z=mrates,
+                x=ages,
+                y=yNames))
+    fig.show()
+
+def simulation_bridge_life_cycle(population,
+                                 start_year,
+                                 end_year):
+    """
+    simulate bridge life cycle of bridges with
+    respect to condition ratings
+    """
+    population = 10001
+    start_year = 1992
+    end_year = 2022
+    start_age = 1
+    end_age = (end_year - start_year)
+
+    bridge_dict = {}
+    bridge_ages = []
+    bridge_condition_ratings = []
+
+    for bridge in range(1, population):
+        bridge = 'bridge' + ' ' + str(bridge)
+        temp_dict = {}
+        temp_condition_ratings = []
+        temp_ages = []
+        temp_year = []
+
+        # Periodic life table computation
+        #age = random.choice(start_age, end_age)
+        age = 1
+
+        # For the survey years from 1992 to 2023
+        for year in range(1992, 2023):
+            rating = generate_condition_rating(age)
+            temp_condition_ratings.append(rating)
+            temp_ages.append(age)
+            temp_year.append(year)
+            age = age + 1
+
+        temp_dict['age'] =  temp_ages
+        temp_dict['year'] =  temp_year
+        temp_dict['deck'] =  temp_condition_ratings
+        temp_deck_inter, count = compute_intervention_utility(temp_condition_ratings)
+        temp_dict['deck intervention'] = temp_deck_inter
+        bridge_dict[bridge] = temp_dict
+
+    return bridge_dict
+
+
