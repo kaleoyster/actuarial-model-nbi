@@ -92,27 +92,18 @@ def main():
     """
     Driver function
     """
-    study_window_years = [[1992, 1998],
-                          [1996, 2002],
-                          [1998, 2004],
-                          [2002, 2006],
-                          [2004, 2008],
-                          [2006, 2010],
-                          [2008, 2012],
-                          [2010, 2014],
-                          [2012, 2016]]
-
     study_window_years = [[1992, 2022]]
     bridge_data = simulation_bridge_life_cycle(1000, 1992, 2022)
-    mRates, ages = compute_life_table_utility(bridge_data,
+    df, mRates, ages = compute_life_table_utility(bridge_data,
                                study_window_years,
                                '',
-                              'Repair')
+                               'Repair')
+    yNames = ['Apple']
+    plot_line(ages, mRates, yNames)
+    plot_heatmap(ages, mRates, yNames)
+    print(df)
 
-    print(mRates)
 
-    #print(bridge_data)
-    #print(bridge_age)
 
 if __name__ == '__main__':
     main()

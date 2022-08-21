@@ -360,7 +360,7 @@ def main():
                           [2012, 2016]]
 
     # Overall rates <- baseline
-    mRates, ages = compute_life_table_utility(data,
+    df, mRates, ages = compute_life_table_utility(data,
                                study_window_years,
                                '',
                               'Repair')

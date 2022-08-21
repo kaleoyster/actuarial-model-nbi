@@ -11,12 +11,16 @@ Credits:
 Date:
     11th August, 2022
 """
+
+import json
+import plotly.graph_objects as go
 import numpy as np
 import pandas as pd
 import random
 from tqdm import tqdm
 from collections import defaultdict
 from collections import Counter
+from plotly.subplots import make_subplots
 
 def periodic_lifetable_by_category(data, study_window_years, field, category):
     """
@@ -37,7 +41,7 @@ def periodic_lifetable_by_category(data, study_window_years, field, category):
         if cat[-1] == category:
             categoryTemp[key] = record
 
-    tempValues, ages = compute_life_table_utility(categoryTemp,
+    df, tempValues, ages = compute_life_table_utility(categoryTemp,
                                             study_window_years,
                                             category,
                                             intervention)
@@ -211,8 +215,6 @@ def compute_life_table(data,
         intervention = intervention_counter[intervention_type]
         number_of_interventions.append(intervention)
 
-    # TODO: create periodic life table instead of cohort
-    print(total_number_of_bridges, number_of_interventions)
     age_list, P, D, m, q, p, l, L, T, e = compute_periodic_life_table(all_ages,
                                                                    total_number_of_bridges,
                                                                    number_of_interventions,
@@ -246,7 +248,7 @@ def compute_life_table_utility(categoryTemp,
         ages = list(tempDf['Age'])
         tempValues.append(list(tempDf['q']))
         tempDf.to_csv(csv_file)
-    return tempValues, ages
+    return tempDf, tempValues, ages
 
 
 def generate_condition_rating(age):
@@ -370,6 +372,51 @@ def compute_intervention_utility(condition_ratings):
     count = len([count for count in interventions if count !=None ])
     return interventions, count
 
+def plot_line(ages, mRates, yNames):
+    """
+    Description:
+        plot line graph
+    args:
+        ages
+        mrates
+    return:
+        plot
+    """
+    # Create figure with secondary y-axis
+    fig = make_subplots(specs=[[{"secondary_y": True}]])
+
+    # Add traces
+    for index, mrates in enumerate(mRates):
+        fig.add_trace(
+            go.Scatter(
+                   x=ages,
+                   y=mrates,
+                   name=yNames[index]),
+        )
+
+    # Add figure title
+    fig.update_layout(
+        title_text="Mortality rates of Bridges across age 1 to 100"
+    )
+
+    # Set x-axis title
+    fig.update_xaxes(title_text="Age")
+
+    # Set y-axes titles
+    fig.update_yaxes(title_text="<b>Mortality Rates</b> ", secondary_y=False)
+    #fig.update_yaxes(title_text="<b>secondary</b> yaxis title", secondary_y=True)
+
+    fig.show()
+
+def plot_heatmap(ages, mrates, yNames):
+    """
+    Description:
+    """
+    fig = go.Figure(data=go.Heatmap(
+                z=mrates,
+                x=ages,
+                y=yNames))
+    fig.show()
 
 def simulation_bridge_life_cycle(population,
                                  start_year,
