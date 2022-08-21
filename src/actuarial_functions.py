@@ -123,7 +123,7 @@ def compute_periodic_life_table(ages,
     # Initiation
     initial_population = 100000
 
-    for i in range(3, end_age):
+    for i in range(1, end_age):
         age = ages[i]
 
         # Population
@@ -175,7 +175,7 @@ def compute_periodic_life_table(ages,
 def compute_life_table(data,
                        study_window_years,
                        intervention_type,
-                       end_age=51):
+                       end_age=31):
     """
     Description:
         computes period life table based on the period
@@ -211,10 +211,13 @@ def compute_life_table(data,
         intervention = intervention_counter[intervention_type]
         number_of_interventions.append(intervention)
 
+    # TODO: create periodic life table instead of cohort
+    print(total_number_of_bridges, number_of_interventions)
     age_list, P, D, m, q, p, l, L, T, e = compute_periodic_life_table(all_ages,
                                                                    total_number_of_bridges,
                                                                    number_of_interventions,
-                                                                    end_age=51)
+                                                                   end_age=31)
+
     df = pd.DataFrame({'Age': age_list[:-1],
                        'P': P[:-1],
                        'D': D[:-1],
@@ -247,30 +250,33 @@ def compute_life_table_utility(categoryTemp,
 
 
 def generate_condition_rating(age):
+    """
+    Return a corresponding condition rating for the age
+    """
     condition_ratings = {
                         1:  [9, 9],
-                        2:  [8, 9],
-                        3:  [8, 9],
-                        4:  [8, 9],
-                        5:  [8, 9],
-                        6:  [7, 9],
-                        7:  [7, 9],
-                        8:  [7, 9],
-                        9:  [7, 9],
+                        2:  [7, 9],
+                        3:  [6, 9],
+                        4:  [6, 9],
+                        5:  [6, 9],
+                        6:  [6, 9],
+                        7:  [6, 9],
+                        8:  [6, 9],
+                        9:  [6, 9],
                         10: [6, 8],
                         11: [6, 8],
                         12: [6, 8],
                         13: [6, 8],
                         14: [6, 8],
-                        15: [5, 7],
-                        16: [5, 7],
-                        17: [5, 7],
-                        18: [5, 7],
-                        19: [5, 7],
-                        20: [4, 6],
-                        21: [4, 6],
-                        22: [4, 6],
-                        23: [4, 6],
+                        15: [5, 8],
+                        16: [5, 8],
+                        17: [5, 8],
+                        18: [5, 8],
+                        19: [5, 8],
+                        20: [3, 6],
+                        21: [3, 6],
+                        22: [3, 6],
+                        23: [3, 6],
                         24: [3, 5],
                         25: [3, 5],
                         26: [3, 5],
@@ -372,7 +378,7 @@ def simulation_bridge_life_cycle(population,
     simulate bridge life cycle of bridges with
     respect to condition ratings
     """
-    population = 1001
+    population = 10001
     start_year = 1992
     end_year = 2022
     start_age = 1
@@ -387,6 +393,9 @@ def simulation_bridge_life_cycle(population,
         temp_dict = {}
         temp_condition_ratings = []
         temp_ages = []
+        temp_year = []
+
+        # Periodic life table computation
         #age = random.choice(start_age, end_age)
         age = 1
 
@@ -395,9 +404,11 @@ def simulation_bridge_life_cycle(population,
             rating = generate_condition_rating(age)
             temp_condition_ratings.append(rating)
             temp_ages.append(age)
+            temp_year.append(year)
             age = age + 1
 
         temp_dict['age'] =  temp_ages
+        temp_dict['year'] =  temp_year
         temp_dict['deck'] =  temp_condition_ratings
         temp_deck_inter, count = compute_intervention_utility(temp_condition_ratings)
         temp_dict['deck intervention'] = temp_deck_inter
