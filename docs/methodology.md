@@ -1,20 +1,114 @@
 <h1 align='center'>
-Methodology 🧭
+   ⚙️  Methodology 
 </h1>
 
 ![Methodology](../images/actuarial-methodology.png)
-<p center='align'> <b>Figure 1: Research methodology of the study</b></p>
+<p> <b align='center'>Figure 1: Research methodology of the study</b></p>
 
+        
 ## Data 
-
 * **Source:** National Bridge Inventory
 * **Timeline:** 1992 to 2021
-* **State:** All U.S. states 🇺🇸
+* **Scope:** All U.S. states 🇺🇸
 * 👉 [**Data acqusition and transformation**](https://github.com/kaleoyster/nbi/tree/b5fb41950ee0a44c1d8967a1a672c0e3ea47b07f)
 
-## Assumptions
 
-* What is the average time-span before there
+## Previous method (O'Brien Method)
+
+### Data 
+* **Source:** National Bridge Inventory
+* **Timeline:** 1992 to 2021
+* **Scope:** All U.S. states 🇺🇸
+
+### Process for computing the failure probability
+
+![O'Brien's method](../images/process-failure-probability.png)
+
+<p><b align='center'>Figure 1: The old research methodology of the study</b></p>
+
+There are four steps to computing failure probabilities using O'Brien's method:
+
+1. Select study window 
+2. Compute exposure at each age 
+3. Compute Hazard rate at each age
+4. Calculate the probability of failure at each age
+
+#### 🪟 1.  Select study window
+
+- The general concept of this approach is to establish a study period and observe the behavior of the bridges as they pass through this window.
+- For this study, we have compared the performance of the bridges with respect to several different chosen windows as five years, across the available time line from 1992 to 2021: for intance one study window might be 2013 to 2017, inclusively. 
+- This selection was based on the length of our available time series data; yet in general, a different window can be chosen for longer or shorter time series data.
+
+#### ☢ 2. Exposures 
+
+- Exposures represent how many bridges of each age are available to “fail" (require maintenance in the bridge case). 
+- For example, if there are 100 bridges aged 35, and 50 bridges aged 40 in the study, then the exposure for ages 35 and 40 are 100 and 50, respectively.
+- To compute the exposures, we need to know the age of each bridge in the study.
+- The counts for each age are incremented regardless of when in the five years in the study window a bridge reaches that age. For example, if a bridge is 45 years old in 2013 and another bridge is also 45 years old in 2016, both bridges are counted as exposures for age 45.
+
+#### ☣️  3. Hazard rate (Conditional probability of maintenance)
+
+- Hazard function is also referred to as the force of mortality, or also thought as the instantaneous rate of failure.
+    * For a very small change in time $x$, the probability that a life who has attained age $x$, fails before attaining age $x + dx$.
+    * However, computing this instantaneous rate of failure requires that a bridge be part of the study for the entire year for it to contribute to the exposures for that year.
+    * This requirement reduces the number of observations in the dataset (Richards 2011). 
+- In contrast, we use a simpler maximum likelihood estimator that can accommodate partial year exposures to capture maintenance patterns.
+
+
+#### ☁️  4. Probabilities
+
+A period life table is based on the mortality expeirence of a population during a relative short period of time. 
+
+
+- $f(x):$ Starting at the start time, **the probability distribution of when you will die.**
+- $F(x):$ Just the cumulative distribution, at time $T$, **what % of the population will be dead?** 
+    - **The conditional probability of death $q_x$ = $D_x \over (P_x + (0.5 * D_x)))$**
+- $S(x):$ $1-F(x)$, at time $T$, **what % of the population will be alive?**
+    - **The conditional probability of survival $p_x = 1 - q_x$**
+
+- $h(x):$  Hazard function, at a given time $T$, of the people still alive, this can be used to estimate **how many people will die in the next time interval, or if interval → 0, `instantaneous` death rate.**
+    - **Hazard rate:** It measures the total amount of risk that has been accumulated up to time t.
+    - **Count data interpration:** `It gives the number of times we would expect to observe failures over a given period, if only the failure events were repeatable`
+- $H(x):$ Cumulative hazard function.
+
+- Instead of the computing the absolute number of surviving bridges at age $x$ life tables commonly compute a probability of survival. 
+- The probability of survival for bridges exposed from age 1 to age $x$ is:  $_1P_x$, or simply $P_x$. 
+- It is computed from the hazard rate as shown in Equation 3:
+- The mortality rate (or cumulative probability of failure), $F(x)$ of bridges exposed at age 1
+before reaching age $x$ is then calculated from the probability of survival, as shown in Equation 4:
+$$F(x) = 1 − _t(P(x))$$
+- Note that $F(x)$ can also be expressed as $_1Q_x$ or simply $Q_x$. $_1Q_1$ is the cumulative probability of failure within the next year. $_1Q_1$ is computed from the probabilities of surviving within the next year $_1P_1$ and subtracting that from 1. Similarly, the probability of failure for years two, three, four, and five are computed. These are $_2Q_1$, $_3Q_1$, $_4Q_1$, $_5Q_1$ respectively.
+- $_4Q_1$ and $_5Q_1$ respectively. These relationships are shown in Equation 5.
+    $$ _1Q_1 = 1 - _1P_1 $$
+    $$ _2Q_1 = 1 - _2P_1 $$
+    $$ _3Q_1 = 1 - _3P_1 $$
+    $$ _4Q_1 = 1 - _4P_1 $$
+    $$ _5Q_1 = 1 - _5P_1 $$
+
+
+
+### After thoughts on the O'Brien's method
+
+
+
+**New improved formulation**
+    - Formulation $q_x = (D_x \over (P_x + (0.5 * D_x)))$
+
+**Work on this**
+- Hence, if $leave(x)$ is the number of bridges that leave the study at age $x$ and $exposures(x)$ is the number of exposures at age $x$ 
+
+The hazard rate is defined as the following:
+$$ h(x) = {exposures(x + 1) \over exposures(x)} $$
+
+The survival rate $S(x)$ can be computed as show in the equation 2:
+$$ {S(x) = 1 - h(x)}$$
+
+
+
+
+
+## Assumptions
+* What is the average time-span before there is a maintenance activity?
 - When a maintenance event occurs on a bridge and that maintenance event is recorded, the bridge is permanently removed from the study. 
 - There are other options on how to handle a bridge once a maintenance event occurs, each with its own consequences. These include:
     - Allow the bridge to re-enter the study at the same age.
@@ -46,58 +140,24 @@ Methodology 🧭
 5. In computing the life table statistics, there is a very narrow range ages, that we can compute the statistics. 
 
 
-## Previous understanding of the methodology
 
-- Instead of the computing the absolute number of surviving bridges at age $x$ life tables commonly compute a probability of survival. 
-- The probability of survival for bridges exposed from age 1 to age $x$ is:  $_1P_x$, or simply $P_x$. 
-- It is computed from the hazard rate as shown in Equation 3:
-- The mortality rate (or cumulative probability of failure), $F(x)$ of bridges exposed at age 1
-before reaching age $x$ is then calculated from the probability of survival, as shown in Equation 4:
-$$F(x) = 1 − _t(P(x))$$
-- Note that $F(x)$ can also be expressed as $_1Q_x$ or simply $Q_x$. $_1Q_1$ is the cumulative probability of failure within the next year. $_1Q_1$ is computed from the probabilities of surviving within the next year $_1P_1$ and subtracting that from 1. Similarly, the probability of failure for years two, three, four, and five are computed. These are $_2Q_1$, $_3Q_1$, $_4Q_1$, $_5Q_1$ respectively.
-- $_4Q_1$ and $_5Q_1$ respectively. These relationships are shown in Equation 5.
-    $$ _1Q_1 = 1 - _1P_1 $$
-    $$ _2Q_1 = 1 - _2P_1 $$
-    $$ _3Q_1 = 1 - _3P_1 $$
-    $$ _4Q_1 = 1 - _4P_1 $$
-    $$ _5Q_1 = 1 - _5P_1 $$
+## 💡 Comparison of methods
+
+| Item           | Description                                                                                                    | Previous (O'Brien) | New |
+| -------------- | -------------------------------------------------------------------------------------------------------------- | -------------------| ----|
+| Study window   | To observe the behavior of the bridges as they pass through this window | Established as five year study window 2013 - 2017 | Established as five year multiple study windows from 1992 to 2020, with an option of overlapping study windows |
+| $leave(x)$     | The number of bridges that leave the study at age $x$                                                          | Computed similar to the described definition, similar to mortality rate | New approach use the concept of conditional probability of dying instead of mortality rate, change in notation used as $D_x$| 
+| $exposures(x)$ | The number of bridges in the study at age $x$                                                                  | Assumes that a bridge be a part of the study for the entire year for it to contribute ot the exposure for that year | Exposures are computed similar to the previous method |
+| Hazard rate $h(x)$         | Hazard rate age $x$. See equation 1                                                                            | Computed as $leaves(x) \over exposure(x)$ | $D_x \over P_x + (0.5 * D_x)$ |
+| $S(x)$         | Survival rate age $x$. See equation 2 | Computed as $S(x) = 1 - h(x)$| Computed as $P_x = 1 - Q_x$ |
+| $F(x)$         | The mortality rate (or cumulative probability of failure) of bridges exposed at age 1 before reaching age $x$  | $1 - P_x$ |Conditional probability of death $q_x = (D_x / (P_x + (0.5 * D_x)))$ |
+| $_yP_1$        | Probability of survival at age $y$ for the next year. See Equation 5 | This version can compute the probability of survival for next 5 years.| Although, this method is so far not implemented, the version can implement next 5 years of probability | 
 
 
-#### 🪟  Select study window
 
-- The general concept of this approach is to establish a study period and observe the behavior of the bridges as they pass through this window.
-- For this study, we have compared the performance of the bridges with respect to several different chosen windows as five years, across the available time line from 1992 to 2021: for intance one study window might be 2013 to 2017, inclusively. 
-- This selection was based on the length of our available time series data; yet in general, a different window can be chosen for longer or shorter time series data.
+## Proposed method
 
-#### ☢ Exposures / available records number of observations in the study window  
-
-- Exposures represent how many bridges of each age are available to “fail" (require maintenance in the bridge case). 
-- For example, if there are 100 bridges aged 35, and 50 bridges aged 40 in the study, then the exposure for ages 35 and 40 are 100 and 50, respectively.
-- To compute the exposures, we need to know the age of each bridge in the study.
-- The counts for each age are incremented regardless of when in the five years in the study window a bridge reaches that age. For example, if a bridge is 45 years old in 2013 and another bridge is also 45 years old in 2016, both bridges are counted as exposures for age 45.
-
-## ☣️  Hazard rate / Conditional probability of maintenance
-
-- Hazard function is also referred to as the force of mortality, or also thought as the instantaneous rate of failure.
-    * For a very small change in time $x$, the probability that a life who has attained age $x$, fails before attaining age $x + dx$.
-    * However, computing this instantaneous rate of failure requires that a bridge be part of the study for the entire year for it to contribute to the exposures for that year.
-    * This requirement reduces the number of observations in the dataset (Richards 2011). 
-- In contrast, we use a simpler maximum likelihood estimator that can accommodate partial year exposures to capture maintenance patterns.
-
-**New improved formulation**
-    - Formulation $q_x = (D_x \over (P_x + (0.5 * D_x)))$
-
-**Work on this**
-- Hence, if $leave(x)$ is the number of bridges that leave the study at age $x$ and $exposures(x)$ is the number of exposures at age $x$ 
-
-The hazard rate is defined as the following:
-$$ h(x) = {exposures(x + 1) \over exposures(x)} $$
-
-The survival rate $S(x)$ can be computed as show in the equation 2:
-$$ {S(x) = 1 - h(x)}$$
-
-
-## ⚙️  The overview of the proposped method / algorithm
+### ⚙️  The overview of the proposped method / algorithm
 
 The following is the new approach:
     - For each window, create a life table for each study window.
@@ -114,7 +174,6 @@ The following is the new approach:
             6. Compute bridge years lived at age x $(L_x)$
             7. Compute total years lived from age x $(T_x)$
             8. Compute life expectancy $e_x$
-
     * **Study window 2:** 1998 - 2004
     * **Study window 3:** 2004 - 2008 
     * **Study window 4:** 2008 - 2012
@@ -123,7 +182,7 @@ The following is the new approach:
     * and so and so forth.
 
 - Using the mortality rate / survival rate as the baseline may prove complementary to the BDS score:
-    - Baseline difference score accounts for performance of the bridge health
+    - Baseline difference score accounts for performance of the bridge health.
     - The baseline based on mortality may account for maintenance.
     * However, the maintenance based baseline may not be useful in computing a score. 
 
@@ -156,20 +215,6 @@ The following is the new approach:
 | $S(x)$         | Survival rate age $x$. See equation 2                                                                          |
 | $F(x)$         | The mortality rate (or cumulative probability of failure) of bridges exposed at age 1 before reaching age $x$  |
 | $_yP_1$        | Probability of survival at age $y$ for the next year. See Equation 5                                           |
-
-#### ☁️  Probabilities
-
-A period life table is baed on the mortality expeirence of a population during a relative short period of time. 
-
-#### New understanding of the methodology
-
-- $f(x):$ Starting at the start time, the probability distribution of when you will die.
-- $F(x):$ Just the cumulative distribution, at time $T$, what % of the population will be dead?
-- $S(x):$ $1-F(x)$, at time $T$, what % of the population will be alive?
-- $h(x):$  Hazard function, at a given time $T$, of the people still alive, this can be used to estimate how many people will die in the next time interval, or if interval → 0, `instantaneous` death rate.
-    - Hazard rate: It measures the total amount of risk that has been accumulated up to time t.
-    - Count data interpration: `It gives the number of times we would expect to observe failures over a given period, if only the failure events were repeatable`
-- $H(x):$ Cumulative hazard function.
 
 #### Validation
 We validate the use of our functions by applying to publicly available data to match the resultant results. We implemented on bridges to understand the life expectancy of the population used in the following reference [3].
