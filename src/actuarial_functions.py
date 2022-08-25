@@ -220,8 +220,11 @@ def compute_life_table(data,
                                                                    number_of_interventions,
                                                                    end_age=31)
 
+
+
+
     df = pd.DataFrame({'Age': age_list[:-1],
-                       'P': P[:-1],
+                       'Population (p)': P[:-1],
                        'D': D[:-1],
                        'm': m[:-1],
                        'q': q[:-1],
