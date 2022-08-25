@@ -1,23 +1,10 @@
 """
 Description:
     This is a script to run the actuarial model.
-
 Author:
     Akshay Kale
-
 Credits:
    The idea and implementation of this project was first initiated by O'Brien Chin.
-Notes:
-    1. Exposures is the same as count_dictionary
-    compute counts can be renamed as exposures.
-
-    2. Adjust the study windows to mimic bridges born during the same year.
-        - Done
-
-    3. Re-create the life table. [ Done ]
-        - Some of the bridges  appear in the later time but do not appear in the earlier timeline.
-        - Look for bridges that do not appear at all in the later time line.
-
 Date:
     29th June, 2022
 """
@@ -31,7 +18,6 @@ from plotly.subplots import make_subplots
 from tqdm import tqdm
 from collections import defaultdict
 from collections import Counter
-
 from actuarial_functions import *
 
 
@@ -327,11 +313,30 @@ def plot_line(ages, mRates, yNames):
 def plot_heatmap(ages, mrates, yNames):
     """
     Description:
+        Plot a heat map for with
+        respect to age and  mortality rates
     """
+    # Convert into percentages
+    new_mrates = []
+    for mrate_cat in mrates:
+        temp_mrate = []
+        for mrate in mrate_cat:
+            percent = mrate*100
+            temp_mrate.append(percent)
+        new_mrates.append(temp_mrate)
+
+    # Figure
     fig = go.Figure(data=go.Heatmap(
-                z=mrates,
+                z=new_mrates,
                 x=ages,
-                y=yNames))
+                y=yNames,
+                colorbar=dict(title='Percentages')))
+
+    # Add figure title
+    fig.update_layout(
+        title_text="<b>(Maintenance: Repair) Bridge categories vs. Age </b>"
+    )
+
     fig.show()
 
 def get_yLabels(study_window_years):
