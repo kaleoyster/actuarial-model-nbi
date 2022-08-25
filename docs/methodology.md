@@ -2,7 +2,6 @@
     Methodology 
 </h1>
 
-
 There are several different version of compute life tables for identifying and studying bridge maintenance patterns:
 
 1. [Life table by O'Brien Chin (v1)](life-table-v1.md)
@@ -26,9 +25,6 @@ There are several different version of compute life tables for identifying and s
 | $S(x)$         | Survival rate age $x$. See equation 2 | Computed as $S(x) = 1 - h(x)$| Computed as $P_x = 1 - Q_x$ |
 | $F(x)$         | The mortality rate (or cumulative probability of failure) of bridges exposed at age 1 before reaching age $x$  | $1 - P_x$ |Conditional probability of death $q_x = (D_x / (P_x + (0.5 * D_x)))$ |
 | $_yP_1$        | Probability of survival at age $y$ for the next year. See Equation 5 | This version can compute the probability of survival for next 5 years.| Although, this method is so far not implemented, the version can implement next 5 years of probability | 
-
-
-
 
 ## References
 

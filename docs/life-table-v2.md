@@ -4,77 +4,74 @@
 
 # TODO:
 - [ ] Find the research papers for the study window.
-- [ ] Organize the methodology of the actuarial life table.
 
 ## Data 
-* **Source:** National Bridge Inventory
-* **Timeline:** 1992 to 2022
-* **Scope:** All U.S. states 🇺🇸
-* 👉 [**Data acqusition and transformation**](https://github.com/kaleoyster/nbi/tree/b5fb41950ee0a44c1d8967a1a672c0e3ea47b07f)
 
-### Determine study window
+- **Source:** National Bridge Inventory
+- **Timeline:** 1992 to 2022
+- **Method:** Overlapping study windows 
+- **Maintenance:** Repair
+- **Scope:** All U.S. states 🇺🇸
+- 👉 [**Data acqusition and transformation**](https://github.com/kaleoyster/nbi/tree/b5fb41950ee0a44c1d8967a1a672c0e3ea47b07f)
+
+### 1. Determine study window
+
 - Over lapping study windows.
 - We have data from 1992 to 2022.
 - There are random variation over the study windows.
 - The following is the new approach:
-For each window, create a life table for each study window.
-    - Study window 1: 1992 - 1998
-    - Study window 2: 1998 - 2004
-    - Study window 3: 2004 - 2008
-    - Study window 4: 2008 - 2012
-    - Study window 5: 2012 - 2016
-    - Study window 6: 2016 - 2020
-    - and so and so forth.
-
-- Within the new propoposed process for the actuarial life table, we have seven steps to be computed for each study window:
-
-### Determine the study window
-
+- For each window, create a life table for each study window.
+    * **Study window 1:** 1992 - 1998
+    * **Study window 2:** 1998 - 2004
+    * **Study window 3:** 2004 - 2008
+    * **Study window 4:** 2008 - 2012
+    * **Study window 5:** 2012 - 2016
+    * **Study window 6:** 2016 - 2020
+    * and so and so forth.
+- Within the new propoposed process for the actuarial life table, we have eight steps to be computed for each study window.
 - The rational behind the study window of 3 years to 4 years is the standard practice in actuary. However, within in the bridge life-cycle, bridges often get maintained in 20 years. Therefore, we need to observe a long period of time.
 
-### Compute population and death rate
-
+### 2. Compute for total number of population and death for each
 - For each age from 0 to 100, compute the number of bridges per age, and number of bridges maintained for each age.
 
-### Compute death rate
-
-- Death rate is denoted as $m_x$
+### 3. Compute death rate
+- Death rate is denoted as $m_x$.
 - The meaning of the death with respect to bridges is not same. As bridges get repaired or maintained, we consider this as the death of the bridge.
 - The definition of death with respect to bridges.
-- Using the mortality rate / survival rate as the baseline may prove complementary to the BDS score
+ Using the mortality rate / survival rate as the baseline may prove complementary to the BDS score.
 - Baseline difference score accounts for performance of the bridge health.
 - The baseline based on mortality may account for maintenance.
 - However, the maintenance based baseline may not be useful in computing a score.
 
-### Compute conditional probability of death rate
+### 4. Compute conditional probability of death rate
 - Compute death rate probability of maintenance ($q_x$):
 - Formulation:
-
   $$q_x = {D_x \over (P_x + (0.5 * D_x))}$$
  
-### Compute conditional probability of survival rate
+### 5. Compute conditional probability of survival rate
 - Conditional probability of survival without maintenance (survival) is denoted by $(p_x)$:
 
 $$ p_x = {1 - q_x}$$
 
-### Compute lived at age x
-- These computations are depended on previous computations
-- To compute number of bridges surviving to age $l_x$ to age $x$
-- Compute lived at age x Compute bridge years lived at age $x$
+### 6. Compute lived at age x
+- These computations are depended on previous computations.
+- To compute number of bridges surviving to age $l_x$ to age $x$.
+- Compute lived at age x Compute bridge years lived at age $x$.
 $$ L_x = {\sum_{i=0}^{n}l_x}$$
 
-### Compute tatal years lived at age x
-- Compute total years lived at age $x$ $(T_x)$
+### 7. Compute total years lived at age x
+- Compute total years lived at age $x$ $(T_x)$.
 
 $$ T_x = {\sum_{i=0}^{n}L_x}$$
 
-### Compute life expectancy
-- Compute life expectancy compute life expectancy $e_x$
-
+### 8. Compute life expectancy
+- Compute life expectancy compute life expectancy $e_x$.
 $$ e_x = {T_{xi} \over l_{xi}}$$
 
-### Compute the conditional probability of survival, based on the study window, we can compute $_tP_x$
+### 9. Compute the conditional probability of survival, based on the study window, we can compute
 - Compute conditional probability of survival Based on the study window, we can compute the $_tP_x$ for each age.
+
+
 
 ## Assumptions
 * What is the average time-span before there is a maintenance activity? - Glen Washer
