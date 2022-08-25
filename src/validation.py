@@ -19,12 +19,6 @@ from collections import defaultdict
 from collections import Counter
 from actuarial_functions import *
 
-def read_csv():
-    """
-    Reads csv files and returns data
-    """
-    return data
-
 def test1():
     """
     driver function
