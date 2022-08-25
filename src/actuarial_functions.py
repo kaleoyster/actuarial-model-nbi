@@ -197,6 +197,14 @@ def compute_life_table(data,
     for bridge, record in new_data.items():
         ages = record['age']
         interventions = record['intervention']
+
+        # TODO; all for all the interventions
+        if 'Repair' in interventions:
+            index_intervention = interventions.index('Repair')
+            index_intervention = index_intervention + 1
+            ages = ages[:index_intervention]
+            interventions = interventions[:index_intervention]
+
         for age, intervention in zip(ages, interventions):
             age_intervention[age].append(intervention)
 
@@ -214,7 +222,6 @@ def compute_life_table(data,
             intervention = total_inter_count
 
         else:
-
            intervention = intervention_counter[intervention_type]
 
         number_of_interventions.append(intervention)
@@ -223,9 +230,6 @@ def compute_life_table(data,
                                                                    total_number_of_bridges,
                                                                    number_of_interventions,
                                                                    end_age=31)
-
-
-
 
     df = pd.DataFrame({'Age': age_list[:-1],
                        'Population (p)': P[:-1],
@@ -447,8 +451,9 @@ def simulation_bridge_life_cycle(population,
                                  start_year,
                                  end_year):
     """
-    simulate bridge life cycle of bridges with
-    respect to condition ratings
+    Description:
+        Simulate bridge life cycle of bridges with
+        respect to condition ratings.
     """
     population = 10001
     start_year = 1992
@@ -468,7 +473,7 @@ def simulation_bridge_life_cycle(population,
         temp_year = []
 
         # Periodic life table computation
-        #age = random.choice(start_age, end_age)
+        # age = random.choice(start_age, end_age)
         age = 1
 
         # For the survey years from 1992 to 2023
@@ -479,9 +484,9 @@ def simulation_bridge_life_cycle(population,
             temp_year.append(year)
             age = age + 1
 
-        temp_dict['age'] =  temp_ages
-        temp_dict['year'] =  temp_year
-        temp_dict['deck'] =  temp_condition_ratings
+        temp_dict['age'] = temp_ages
+        temp_dict['year'] = temp_year
+        temp_dict['deck'] = temp_condition_ratings
         temp_deck_inter, count = compute_intervention_utility(temp_condition_ratings)
         temp_dict['deck intervention'] = temp_deck_inter
         bridge_dict[bridge] = temp_dict
