@@ -19,12 +19,6 @@ from collections import defaultdict
 from collections import Counter
 from actuarial_functions import *
 
-def read_csv():
-    """
-    Reads csv files and returns data
-    """
-    return data
-
 def test1():
     """
     driver function
@@ -75,18 +69,17 @@ def test1():
                                death,
                                end_age=11)
 
-    df = pd.DataFrame({'Age': age_list[:-1],
-                       'P': P[:-1],
-                       'D': D[:-1],
-                       'm': m[:-1],
-                       'q': q[:-1],
-                       'p': p[:-1],
-                       'L': L,
-                       'T': T,
-                       'E': e
+    df = pd.DataFrame({'a': age_list[:-1],
+                       'P - (Population)': P[:-1],
+                       'D - (Death)': D[:-1],
+                       'm - (Death Rate)': m[:-1],
+                       'q - (Cond. Prob. Death) ': q[:-1],
+                       'p - (Cond. Prob. Survival)': p[:-1],
+                       'L - (Life lived)': L,
+                       'T - (Total time)': T,
+                       'E - (life expectancy)': e
     })
-
-    print(df)
+    return df
 
 def main():
     """
@@ -98,9 +91,39 @@ def main():
                                study_window_years,
                                '',
                                'Repair')
-    yNames = ['Apple']
+    yNames = ['Simulation']
     plot_line(ages, mRates, yNames)
     plot_heatmap(ages, mRates, yNames)
+
+    df.columns = ['Age',
+                  'Population (P)',
+                  'Death (D)',
+                  'Death rate (m)',
+                  'Conditional Prob. Death (q)',
+                  'Conditional Prob. Survival (p)',
+                  'Person year lived (L)',
+                  'Total year lived (T)',
+                  'Life expectancy (E)']
+
+    fig = go.Figure(data=[go.Table(
+        header=dict(values=list(df.columns),
+                fill_color='paleturquoise',
+                align='left'),
+        cells=dict(values=[df['Age'],
+                           df['Population (P)'],
+                           df['Death (D)'],
+                           df['Death rate (m)'],
+                           df['Conditional Prob. Death (q)'],
+                           df['Conditional Prob. Survival (p)'],
+                           df['Person year lived (L)'],
+                           df['Total year lived (T)'],
+                           df['Life expectancy (E)']
+                          ],
+               fill_color='lavender',
+               align='left'))
+        ])
+
+    fig.show()
     print(df)
 
 
