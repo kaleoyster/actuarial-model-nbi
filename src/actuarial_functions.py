@@ -477,6 +477,8 @@ def simulation_bridge_life_cycle(population,
         age = 1
 
         # For the survey years from 1992 to 2023
+
+    # For every bridge in the population
         for year in range(1992, 2023):
             rating = generate_condition_rating(age)
             temp_condition_ratings.append(rating)
