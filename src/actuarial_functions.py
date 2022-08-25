@@ -1,15 +1,8 @@
 """
-Description:
-    This is a script contains actuarial functions
-
-Author:
-    Akshay Kale
-
-Credits:
-    O'Brien Chin
-
-Date:
-    11th August, 2022
+Description: This is a script contains actuarial functions
+Author: Akshay Kale
+Credits: O'Brien Chin
+Date: 11th August, 2022
 """
 
 import json
@@ -212,7 +205,18 @@ def compute_life_table(data,
         interventions = age_intervention[counter]
         total_number_of_bridges.append(len(interventions))
         intervention_counter = Counter(interventions)
-        intervention = intervention_counter[intervention_type]
+        if intervention_type == 'All':
+
+            total_none_count = intervention_counter[None] \
+                + intervention_counter['Insp. Variance']
+            total_count = sum(intervention_counter.values())
+            total_inter_count = total_count - total_none_count
+            intervention = total_inter_count
+
+        else:
+
+           intervention = intervention_counter[intervention_type]
+
         number_of_interventions.append(intervention)
 
     age_list, P, D, m, q, p, l, L, T, e = compute_periodic_life_table(all_ages,
