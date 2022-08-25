@@ -410,15 +410,33 @@ def plot_line(ages, mRates, yNames):
     #fig.update_yaxes(title_text="<b>secondary</b> yaxis title", secondary_y=True)
 
     fig.show()
-
 def plot_heatmap(ages, mrates, yNames):
     """
     Description:
+        Plot a heat map for with
+        respect to age and  mortality rates
     """
+    # Convert into percentages
+    new_mrates = []
+    for mrate_cat in mrates:
+        temp_mrate = []
+        for mrate in mrate_cat:
+            percent = mrate*100
+            temp_mrate.append(percent)
+        new_mrates.append(temp_mrate)
+
+    # Figure
     fig = go.Figure(data=go.Heatmap(
-                z=mrates,
+                z=new_mrates,
                 x=ages,
-                y=yNames))
+                y=yNames,
+                colorbar=dict(title='Percentages')))
+
+    # Add figure title
+    fig.update_layout(
+        title_text="<b>(Maintenance: Repair) Bridge categories vs. Age </b>"
+    )
+
     fig.show()
 
 def simulation_bridge_life_cycle(population,
