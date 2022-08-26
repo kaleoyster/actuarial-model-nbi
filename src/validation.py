@@ -77,8 +77,7 @@ def main():
     """
     Driver function
     """
-    study_window_years = [[1992, 2022]]
-
+    #study_window_years = [[1992, 2022]]
     study_window_years = [[1992, 1998],
                           [1996, 2002],
                           [1998, 2004],
@@ -90,11 +89,12 @@ def main():
                           [2012, 2016]]
 
     bridge_data = simulation_bridge_life_cycle(1000, 1992, 2022)
+
     df, mRates, ages = compute_life_table_utility(bridge_data,
                                study_window_years,
                                '',
                                'Repair')
-    yNames = ['Simulation']
+    #yNames = ['Simulation']
     yNames= [
         '1992 - 1998',
         '1996 - 2002',

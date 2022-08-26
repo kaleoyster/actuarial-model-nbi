@@ -351,6 +351,7 @@ def get_yLabels(study_window_years):
     return yNames
 
 def main():
+
     # Path of the Nebraska
     path = '../data/nebraska.json'
     data = read_json(path)
