@@ -1,15 +1,8 @@
 """
-Description:
-    This is a script contains actuarial functions
-
-Author:
-    Akshay Kale
-
-Credits:
-    O'Brien Chin
-
-Date:
-    11th August, 2022
+Description: This is a script contains actuarial functions
+Author: Akshay Kale
+Credits: O'Brien Chin
+Date: 11th August, 2022
 """
 
 import json
@@ -204,6 +197,14 @@ def compute_life_table(data,
     for bridge, record in new_data.items():
         ages = record['age']
         interventions = record['intervention']
+
+        # TODO; all for all the interventions
+        if 'Repair' in interventions:
+            index_intervention = interventions.index('Repair')
+            index_intervention = index_intervention + 1
+            ages = ages[:index_intervention]
+            interventions = interventions[:index_intervention]
+
         for age, intervention in zip(ages, interventions):
             age_intervention[age].append(intervention)
 
@@ -212,16 +213,23 @@ def compute_life_table(data,
         interventions = age_intervention[counter]
         total_number_of_bridges.append(len(interventions))
         intervention_counter = Counter(interventions)
-        intervention = intervention_counter[intervention_type]
+        if intervention_type == 'All':
+
+            total_none_count = intervention_counter[None] \
+                + intervention_counter['Insp. Variance']
+            total_count = sum(intervention_counter.values())
+            total_inter_count = total_count - total_none_count
+            intervention = total_inter_count
+
+        else:
+           intervention = intervention_counter[intervention_type]
+
         number_of_interventions.append(intervention)
 
     age_list, P, D, m, q, p, l, L, T, e = compute_periodic_life_table(all_ages,
                                                                    total_number_of_bridges,
                                                                    number_of_interventions,
                                                                    end_age=31)
-
-
-
 
     df = pd.DataFrame({'Age': age_list[:-1],
                        'Population (p)': P[:-1],
@@ -278,7 +286,7 @@ def generate_condition_rating(age):
                         17: [5, 8],
                         18: [5, 8],
                         19: [5, 8],
-                        20: [3, 6],
+                        20: [3, 7],
                         21: [3, 6],
                         22: [3, 6],
                         23: [3, 6],
@@ -443,8 +451,9 @@ def simulation_bridge_life_cycle(population,
                                  start_year,
                                  end_year):
     """
-    simulate bridge life cycle of bridges with
-    respect to condition ratings
+    Description:
+        Simulate bridge life cycle of bridges with
+        respect to condition ratings.
     """
     population = 10001
     start_year = 1992
@@ -464,7 +473,7 @@ def simulation_bridge_life_cycle(population,
         temp_year = []
 
         # Periodic life table computation
-        #age = random.choice(start_age, end_age)
+        # age = random.choice(start_age, end_age)
         age = 1
 
         # For the survey years from 1992 to 2023
@@ -475,9 +484,9 @@ def simulation_bridge_life_cycle(population,
             temp_year.append(year)
             age = age + 1
 
-        temp_dict['age'] =  temp_ages
-        temp_dict['year'] =  temp_year
-        temp_dict['deck'] =  temp_condition_ratings
+        temp_dict['age'] = temp_ages
+        temp_dict['year'] = temp_year
+        temp_dict['deck'] = temp_condition_ratings
         temp_deck_inter, count = compute_intervention_utility(temp_condition_ratings)
         temp_dict['deck intervention'] = temp_deck_inter
         bridge_dict[bridge] = temp_dict
