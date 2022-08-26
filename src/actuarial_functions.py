@@ -298,6 +298,79 @@ def generate_condition_rating(age):
                         29: [3, 5],
                         30: [3, 5],
                         31: [3, 5],
+                        32: [3, 6],
+                        33: [3, 6],
+                        34: [3, 5],
+                        35: [3, 5],
+                        36: [3, 5],
+                        37: [3, 5],
+                        38: [3, 5],
+                        39: [3, 5],
+                        40: [3, 5],
+                        41: [6, 8],
+                        42: [6, 8],
+                        43: [6, 8],
+                        44: [6, 8],
+                        45: [5, 8],
+                        46: [5, 8],
+                        47: [5, 8],
+                        48: [5, 8],
+                        49: [5, 8],
+                        50: [3, 7],
+                        51: [3, 6],
+                        52: [3, 6],
+                        53: [3, 6],
+                        54: [3, 5],
+                        55: [3, 5],
+                        56: [3, 5],
+                        57: [3, 5],
+                        58: [3, 5],
+                        59: [3, 5],
+                        60: [3, 5],
+                        61: [3, 6],
+                        62: [3, 6],
+                        63: [3, 6],
+                        64: [3, 5],
+                        65: [3, 5],
+                        66: [3, 5],
+                        67: [3, 5],
+                        68: [3, 5],
+                        69: [3, 5],
+                        70: [3, 5],
+                        71: [3, 6],
+                        72: [3, 6],
+                        73: [3, 6],
+                        74: [3, 5],
+                        75: [3, 5],
+                        76: [3, 5],
+                        77: [3, 5],
+                        78: [3, 5],
+                        79: [3, 5],
+                        80: [3, 5],
+                        81: [3, 6],
+                        82: [3, 6],
+                        83: [3, 6],
+                        84: [3, 5],
+                        85: [3, 5],
+                        86: [3, 5],
+                        87: [3, 5],
+                        88: [3, 5],
+                        89: [3, 5],
+                        90: [3, 5],
+                        91: [3, 6],
+                        92: [3, 6],
+                        93: [3, 6],
+                        94: [3, 5],
+                        95: [3, 5],
+                        96: [3, 5],
+                        97: [3, 5],
+                        98: [3, 5],
+                        99: [3, 5],
+                        100: [3, 5],
+
+
+
+
                     }
 
     low_rating, high_rating = condition_ratings[age]
@@ -473,8 +546,8 @@ def simulation_bridge_life_cycle(population,
         temp_year = []
 
         # Periodic life table computation
-        # age = random.choice(start_age, end_age)
-        age = 1
+        age = random.choice(range(start_age, end_age))
+        #age = 1
 
         # For the survey years from 1992 to 2023
         for year in range(1992, 2023):
@@ -489,6 +562,7 @@ def simulation_bridge_life_cycle(population,
         temp_dict['deck'] = temp_condition_ratings
         temp_deck_inter, count = compute_intervention_utility(temp_condition_ratings)
         temp_dict['deck intervention'] = temp_deck_inter
+        print(temp_dict)
         bridge_dict[bridge] = temp_dict
 
     return bridge_dict
