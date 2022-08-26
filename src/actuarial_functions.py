@@ -168,18 +168,17 @@ def compute_periodic_life_table(ages,
     return age_list, list_P_x, list_D_x, list_m_x, \
            list_q_x, list_p_x, list_l_x, list_L_x, list_T_x, list_e_x
 
-
 def compute_life_table(data,
                        study_window_years,
                        intervention_type,
-                       end_age=31):
+                       end_age=50):
     """
     Description:
-        computes period life table based on the period
+        Computes period life table based on the period
 
     Args:
         study_window_years:
-        intervention_type:
+        Intervention_type:
 
     Returns:
         A life table
@@ -214,22 +213,19 @@ def compute_life_table(data,
         total_number_of_bridges.append(len(interventions))
         intervention_counter = Counter(interventions)
         if intervention_type == 'All':
-
             total_none_count = intervention_counter[None] \
                 + intervention_counter['Insp. Variance']
             total_count = sum(intervention_counter.values())
             total_inter_count = total_count - total_none_count
             intervention = total_inter_count
-
         else:
            intervention = intervention_counter[intervention_type]
-
         number_of_interventions.append(intervention)
 
     age_list, P, D, m, q, p, l, L, T, e = compute_periodic_life_table(all_ages,
                                                                    total_number_of_bridges,
                                                                    number_of_interventions,
-                                                                   end_age=31)
+                                                                   end_age=50)
 
     df = pd.DataFrame({'Age': age_list[:-1],
                        'Population (p)': P[:-1],
@@ -445,7 +441,6 @@ def compute_intervention_utility(condition_ratings):
                    ('1', '2'):'Not applicable'
                   }
 
-
     i = 0
     interventions = list()
     interventions.append(None)
@@ -489,8 +484,8 @@ def plot_line(ages, mRates, yNames):
     # Set y-axes titles
     fig.update_yaxes(title_text="<b>Mortality Rates</b> ", secondary_y=False)
     #fig.update_yaxes(title_text="<b>secondary</b> yaxis title", secondary_y=True)
-
     fig.show()
+
 def plot_heatmap(ages, mrates, yNames):
     """
     Description:
@@ -528,11 +523,10 @@ def simulation_bridge_life_cycle(population,
         Simulate bridge life cycle of bridges with
         respect to condition ratings.
     """
-    population = 10001
-    start_year = 1992
-    end_year = 2022
+    population = 100001
     start_age = 1
-    end_age = (end_year - start_year)
+    #end_age = (end_year - start_year)
+    end_age = 60
 
     bridge_dict = {}
     bridge_ages = []
@@ -547,10 +541,10 @@ def simulation_bridge_life_cycle(population,
 
         # Periodic life table computation
         age = random.choice(range(start_age, end_age))
-        #age = 1
+        start_year = random.choice(range(1992, 2023))
 
         # For the survey years from 1992 to 2023
-        for year in range(1992, 2023):
+        for year in range(start_year, end_year):
             rating = generate_condition_rating(age)
             temp_condition_ratings.append(rating)
             temp_ages.append(age)
@@ -562,9 +556,6 @@ def simulation_bridge_life_cycle(population,
         temp_dict['deck'] = temp_condition_ratings
         temp_deck_inter, count = compute_intervention_utility(temp_condition_ratings)
         temp_dict['deck intervention'] = temp_deck_inter
-        print(temp_dict)
         bridge_dict[bridge] = temp_dict
 
     return bridge_dict
-
-
