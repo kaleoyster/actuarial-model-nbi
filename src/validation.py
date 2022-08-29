@@ -108,8 +108,9 @@ def main():
         '2012 - 2016',
     ]
 
-    plot_line(ages, mRates, yNames)
-    plot_heatmap(ages, mRates, yNames)
+    title = "Simulation"
+    plot_line(ages, mRates, yNames, title)
+    plot_heatmap(ages, mRates, yNames, title)
 
     df.columns = ['Age',
                   'Population (P)',

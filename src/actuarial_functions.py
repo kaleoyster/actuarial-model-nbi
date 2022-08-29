@@ -465,7 +465,8 @@ def plot_line(ages, mRates, yNames, title):
     # Create figure with secondary y-axis
     fig = make_subplots(specs=[[{"secondary_y": True}]])
     t_text = "Mortality rates of Bridges across age 1 to 100"
-    t_text = t_text + " - "+ title
+    t_text = t_text + " - <b>"+ title +"</b>"
+
 
     # Add traces
     for index, mrates in enumerate(mRates):
@@ -496,7 +497,7 @@ def plot_heatmap(ages, mrates, yNames, title):
         respect to age and  mortality rates
     """
     t_text = "<b>(Maintenance: Repair) Bridge categories vs. Age </b>"
-    t_text = t_text + " - "+ title
+    t_text = t_text + " - <b>"+ title +"</b>"
 
     # Convert into percentages
     new_mrates = []
