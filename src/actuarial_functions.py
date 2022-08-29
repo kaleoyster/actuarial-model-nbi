@@ -255,6 +255,7 @@ def compute_life_table_utility(categoryTemp,
         ages = list(tempDf['Age'])
         tempValues.append(list(tempDf['q']))
         tempDf.to_csv(csv_file)
+        # TODO: store all the df's in a list 
     return tempDf, tempValues, ages
 
 
