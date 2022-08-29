@@ -1,14 +1,8 @@
 """
-Description:
-    Validation script for actuarial model
-
-Author:
-    Akshay Kale
-
-Date:
-     August 9th, 2022
+Description: Validation script for actuarial model
+Author: Akshay Kale
+Date: August 9th, 2022
 """
-
 import json
 import numpy as np
 import pandas as pd
@@ -23,20 +17,19 @@ def test1():
     """
     driver function
     """
-    ages = [
-        0,
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
-        7,
-        8,
-        9,
-        10,
-        11
-    ]
+    ages = [ 0,
+             1,
+             2,
+             3,
+             4,
+             5,
+             6,
+             7,
+             8,
+             9,
+             10,
+             11]
+
     population = [48283,
                   47195,
                   48140,
@@ -48,8 +41,7 @@ def test1():
                   49728,
                   49909,
                   49051,
-                  49233
-                 ]
+                  49233]
 
     death = [136,
              8,
@@ -85,13 +77,37 @@ def main():
     """
     Driver function
     """
-    study_window_years = [[1992, 2022]]
+    #study_window_years = [[1992, 2022]]
+    study_window_years = [[1992, 1998],
+                          [1996, 2002],
+                          [1998, 2004],
+                          [2002, 2006],
+                          [2004, 2008],
+                          [2006, 2010],
+                          [2008, 2012],
+                          [2010, 2014],
+                          [2012, 2016]]
+
     bridge_data = simulation_bridge_life_cycle(1000, 1992, 2022)
+    print(bridge_data)
+
     df, mRates, ages = compute_life_table_utility(bridge_data,
                                study_window_years,
                                '',
                                'Repair')
-    yNames = ['Simulation']
+    #yNames = ['Simulation']
+    yNames= [
+        '1992 - 1998',
+        '1996 - 2002',
+        '1998 - 2004',
+        '2002 - 2006',
+        '2004 - 2008',
+        '2006 - 2010',
+        '2008 - 2012',
+        '2010 - 2014',
+        '2012 - 2016',
+    ]
+
     plot_line(ages, mRates, yNames)
     plot_heatmap(ages, mRates, yNames)
 
@@ -109,7 +125,8 @@ def main():
         header=dict(values=list(df.columns),
                 fill_color='paleturquoise',
                 align='left'),
-        cells=dict(values=[df['Age'],
+
+                cells=dict(values=[df['Age'],
                            df['Population (P)'],
                            df['Death (D)'],
                            df['Death rate (m)'],
@@ -119,6 +136,7 @@ def main():
                            df['Total year lived (T)'],
                            df['Life expectancy (E)']
                           ],
+
                fill_color='lavender',
                align='left'))
         ])

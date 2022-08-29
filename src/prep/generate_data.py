@@ -74,8 +74,7 @@ def main():
     individual_records = compute_age_1(individual_records)
     individual_records = compute_adt_cat(individual_records)
     paved_ind_rec, gravel_ind_rec = filter_gravel_paved(individual_records)
-
-    #individual_records = paved_ind_rec
+    #individual_records = gravel_ind_rec
 
     # Group records and segmentize
     groupedRecords = group_records(individual_records, fields)

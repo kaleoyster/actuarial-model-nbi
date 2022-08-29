@@ -26,6 +26,15 @@ There are several different version of compute life tables for identifying and s
 | $F(x)$         | The mortality rate (or cumulative probability of failure) of bridges exposed at age 1 before reaching age $x$  | $1 - P_x$ |Conditional probability of death $q_x = (D_x / (P_x + (0.5 * D_x)))$ |
 | $_yP_1$        | Probability of survival at age $y$ for the next year. See Equation 5 | This version can compute the probability of survival for next 5 years.| Although, this method is so far not implemented, the version can implement next 5 years of probability | 
 
+
+## Verifying the simulation with gravel bridges
+
+### Required gravel bridge format
+
+#### Why is gravel bridges showing the same patterns as the overall bridge 
+- The range of the condition ratings with respect to age.
+
+
 ## References
 
 1. [Intuition for cumulative hazard function -- survival analysis](https://stats.stackexchange.com/questions/60238/intuition-for-cumulative-hazard-function-survival-analysis)

@@ -168,18 +168,17 @@ def compute_periodic_life_table(ages,
     return age_list, list_P_x, list_D_x, list_m_x, \
            list_q_x, list_p_x, list_l_x, list_L_x, list_T_x, list_e_x
 
-
 def compute_life_table(data,
                        study_window_years,
                        intervention_type,
-                       end_age=31):
+                       end_age=50):
     """
     Description:
-        computes period life table based on the period
+        Computes period life table based on the period
 
     Args:
         study_window_years:
-        intervention_type:
+        Intervention_type:
 
     Returns:
         A life table
@@ -214,22 +213,19 @@ def compute_life_table(data,
         total_number_of_bridges.append(len(interventions))
         intervention_counter = Counter(interventions)
         if intervention_type == 'All':
-
             total_none_count = intervention_counter[None] \
                 + intervention_counter['Insp. Variance']
             total_count = sum(intervention_counter.values())
             total_inter_count = total_count - total_none_count
             intervention = total_inter_count
-
         else:
            intervention = intervention_counter[intervention_type]
-
         number_of_interventions.append(intervention)
 
     age_list, P, D, m, q, p, l, L, T, e = compute_periodic_life_table(all_ages,
                                                                    total_number_of_bridges,
                                                                    number_of_interventions,
-                                                                   end_age=31)
+                                                                   end_age=50)
 
     df = pd.DataFrame({'Age': age_list[:-1],
                        'Population (p)': P[:-1],
@@ -259,6 +255,7 @@ def compute_life_table_utility(categoryTemp,
         ages = list(tempDf['Age'])
         tempValues.append(list(tempDf['q']))
         tempDf.to_csv(csv_file)
+        # TODO: store all the df's in a list 
     return tempDf, tempValues, ages
 
 
@@ -298,6 +295,79 @@ def generate_condition_rating(age):
                         29: [3, 5],
                         30: [3, 5],
                         31: [3, 5],
+                        32: [3, 6],
+                        33: [3, 6],
+                        34: [3, 5],
+                        35: [3, 5],
+                        36: [3, 5],
+                        37: [3, 5],
+                        38: [3, 5],
+                        39: [3, 5],
+                        40: [3, 5],
+                        41: [6, 8],
+                        42: [6, 8],
+                        43: [6, 8],
+                        44: [6, 8],
+                        45: [5, 8],
+                        46: [5, 8],
+                        47: [5, 8],
+                        48: [5, 8],
+                        49: [5, 8],
+                        50: [3, 7],
+                        51: [3, 6],
+                        52: [3, 6],
+                        53: [3, 6],
+                        54: [3, 5],
+                        55: [3, 5],
+                        56: [3, 5],
+                        57: [3, 5],
+                        58: [3, 5],
+                        59: [3, 5],
+                        60: [3, 5],
+                        61: [3, 6],
+                        62: [3, 6],
+                        63: [3, 6],
+                        64: [3, 5],
+                        65: [3, 5],
+                        66: [3, 5],
+                        67: [3, 5],
+                        68: [3, 5],
+                        69: [3, 5],
+                        70: [3, 5],
+                        71: [3, 6],
+                        72: [3, 6],
+                        73: [3, 6],
+                        74: [3, 5],
+                        75: [3, 5],
+                        76: [3, 5],
+                        77: [3, 5],
+                        78: [3, 5],
+                        79: [3, 5],
+                        80: [3, 5],
+                        81: [3, 6],
+                        82: [3, 6],
+                        83: [3, 6],
+                        84: [3, 5],
+                        85: [3, 5],
+                        86: [3, 5],
+                        87: [3, 5],
+                        88: [3, 5],
+                        89: [3, 5],
+                        90: [3, 5],
+                        91: [3, 6],
+                        92: [3, 6],
+                        93: [3, 6],
+                        94: [3, 5],
+                        95: [3, 5],
+                        96: [3, 5],
+                        97: [3, 5],
+                        98: [3, 5],
+                        99: [3, 5],
+                        100: [3, 5],
+
+
+
+
                     }
 
     low_rating, high_rating = condition_ratings[age]
@@ -372,7 +442,6 @@ def compute_intervention_utility(condition_ratings):
                    ('1', '2'):'Not applicable'
                   }
 
-
     i = 0
     interventions = list()
     interventions.append(None)
@@ -383,7 +452,7 @@ def compute_intervention_utility(condition_ratings):
     count = len([count for count in interventions if count !=None ])
     return interventions, count
 
-def plot_line(ages, mRates, yNames):
+def plot_line(ages, mRates, yNames, title):
     """
     Description:
         plot line graph
@@ -395,6 +464,8 @@ def plot_line(ages, mRates, yNames):
     """
     # Create figure with secondary y-axis
     fig = make_subplots(specs=[[{"secondary_y": True}]])
+    t_text = "Mortality rates of Bridges across age 1 to 100"
+    t_text = t_text + " - "+ title
 
     # Add traces
     for index, mrates in enumerate(mRates):
@@ -407,7 +478,8 @@ def plot_line(ages, mRates, yNames):
 
     # Add figure title
     fig.update_layout(
-        title_text="Mortality rates of Bridges across age 1 to 100"
+        #title_text="Mortality rates of Bridges across age 1 to 100"
+        title_text = t_text
     )
 
     # Set x-axis title
@@ -415,15 +487,17 @@ def plot_line(ages, mRates, yNames):
 
     # Set y-axes titles
     fig.update_yaxes(title_text="<b>Mortality Rates</b> ", secondary_y=False)
-    #fig.update_yaxes(title_text="<b>secondary</b> yaxis title", secondary_y=True)
-
     fig.show()
-def plot_heatmap(ages, mrates, yNames):
+
+def plot_heatmap(ages, mrates, yNames, title):
     """
     Description:
         Plot a heat map for with
         respect to age and  mortality rates
     """
+    t_text = "<b>(Maintenance: Repair) Bridge categories vs. Age </b>"
+    t_text = t_text + " - "+ title
+
     # Convert into percentages
     new_mrates = []
     for mrate_cat in mrates:
@@ -442,7 +516,8 @@ def plot_heatmap(ages, mrates, yNames):
 
     # Add figure title
     fig.update_layout(
-        title_text="<b>(Maintenance: Repair) Bridge categories vs. Age </b>"
+        #title_text="<b>(Maintenance: Repair) Bridge categories vs. Age </b>"
+        title_text = t_text
     )
 
     fig.show()
@@ -455,11 +530,10 @@ def simulation_bridge_life_cycle(population,
         Simulate bridge life cycle of bridges with
         respect to condition ratings.
     """
-    population = 10001
-    start_year = 1992
-    end_year = 2022
+    population = 100001
     start_age = 1
-    end_age = (end_year - start_year)
+    #end_age = (end_year - start_year)
+    end_age = 60
 
     bridge_dict = {}
     bridge_ages = []
@@ -473,11 +547,11 @@ def simulation_bridge_life_cycle(population,
         temp_year = []
 
         # Periodic life table computation
-        # age = random.choice(start_age, end_age)
-        age = 1
+        age = random.choice(range(start_age, end_age))
+        start_year = random.choice(range(1992, 2023))
 
         # For the survey years from 1992 to 2023
-        for year in range(1992, 2023):
+        for year in range(start_year, end_year):
             rating = generate_condition_rating(age)
             temp_condition_ratings.append(rating)
             temp_ages.append(age)
@@ -492,5 +566,3 @@ def simulation_bridge_life_cycle(population,
         bridge_dict[bridge] = temp_dict
 
     return bridge_dict
-
-
