@@ -89,6 +89,7 @@ def main():
                           [2012, 2016]]
 
     bridge_data = simulation_bridge_life_cycle(1000, 1992, 2022)
+    print(bridge_data)
 
     df, mRates, ages = compute_life_table_utility(bridge_data,
                                study_window_years,

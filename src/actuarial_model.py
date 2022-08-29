@@ -353,8 +353,9 @@ def get_yLabels(study_window_years):
 def main():
 
     # Path of the Nebraska
-    path = '../data/nebraska.json'
+    path = '../data/gravel-nebraska.json'
     data = read_json(path)
+    print(data)
     study_window_years = [[1992, 1998],
                           [1996, 2002],
                           [1998, 2004],
@@ -376,21 +377,21 @@ def main():
     plot_heatmap(ages, mRates, yNames)
 
     # Average daily traffic
-    field = 'adt category'
-    yNames = ['Ultra Light',
-              'Very Light',
-              'Light',
-              'Moderate',
-              'High']
+    # field = 'adt category'
+    # yNames = ['Ultra Light',
+    #           'Very Light',
+    #           'Light',
+    #           'Moderate',
+    #           'High']
 
-    heatmaps = []
-    for category in yNames:
-        rates = periodic_lifetable_by_category(data,
-                                          study_window_years,
-                                          field,
-                                          category)
-        heatmaps.append(rates[0])
-    plot_heatmap(ages, heatmaps, yNames)
+    # heatmaps = []
+    # for category in yNames:
+    #     rates = periodic_lifetable_by_category(data,
+    #                                       study_window_years,
+    #                                       field,
+    #                                       category)
+    #     heatmaps.append(rates[0])
+    # plot_heatmap(ages, heatmaps, yNames)
 
     # Owner
     #field = 'owner'
