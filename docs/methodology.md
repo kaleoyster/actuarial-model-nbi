@@ -31,18 +31,10 @@ There are several different version of compute life tables for identifying and s
 
 ### Required gravel bridge format
 
-```python
-# gravel bridges
-bridge_data = {
+#### Why is gravel bridges showing the same patterns as the overall bridge 
+- The range of the condition ratings with respect to age.
 
-       'structureNumber 1':  
-       { 'age': [],
-        'deck' : [],
-        'deck intervention' : [],
-        }
-}
-```
-    
+
 ## References
 
 1. [Intuition for cumulative hazard function -- survival analysis](https://stats.stackexchange.com/questions/60238/intuition-for-cumulative-hazard-function-survival-analysis)

@@ -274,70 +274,70 @@ def compute_window_statistics(data_new, year_built):
             }
     return stats
 
-def plot_line(ages, mRates, yNames):
-    """
-    Description:
-        plot line graph
-    args:
-        ages
-        mrates
-    return:
-        plot
-    """
-    # Create figure with secondary y-axis
-    fig = make_subplots(specs=[[{"secondary_y": True}]])
+#def plot_line(ages, mRates, yNames):
+#    """
+#    Description:
+#        plot line graph
+#    args:
+#        ages
+#        mrates
+#    return:
+#        plot
+#    """
+#    # Create figure with secondary y-axis
+#    fig = make_subplots(specs=[[{"secondary_y": True}]])
+#
+#    # Add traces
+#    for index, mrates in enumerate(mRates):
+#        fig.add_trace(
+#            go.Scatter(
+#                   x=ages,
+#                   y=mrates,
+#                   name=yNames[index]),
+#        )
+#
+#    # Add figure title
+#    fig.update_layout(
+#        title_text="Mortality rates of Bridges across age 1 to 100"
+#    )
+#
+#    # Set x-axis title
+#    fig.update_xaxes(title_text="Age")
+#
+#    # Set y-axes titles
+#    fig.update_yaxes(title_text="<b>Mortality Rates</b> ", secondary_y=False)
+#    #fig.update_yaxes(title_text="<b>secondary</b> yaxis title", secondary_y=True)
+#
+#    fig.show()
 
-    # Add traces
-    for index, mrates in enumerate(mRates):
-        fig.add_trace(
-            go.Scatter(
-                   x=ages,
-                   y=mrates,
-                   name=yNames[index]),
-        )
-
-    # Add figure title
-    fig.update_layout(
-        title_text="Mortality rates of Bridges across age 1 to 100"
-    )
-
-    # Set x-axis title
-    fig.update_xaxes(title_text="Age")
-
-    # Set y-axes titles
-    fig.update_yaxes(title_text="<b>Mortality Rates</b> ", secondary_y=False)
-    #fig.update_yaxes(title_text="<b>secondary</b> yaxis title", secondary_y=True)
-
-    fig.show()
-
-def plot_heatmap(ages, mrates, yNames):
-    """
-    Description:
-        Plot a heat map for with
-        respect to age and  mortality rates
-    """
-    # Convert into percentages
-    new_mrates = []
-    for mrate_cat in mrates:
-        temp_mrate = []
-        for mrate in mrate_cat:
-            percent = mrate*100
-            temp_mrate.append(percent)
-        new_mrates.append(temp_mrate)
-
-    # Figure
-    fig = go.Figure(data=go.Heatmap(
-                z=new_mrates,
-                x=ages,
-                y=yNames,
-                colorbar=dict(title='Percentages')))
-
-    # Add figure title
-    fig.update_layout(
-        title_text="<b>(Maintenance: Repair) Bridge categories vs. Age </b>"
-    )
-
-    fig.show()
+#def plot_heatmap(ages, mrates, yNames):
+#    """
+#    Description:
+#        Plot a heat map for with
+#        respect to age and  mortality rates
+#    """
+#    # Convert into percentages
+#    new_mrates = []
+#    for mrate_cat in mrates:
+#        temp_mrate = []
+#        for mrate in mrate_cat:
+#            percent = mrate*100
+#            temp_mrate.append(percent)
+#        new_mrates.append(temp_mrate)
+#
+#    # Figure
+#    fig = go.Figure(data=go.Heatmap(
+#                z=new_mrates,
+#                x=ages,
+#                y=yNames,
+#                colorbar=dict(title='Percentages')))
+#
+#    # Add figure title
+#    fig.update_layout(
+#        title_text="<b>(Maintenance: Repair) Bridge categories vs. Age </b>"
+#    )
+#
+#    fig.show()
 
 def get_yLabels(study_window_years):
     """
@@ -353,9 +353,10 @@ def get_yLabels(study_window_years):
 def main():
 
     # Path of the Nebraska
-    path = '../data/gravel-nebraska.json'
+    #path = '../data/gravel-nebraska.json'
+    path = '../data/nebraska.json'
+
     data = read_json(path)
-    print(data)
     study_window_years = [[1992, 1998],
                           [1996, 2002],
                           [1998, 2004],
@@ -372,9 +373,10 @@ def main():
                                '',
                               'Repair')
 
+    title = 'Gravel Nebraska'
     yNames = get_yLabels(study_window_years)
-    plot_line(ages, mRates, yNames)
-    plot_heatmap(ages, mRates, yNames)
+    plot_line(ages, mRates, yNames, title)
+    plot_heatmap(ages, mRates, yNames, title)
 
     # Average daily traffic
     # field = 'adt category'

@@ -452,7 +452,7 @@ def compute_intervention_utility(condition_ratings):
     count = len([count for count in interventions if count !=None ])
     return interventions, count
 
-def plot_line(ages, mRates, yNames):
+def plot_line(ages, mRates, yNames, title):
     """
     Description:
         plot line graph
@@ -464,6 +464,8 @@ def plot_line(ages, mRates, yNames):
     """
     # Create figure with secondary y-axis
     fig = make_subplots(specs=[[{"secondary_y": True}]])
+    t_text = "Mortality rates of Bridges across age 1 to 100"
+    t_text = t_text + " - "+ title
 
     # Add traces
     for index, mrates in enumerate(mRates):
@@ -476,7 +478,8 @@ def plot_line(ages, mRates, yNames):
 
     # Add figure title
     fig.update_layout(
-        title_text="Mortality rates of Bridges across age 1 to 100"
+        #title_text="Mortality rates of Bridges across age 1 to 100"
+        title_text = t_text
     )
 
     # Set x-axis title
@@ -484,15 +487,17 @@ def plot_line(ages, mRates, yNames):
 
     # Set y-axes titles
     fig.update_yaxes(title_text="<b>Mortality Rates</b> ", secondary_y=False)
-    #fig.update_yaxes(title_text="<b>secondary</b> yaxis title", secondary_y=True)
     fig.show()
 
-def plot_heatmap(ages, mrates, yNames):
+def plot_heatmap(ages, mrates, yNames, title):
     """
     Description:
         Plot a heat map for with
         respect to age and  mortality rates
     """
+    t_text = "<b>(Maintenance: Repair) Bridge categories vs. Age </b>"
+    t_text = t_text + " - "+ title
+
     # Convert into percentages
     new_mrates = []
     for mrate_cat in mrates:
@@ -511,7 +516,8 @@ def plot_heatmap(ages, mrates, yNames):
 
     # Add figure title
     fig.update_layout(
-        title_text="<b>(Maintenance: Repair) Bridge categories vs. Age </b>"
+        #title_text="<b>(Maintenance: Repair) Bridge categories vs. Age </b>"
+        title_text = t_text
     )
 
     fig.show()
