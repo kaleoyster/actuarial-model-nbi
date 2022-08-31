@@ -261,8 +261,12 @@ def compute_life_table_utility(categoryTemp,
                                intervention):
     """
     Description:
+        Return the life table, values, and ages
     Agrs:
-    Return:
+        categoryTemp (string): type of intervention
+        study_window_years (list of list):
+        category (string): type of feature such as (average daily traffic)
+        intervention (string): type of intervention
     """
     tempValues = []
     for window in tqdm(study_window_years):
@@ -275,7 +279,10 @@ def compute_life_table_utility(categoryTemp,
 
 def convert_int(ratings):
     """
-    Description
+    Description:
+        Return the list of ratings into an interger format
+    Args:
+        ratings (list of int list): time series data of the condition ratings
     """
     new_ratings = []
     for rating in ratings:
@@ -326,6 +333,7 @@ def age_condition_distribution(bridge_data):
                  temp_dict[70],
                 ]
 
+    # Label
     labels = [
               'Age 1',
               'Age 10',
@@ -336,6 +344,7 @@ def age_condition_distribution(bridge_data):
               'Age 60',
               'Age 70'
              ]
+
     if drawFigure == True:
         fig = ff.create_distplot(variables, labels, show_hist=False)
         fig.show()
@@ -528,7 +537,8 @@ def compute_intervention_utility(condition_ratings):
     interventions.append(None)
     for i in range(len(condition_ratings)-1):
        j = i + 1
-       interv = intervention_map.get((str(condition_ratings[i]), str(condition_ratings[j])))
+       interv = intervention_map.get((str(condition_ratings[i]),
+                                      str(condition_ratings[j])))
        interventions.append(interv)
     count = len([count for count in interventions if count !=None ])
     return interventions, count
@@ -548,7 +558,6 @@ def plot_line(ages, mRates, yNames, title):
     t_text = "Mortality rates of Bridges across age 1 to 100"
     t_text = t_text + " - <b>"+ title +"</b>"
 
-
     # Add traces
     for index, mrates in enumerate(mRates):
         fig.add_trace(
@@ -560,7 +569,6 @@ def plot_line(ages, mRates, yNames, title):
 
     # Add figure title
     fig.update_layout(
-        #title_text="Mortality rates of Bridges across age 1 to 100"
         title_text = t_text
     )
 
@@ -576,6 +584,12 @@ def plot_heatmap(ages, mrates, yNames, title):
     Description:
         Plot a heat map for with
         respect to age and  mortality rates
+
+    Args:
+        ages (list):
+        mrates (list):
+        yNames (list): labels for the y-axis
+        title (string):
     """
     t_text = "<b>(Maintenance: Repair) Bridge categories vs. Age </b>"
     t_text = t_text + " - <b>"+ title +"</b>"
@@ -598,7 +612,6 @@ def plot_heatmap(ages, mrates, yNames, title):
 
     # Add figure title
     fig.update_layout(
-        #title_text="<b>(Maintenance: Repair) Bridge categories vs. Age </b>"
         title_text = t_text
     )
 
