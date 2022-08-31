@@ -75,31 +75,6 @@ def test1():
     })
     return df
 
-def plot_table(df):
-    """
-    Returns a plotly table
-    """
-    fig = go.Figure(data=[go.Table(
-        header=dict(values=list(df.columns),
-                fill_color='paleturquoise',
-                align='left'),
-                cells=dict(values=[df['Age'],
-                           df['Population (P)'],
-                           df['Death (D)'],
-                           df['Death rate (m)'],
-                           df['Conditional Prob. Death (q)'],
-                           df['Conditional Prob. Survival (p)'],
-                           df['Person year lived (L)'],
-                           df['Total year lived (T)'],
-                           df['Life expectancy (E)']
-                          ],
-
-               fill_color='lavender',
-               align='left'))
-        ])
-
-    fig.show()
-
 
 def main():
     """
@@ -115,10 +90,14 @@ def main():
                           [2008, 2012],
                           [2010, 2014],
                           [2012, 2016]]
+
     path = '../data/nebraska.json'
     data = read_json(path)
     age_condition_ratings_dict = age_condition_distribution(data)
-    bridge_data = simulation_bridge_life_cycle(1000, 1992, 2022, age_condition_ratings_dict)
+    bridge_data = simulation_bridge_life_cycle(1000,
+                                               1992,
+                                               2022,
+                                               age_condition_ratings_dict)
     dfs, mRates, ages = compute_life_table_utility(bridge_data,
                                study_window_years,
                                '',
@@ -140,19 +119,17 @@ def main():
     plot_line(ages, mRates, yNames, title)
     plot_heatmap(ages, mRates, yNames, title)
 
-    for df in dfs:
+    for df, study_window in zip(dfs, yNames):
         df.columns = ['Age',
-                  'Population (P)',
-                  'Death (D)',
-                  'Death rate (m)',
-                  'Conditional Prob. Death (q)',
-                  'Conditional Prob. Survival (p)',
-                  'Person year lived (L)',
-                  'Total year lived (T)',
-                  'Life expectancy (E)']
-        plot_table(df)
-
-
+                      'Population (P)',
+                      'Death (D)',
+                      'Death rate (m)',
+                      'Conditional Prob. Death (q)',
+                      'Conditional Prob. Survival (p)',
+                      'Person year lived (L)',
+                      'Total year lived (T)',
+                      'Life expectancy (E)']
+        plot_table(df, study_window)
 
 if __name__ == '__main__':
     main()

@@ -276,7 +276,7 @@ def compute_life_table_utility(categoryTemp,
         tempValues.append(list(tempDf['q']))
         tempDf.to_csv(csv_file)
         dfs.append(tempDf)
-    return tempDf, tempValues, ages
+    return dfs, tempValues, ages
 
 def convert_int(ratings):
     """
@@ -616,6 +616,34 @@ def plot_heatmap(ages, mrates, yNames, title):
         title_text = t_text
     )
 
+    fig.show()
+
+def plot_table(df, study_window):
+    """
+    Returns a plotly table
+    """
+    t_title = '<b>Life table</b>'
+    t_title =  t_title + ' -- ' + '<b>'+ study_window + '</b>'
+    fig = go.Figure(data=[go.Table(
+        header=dict(values=list(df.columns),
+                fill_color='paleturquoise',
+                align='left'),
+                cells=dict(values=[df['Age'],
+                           df['Population (P)'],
+                           df['Death (D)'],
+                           df['Death rate (m)'],
+                           df['Conditional Prob. Death (q)'],
+                           df['Conditional Prob. Survival (p)'],
+                           df['Person year lived (L)'],
+                           df['Total year lived (T)'],
+                           df['Life expectancy (E)']
+                          ],
+
+               fill_color='lavender',
+               align='left'))
+        ])
+
+    fig.update_layout(title_text=t_title)
     fig.show()
 
 def simulation_bridge_life_cycle(population,
