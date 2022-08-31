@@ -40,7 +40,6 @@ def periodic_lifetable_by_category(data, study_window_years, field, category):
     Returns:
         study window years
     """
-
     intervention = 'Repair'
 
     # Prepare dataset for only category 
@@ -269,12 +268,14 @@ def compute_life_table_utility(categoryTemp,
         intervention (string): type of intervention
     """
     tempValues = []
+    dfs = []
     for window in tqdm(study_window_years):
         csv_file = 'life-table-'+ str(window[0]) + '-' + str(window[1]) + '-' + category + '.csv'
         tempDf = compute_life_table(categoryTemp, window, intervention)
         ages = list(tempDf['Age'])
         tempValues.append(list(tempDf['q']))
         tempDf.to_csv(csv_file)
+        dfs.append(tempDf)
     return tempDf, tempValues, ages
 
 def convert_int(ratings):

@@ -75,55 +75,10 @@ def test1():
     })
     return df
 
-def main():
+def plot_table(df):
     """
-    Driver function
+    Returns a plotly table
     """
-    #study_window_years = [[1992, 2022]]
-    study_window_years = [[1992, 1998],
-                          [1996, 2002],
-                          [1998, 2004],
-                          [2002, 2006],
-                          [2004, 2008],
-                          [2006, 2010],
-                          [2008, 2012],
-                          [2010, 2014],
-                          [2012, 2016]]
-    path = '../data/nebraska.json'
-    data = read_json(path)
-    age_condition_ratings_dict = age_condition_distribution(data)
-    bridge_data = simulation_bridge_life_cycle(1000, 1992, 2022, age_condition_ratings_dict)
-    df, mRates, ages = compute_life_table_utility(bridge_data,
-                               study_window_years,
-                               '',
-                               'Repair')
-
-    yNames= [
-        '1992 - 1998',
-        '1996 - 2002',
-        '1998 - 2004',
-        '2002 - 2006',
-        '2004 - 2008',
-        '2006 - 2010',
-        '2008 - 2012',
-        '2010 - 2014',
-        '2012 - 2016',
-    ]
-
-    title = "Simulation"
-    plot_line(ages, mRates, yNames, title)
-    plot_heatmap(ages, mRates, yNames, title)
-
-    df.columns = ['Age',
-                  'Population (P)',
-                  'Death (D)',
-                  'Death rate (m)',
-                  'Conditional Prob. Death (q)',
-                  'Conditional Prob. Survival (p)',
-                  'Person year lived (L)',
-                  'Total year lived (T)',
-                  'Life expectancy (E)']
-
     fig = go.Figure(data=[go.Table(
         header=dict(values=list(df.columns),
                 fill_color='paleturquoise',
@@ -144,6 +99,59 @@ def main():
         ])
 
     fig.show()
+
+
+def main():
+    """
+    Driver function
+    """
+    #study_window_years = [[1992, 2022]]
+    study_window_years = [[1992, 1998],
+                          [1996, 2002],
+                          [1998, 2004],
+                          [2002, 2006],
+                          [2004, 2008],
+                          [2006, 2010],
+                          [2008, 2012],
+                          [2010, 2014],
+                          [2012, 2016]]
+    path = '../data/nebraska.json'
+    data = read_json(path)
+    age_condition_ratings_dict = age_condition_distribution(data)
+    bridge_data = simulation_bridge_life_cycle(1000, 1992, 2022, age_condition_ratings_dict)
+    dfs, mRates, ages = compute_life_table_utility(bridge_data,
+                               study_window_years,
+                               '',
+                               'Repair')
+
+    yNames= [
+        '1992 - 1998',
+        '1996 - 2002',
+        '1998 - 2004',
+        '2002 - 2006',
+        '2004 - 2008',
+        '2006 - 2010',
+        '2008 - 2012',
+        '2010 - 2014',
+        '2012 - 2016',
+    ]
+
+    title = "Simulation"
+    plot_line(ages, mRates, yNames, title)
+    plot_heatmap(ages, mRates, yNames, title)
+
+    for df in dfs:
+        df.columns = ['Age',
+                  'Population (P)',
+                  'Death (D)',
+                  'Death rate (m)',
+                  'Conditional Prob. Death (q)',
+                  'Conditional Prob. Survival (p)',
+                  'Person year lived (L)',
+                  'Total year lived (T)',
+                  'Life expectancy (E)']
+        plot_table(df)
+
 
 
 if __name__ == '__main__':
