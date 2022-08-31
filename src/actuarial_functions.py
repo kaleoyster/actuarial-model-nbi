@@ -7,6 +7,7 @@ Date: 11th August, 2022
 
 import json
 import plotly.graph_objects as go
+import plotly.figure_factory as ff
 import numpy as np
 import pandas as pd
 import random
@@ -255,9 +256,74 @@ def compute_life_table_utility(categoryTemp,
         ages = list(tempDf['Age'])
         tempValues.append(list(tempDf['q']))
         tempDf.to_csv(csv_file)
-        # TODO: store all the df's in a list 
     return tempDf, tempValues, ages
 
+def convert_int(ratings):
+    """
+    Description
+    """
+    new_ratings = []
+    for rating in ratings:
+        try:
+            rating = float(rating)
+        except:
+            rating = None
+        new_ratings.append(rating)
+    return new_ratings
+
+def age_condition_distribution(bridge_data):
+    """
+    Returns and plot condition ratings with respect to distribution
+    """
+    ages_temp = []
+    ratings_temp = []
+    temp_dict = defaultdict(list)
+    for bridge, data in bridge_data.items():
+        ratings = data['deck']
+        ratings = convert_int(ratings)
+        for age, rating in zip(data['age'], ratings):
+            rating = [score for score in ratings if score is not None]
+            for rate in rating:
+                temp_dict[age].append(rate)
+
+    age_condition_ratings_dict = defaultdict()
+    for age, ratings in temp_dict.items():
+        try:
+            min_rating = min([score for score in ratings if score is not None])
+            max_rating = max([score for score in ratings if score is not None])
+        except:
+            min_rating = -1
+            max_rating = -1
+
+        ranges = [min_rating, max_rating]
+        age_condition_ratings_dict[age] = ranges
+
+    # plot
+    variables = [
+                 temp_dict[1],
+                 temp_dict[10],
+                 temp_dict[20],
+                 temp_dict[30],
+                 temp_dict[40],
+                 temp_dict[50],
+                 temp_dict[60],
+                 temp_dict[70],
+                ]
+
+    labels = [
+              'Age 1',
+              'Age 10',
+              'Age 20',
+              'Age 30',
+              'Age 40',
+              'Age 50',
+              'Age 60',
+              'Age 70'
+             ]
+    fig = ff.create_distplot(variables, labels, show_hist=False)
+    fig.show()
+
+    return age_condition_ratings_dict
 
 def generate_condition_rating(age):
     """

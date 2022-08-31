@@ -290,8 +290,8 @@ def main():
     # Path of the Nebraska
     #path = '../data/gravel-nebraska.json'
     path = '../data/nebraska.json'
-
     data = read_json(path)
+    age_condition_dict = age_condition_distribution(data)
     study_window_years = [[1992, 1998],
                           [1996, 2002],
                           [1998, 2004],
