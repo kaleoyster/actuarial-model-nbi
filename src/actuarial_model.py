@@ -115,20 +115,6 @@ def compute_probabilities(hazard_dictionary):
         probabilities_dict[age] = 1 - hr
     return probabilities_dict
 
-def read_json(path):
-    """
-    Description:
-       reads json file
-    Args:
-        path (string)
-    Returns:
-        dictionary
-    """
-    file_obj = open(path)
-    data = json.load(file_obj)
-    file_obj.close()
-    return data
-
 def compute_counts(data):
     """
     Description:
@@ -290,8 +276,8 @@ def main():
     # Path of the Nebraska
     #path = '../data/gravel-nebraska.json'
     path = '../data/nebraska.json'
-
     data = read_json(path)
+    age_condition_dict = age_condition_distribution(data)
     study_window_years = [[1992, 1998],
                           [1996, 2002],
                           [1998, 2004],

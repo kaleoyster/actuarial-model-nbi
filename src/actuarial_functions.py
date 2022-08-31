@@ -7,6 +7,7 @@ Date: 11th August, 2022
 
 import json
 import plotly.graph_objects as go
+import plotly.figure_factory as ff
 import numpy as np
 import pandas as pd
 import random
@@ -14,6 +15,21 @@ from tqdm import tqdm
 from collections import defaultdict
 from collections import Counter
 from plotly.subplots import make_subplots
+
+def read_json(path):
+    """
+    Description:
+       reads json file
+    Args:
+        path (string)
+    Returns:
+        dictionary
+    """
+    file_obj = open(path)
+    data = json.load(file_obj)
+    file_obj.close()
+    return data
+
 
 def periodic_lifetable_by_category(data, study_window_years, field, category):
     """
@@ -255,11 +271,78 @@ def compute_life_table_utility(categoryTemp,
         ages = list(tempDf['Age'])
         tempValues.append(list(tempDf['q']))
         tempDf.to_csv(csv_file)
-        # TODO: store all the df's in a list 
     return tempDf, tempValues, ages
 
+def convert_int(ratings):
+    """
+    Description
+    """
+    new_ratings = []
+    for rating in ratings:
+        try:
+            rating = float(rating)
+        except:
+            rating = None
+        new_ratings.append(rating)
+    return new_ratings
 
-def generate_condition_rating(age):
+def age_condition_distribution(bridge_data):
+    """
+    Returns and plot condition ratings with respect to distribution
+    """
+    drawFigure = True
+    ages_temp = []
+    ratings_temp = []
+    temp_dict = defaultdict(list)
+    for bridge, data in bridge_data.items():
+        ratings = data['deck']
+        ratings = convert_int(ratings)
+        for age, rating in zip(data['age'], ratings):
+            rating = [score for score in ratings if score is not None]
+            for rate in rating:
+                temp_dict[age].append(rate)
+
+    age_condition_ratings_dict = defaultdict()
+    for age, ratings in temp_dict.items():
+        try:
+            min_rating = min([score for score in ratings if score is not None])
+            max_rating = max([score for score in ratings if score is not None])
+        except:
+            min_rating = -1
+            max_rating = -1
+
+        ranges = [min_rating, max_rating]
+        age_condition_ratings_dict[age] = ranges
+
+    # plot
+    variables = [
+                 temp_dict[1],
+                 temp_dict[10],
+                 temp_dict[20],
+                 temp_dict[30],
+                 temp_dict[40],
+                 temp_dict[50],
+                 temp_dict[60],
+                 temp_dict[70],
+                ]
+
+    labels = [
+              'Age 1',
+              'Age 10',
+              'Age 20',
+              'Age 30',
+              'Age 40',
+              'Age 50',
+              'Age 60',
+              'Age 70'
+             ]
+    if drawFigure == True:
+        fig = ff.create_distplot(variables, labels, show_hist=False)
+        fig.show()
+
+    return age_condition_ratings_dict
+
+def generate_condition_rating(age, age_condition_dict):
     """
     Return a corresponding condition rating for the age
     """
@@ -365,11 +448,9 @@ def generate_condition_rating(age):
                         99: [3, 5],
                         100: [3, 5],
 
-
-
-
                     }
 
+    condition_ratings = age_condition_dict
     low_rating, high_rating = condition_ratings[age]
     rating = np.random.uniform(low=low_rating,
                                high=high_rating)
@@ -465,7 +546,8 @@ def plot_line(ages, mRates, yNames, title):
     # Create figure with secondary y-axis
     fig = make_subplots(specs=[[{"secondary_y": True}]])
     t_text = "Mortality rates of Bridges across age 1 to 100"
-    t_text = t_text + " - "+ title
+    t_text = t_text + " - <b>"+ title +"</b>"
+
 
     # Add traces
     for index, mrates in enumerate(mRates):
@@ -496,7 +578,7 @@ def plot_heatmap(ages, mrates, yNames, title):
         respect to age and  mortality rates
     """
     t_text = "<b>(Maintenance: Repair) Bridge categories vs. Age </b>"
-    t_text = t_text + " - "+ title
+    t_text = t_text + " - <b>"+ title +"</b>"
 
     # Convert into percentages
     new_mrates = []
@@ -524,7 +606,8 @@ def plot_heatmap(ages, mrates, yNames, title):
 
 def simulation_bridge_life_cycle(population,
                                  start_year,
-                                 end_year):
+                                 end_year,
+                                age_condition_dict):
     """
     Description:
         Simulate bridge life cycle of bridges with
@@ -552,7 +635,7 @@ def simulation_bridge_life_cycle(population,
 
         # For the survey years from 1992 to 2023
         for year in range(start_year, end_year):
-            rating = generate_condition_rating(age)
+            rating = generate_condition_rating(age, age_condition_dict)
             temp_condition_ratings.append(rating)
             temp_ages.append(age)
             temp_year.append(year)

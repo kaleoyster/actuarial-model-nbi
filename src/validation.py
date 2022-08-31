@@ -8,6 +8,8 @@ import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
+import plotly.figure_factory as ff
+
 from tqdm import tqdm
 from collections import defaultdict
 from collections import Counter
@@ -87,15 +89,15 @@ def main():
                           [2008, 2012],
                           [2010, 2014],
                           [2012, 2016]]
-
-    bridge_data = simulation_bridge_life_cycle(1000, 1992, 2022)
-    print(bridge_data)
-
+    path = '../data/nebraska.json'
+    data = read_json(path)
+    age_condition_ratings_dict = age_condition_distribution(data)
+    bridge_data = simulation_bridge_life_cycle(1000, 1992, 2022, age_condition_ratings_dict)
     df, mRates, ages = compute_life_table_utility(bridge_data,
                                study_window_years,
                                '',
                                'Repair')
-    #yNames = ['Simulation']
+
     yNames= [
         '1992 - 1998',
         '1996 - 2002',
@@ -108,8 +110,9 @@ def main():
         '2012 - 2016',
     ]
 
-    plot_line(ages, mRates, yNames)
-    plot_heatmap(ages, mRates, yNames)
+    title = "Simulation"
+    plot_line(ages, mRates, yNames, title)
+    plot_heatmap(ages, mRates, yNames, title)
 
     df.columns = ['Age',
                   'Population (P)',
@@ -125,7 +128,6 @@ def main():
         header=dict(values=list(df.columns),
                 fill_color='paleturquoise',
                 align='left'),
-
                 cells=dict(values=[df['Age'],
                            df['Population (P)'],
                            df['Death (D)'],
@@ -142,8 +144,6 @@ def main():
         ])
 
     fig.show()
-    print(df)
-
 
 
 if __name__ == '__main__':
