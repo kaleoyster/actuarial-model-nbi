@@ -16,6 +16,21 @@ from collections import defaultdict
 from collections import Counter
 from plotly.subplots import make_subplots
 
+def read_json(path):
+    """
+    Description:
+       reads json file
+    Args:
+        path (string)
+    Returns:
+        dictionary
+    """
+    file_obj = open(path)
+    data = json.load(file_obj)
+    file_obj.close()
+    return data
+
+
 def periodic_lifetable_by_category(data, study_window_years, field, category):
     """
     Description:
@@ -275,6 +290,7 @@ def age_condition_distribution(bridge_data):
     """
     Returns and plot condition ratings with respect to distribution
     """
+    drawFigure = True
     ages_temp = []
     ratings_temp = []
     temp_dict = defaultdict(list)
@@ -320,12 +336,13 @@ def age_condition_distribution(bridge_data):
               'Age 60',
               'Age 70'
              ]
-    fig = ff.create_distplot(variables, labels, show_hist=False)
-    fig.show()
+    if drawFigure == True:
+        fig = ff.create_distplot(variables, labels, show_hist=False)
+        fig.show()
 
     return age_condition_ratings_dict
 
-def generate_condition_rating(age):
+def generate_condition_rating(age, age_condition_dict):
     """
     Return a corresponding condition rating for the age
     """
@@ -431,11 +448,9 @@ def generate_condition_rating(age):
                         99: [3, 5],
                         100: [3, 5],
 
-
-
-
                     }
 
+    condition_ratings = age_condition_dict
     low_rating, high_rating = condition_ratings[age]
     rating = np.random.uniform(low=low_rating,
                                high=high_rating)
@@ -591,7 +606,8 @@ def plot_heatmap(ages, mrates, yNames, title):
 
 def simulation_bridge_life_cycle(population,
                                  start_year,
-                                 end_year):
+                                 end_year,
+                                age_condition_dict):
     """
     Description:
         Simulate bridge life cycle of bridges with
@@ -619,7 +635,7 @@ def simulation_bridge_life_cycle(population,
 
         # For the survey years from 1992 to 2023
         for year in range(start_year, end_year):
-            rating = generate_condition_rating(age)
+            rating = generate_condition_rating(age, age_condition_dict)
             temp_condition_ratings.append(rating)
             temp_ages.append(age)
             temp_year.append(year)

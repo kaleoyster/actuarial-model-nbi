@@ -115,20 +115,6 @@ def compute_probabilities(hazard_dictionary):
         probabilities_dict[age] = 1 - hr
     return probabilities_dict
 
-def read_json(path):
-    """
-    Description:
-       reads json file
-    Args:
-        path (string)
-    Returns:
-        dictionary
-    """
-    file_obj = open(path)
-    data = json.load(file_obj)
-    file_obj.close()
-    return data
-
 def compute_counts(data):
     """
     Description:
