@@ -80,7 +80,6 @@ def main():
     """
     Driver function
     """
-    #study_window_years = [[1992, 2022]]
     study_window_years = [[1992, 1998],
                           [1996, 2002],
                           [1998, 2004],
@@ -91,9 +90,26 @@ def main():
                           [2010, 2014],
                           [2012, 2016]]
 
-    path = '../data/nebraska.json'
+    path = '../data/gravel-nebraska.json'
     data = read_json(path)
     age_condition_ratings_dict = age_condition_distribution(data)
+
+    # Convert this into the condition ratings
+    age_list = []
+    min_list = []
+    max_list = []
+
+    for index in range(1, 100):
+        min_val, max_val = age_condition_ratings_dict.get(index)
+        age_list.append(index)
+        min_list.append(min_val)
+        max_list.append(max_val)
+
+    df_apple = pd.DataFrame({'age':age_list,
+                             'min': min_list,
+                             'max': max_list})
+
+    print(df_apple)
     bridge_data = simulation_bridge_life_cycle(1000,
                                                1992,
                                                2022,

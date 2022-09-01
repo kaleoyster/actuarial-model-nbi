@@ -2,9 +2,6 @@
       Actuarial lifetable version 2
 </h1>
 
-# TODO:
-- [ ] Find the research papers for the study window.
-
 ## Data 
 
 - **Source:** National Bridge Inventory
@@ -71,8 +68,6 @@ $$ e_x = {T_{xi} \over l_{xi}}$$
 ### 9. Compute the conditional probability of survival, based on the study window, we can compute
 - Compute conditional probability of survival Based on the study window, we can compute the $_tP_x$ for each age.
 
-
-
 ## Assumptions
 * What is the average time-span before there is a maintenance activity? - Glen Washer
 - When a maintenance event occurs on a bridge and that maintenance event is recorded, the bridge is permanently removed from the study. 
@@ -80,9 +75,8 @@ $$ e_x = {T_{xi} \over l_{xi}}$$
     - Allow the bridge to re-enter the study at the same age.
     - Allow the bridge to re-enter the study at a younger age, given the type of maintenance which occurred.
 
-
 ## 📝 There are few consideration regarding the computation of the actuarial model
-- When using the mortality rates as baseline:
+1. When using the mortality rates as baseline:
     - Does computing with a denominator of 0 useful / valid as concluding 0 for life-table.
     - Zero in the denominator suggest that there are no available records for that age. That doesn't necessarily translate to no deaths.
 
@@ -99,7 +93,7 @@ $$ e_x = {T_{xi} \over l_{xi}}$$
 
 6. **Application:** This methodology can guide in answering the questions regarding the `average daily traffic` effect on the `deck` repair and maintenances.
 
-
+## Further discussion points
 1. We need to find the appropriate length of the study window.
     - Determining the appropriate length of the study window using historical evidence.
         - For all the bridges built in the year from 1992 to 2010. Determine the average time for first major intervention.

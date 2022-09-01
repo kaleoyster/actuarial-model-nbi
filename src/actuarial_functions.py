@@ -312,14 +312,21 @@ def age_condition_distribution(bridge_data):
 
     age_condition_ratings_dict = defaultdict()
     for age, ratings in temp_dict.items():
+        new_ratings = []
+        for rate in ratings:
+            if rate > 0.0:
+                new_ratings.append(rate)
         try:
-            min_rating = min([score for score in ratings if score is not None])
-            max_rating = max([score for score in ratings if score is not None])
+            min_rating = min([score for score in new_ratings if score is not None])
+            max_rating = max([score for score in new_ratings if score is not None])
+            #mean = np.mean([score for score in new_ratings if score is not None])
+            #sigma = np.mean([score for score in new_ratings if score is not None])
         except:
             min_rating = -1
             max_rating = -1
 
         ranges = [min_rating, max_rating]
+        summary_data = []
         age_condition_ratings_dict[age] = ranges
 
     # plot
