@@ -109,16 +109,37 @@ def main():
                              'min': min_list,
                              'max': max_list})
 
-    print(df_apple)
     bridge_data = simulation_bridge_life_cycle(1000,
                                                1992,
                                                2022,
                                                age_condition_ratings_dict)
+
     dfs, mRates, ages = compute_life_table_utility(bridge_data,
                                study_window_years,
                                '',
                                'Repair')
+    total_length = len(mRates)
+    cols_values = []
+    mrate_dict = defaultdict()
+    mrate_dict['age'] = list(range(1, len(mRates[0])+1))
+    for extra_col in range(0, total_length):
+        suffix = extra_col + 1
+        col_name = 'study window ' + str(extra_col)
+        mrate_dict[col_name] = mRates[extra_col]
 
+    df_mrates = pd.DataFrame(mrate_dict)
+    median = df_mrates[[
+                'study window 0',
+                'study window 1',
+                'study window 2',
+                'study window 3',
+                'study window 4',
+                'study window 5',
+                'study window 6',
+                'study window 7',
+                'study window 8',
+              ]].median()
+    print(median)
     yNames= [
         '1992 - 1998',
         '1996 - 2002',
@@ -132,20 +153,20 @@ def main():
     ]
 
     title = "Simulation"
-    plot_line(ages, mRates, yNames, title)
-    plot_heatmap(ages, mRates, yNames, title)
 
-    for df, study_window in zip(dfs, yNames):
-        df.columns = ['Age',
-                      'Population (P)',
-                      'Death (D)',
-                      'Death rate (m)',
-                      'Conditional Prob. Death (q)',
-                      'Conditional Prob. Survival (p)',
-                      'Person year lived (L)',
-                      'Total year lived (T)',
-                      'Life expectancy (E)']
-        plot_table(df, study_window)
+    #plot_line(ages, mRates, yNames, title)
+    #plot_heatmap(ages, mRates, yNames, title)
+    #for df, study_window in zip(dfs, yNames):
+    #    df.columns = ['Age',
+    #                  'Population (P)',
+    #                  'Death (D)',
+    #                  'Death rate (m)',
+    #                  'Conditional Prob. Death (q)',
+    #                  'Conditional Prob. Survival (p)',
+    #                  'Person year lived (L)',
+    #                  'Total year lived (T)',
+    #                  'Life expectancy (E)']
+    #    plot_table(df, study_window)
 
 if __name__ == '__main__':
     main()
