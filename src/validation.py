@@ -126,20 +126,13 @@ def main():
         suffix = extra_col + 1
         col_name = 'study window ' + str(extra_col)
         mrate_dict[col_name] = mRates[extra_col]
-
     df_mrates = pd.DataFrame(mrate_dict)
-    median = df_mrates[[
-                'study window 0',
-                'study window 1',
-                'study window 2',
-                'study window 3',
-                'study window 4',
-                'study window 5',
-                'study window 6',
-                'study window 7',
-                'study window 8',
-              ]].median()
-    print(median)
+
+    median_mrates = list()
+    for row in df_mrates.itertuples():
+        new_list = list(row)
+        median_mrates.append(np.median(new_list[2:]))
+
     yNames= [
         '1992 - 1998',
         '1996 - 2002',
