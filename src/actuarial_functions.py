@@ -361,7 +361,12 @@ def age_condition_distribution(bridge_data):
 
 def generate_condition_rating(age, age_condition_dict):
     """
-    Return a corresponding condition rating for the age
+    Description:
+        Return a corresponding condition rating for the age
+
+    Args:
+        age (list)
+        age_condition_dict (dicts)
     """
     condition_ratings = {
                         1:  [9, 9],
