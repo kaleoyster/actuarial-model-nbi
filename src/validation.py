@@ -122,6 +122,7 @@ def main():
     cols_values = []
     mrate_dict = defaultdict()
     mrate_dict['age'] = list(range(1, len(mRates[0])+1))
+
     for extra_col in range(0, total_length):
         suffix = extra_col + 1
         col_name = 'study window ' + str(extra_col)
@@ -145,7 +146,12 @@ def main():
         '2012 - 2016',
     ]
 
+    yNames = ['average']
     title = "Simulation"
+    mRates = [median_mrates]
+
+    plot_line(ages, mRates, yNames, title)
+    plot_heatmap(ages, mRates, yNames, title)
 
     #plot_line(ages, mRates, yNames, title)
     #plot_heatmap(ages, mRates, yNames, title)

@@ -292,9 +292,29 @@ def main():
                                study_window_years,
                                '',
                               'Repair')
+    total_length = len(mRates)
+    cols_values = []
+    mrate_dict = defaultdict()
+    mrate_dict['age'] = list(range(1, len(mRates[0])+1))
+
+    for extra_col in range(0, total_length):
+        suffix = extra_col + 1
+        col_name = 'study window ' + str(extra_col)
+        mrate_dict[col_name] = mRates[extra_col]
+    df_mrates = pd.DataFrame(mrate_dict)
+
+    median_mrates = list()
+    for row in df_mrates.itertuples():
+        new_list = list(row)
+        median_mrates.append(np.median(new_list[2:]))
 
     title = 'Gravel Nebraska'
     yNames = get_yLabels(study_window_years)
+
+    yNames = ['average']
+    title = "Simulation"
+    mRates = [median_mrates]
+
     plot_line(ages, mRates, yNames, title)
     plot_heatmap(ages, mRates, yNames, title)
 
