@@ -667,8 +667,13 @@ def simulation_bridge_life_cycle(population,
     #end_age = (end_year - start_year)
     end_age = 60
 
+    # Bridge life cycle
     bridge_dict = {}
+
+    # Ages of the bridges
     bridge_ages = []
+
+    # Condition ratings of the bridges
     bridge_condition_ratings = []
 
     for bridge in range(1, population):
@@ -684,7 +689,8 @@ def simulation_bridge_life_cycle(population,
 
         # For the survey years from 1992 to 2023
         for year in range(start_year, end_year):
-            rating = generate_condition_rating(age, age_condition_dict)
+            rating = generate_condition_rating(age,
+                                               age_condition_dict)
             temp_condition_ratings.append(rating)
             temp_ages.append(age)
             temp_year.append(year)
