@@ -1,10 +1,13 @@
 """
 Description:
-    This is a script to run the actuarial model.
+    Script to run the actuarial model.
+
 Author:
     Akshay Kale
+
 Credits:
    The idea and implementation of this project was first initiated by O'Brien Chin.
+
 Date:
     29th June, 2022
 """
@@ -13,13 +16,11 @@ import json
 import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
-from plotly.subplots import make_subplots
-
 from tqdm import tqdm
 from collections import defaultdict
 from collections import Counter
 from actuarial_functions import *
-
+from plotly.subplots import make_subplots
 
 def identify_windows(from_year, to_year, data):
     """
@@ -230,6 +231,14 @@ def compute_bridge_count(study_window, data):
     return year_total_bridge
 
 def compute_window_statistics(data_new, year_built):
+    """
+    Description:
+        compute the life table statistics for each study window
+
+    Args:
+        data_new: (list of list)
+        year_built: (list of years)
+    """
     saving_indexes = []
     for bridge, record in data_new.items():
         intervention = record['deck intervention']
@@ -308,11 +317,10 @@ def main():
         new_list = list(row)
         median_mrates.append(np.median(new_list[2:]))
 
-    title = 'Gravel Nebraska'
+    title = 'Nebraska'
     yNames = get_yLabels(study_window_years)
 
     yNames = ['average']
-    title = "Simulation"
     mRates = [median_mrates]
 
     plot_line(ages, mRates, yNames, title)
