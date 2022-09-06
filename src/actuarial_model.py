@@ -320,7 +320,7 @@ def main():
     title = 'Nebraska'
     yNames = get_yLabels(study_window_years)
 
-    yNames = ['average']
+    yNames = ['median']
     mRates = [median_mrates]
 
     plot_line(ages, mRates, yNames, title)

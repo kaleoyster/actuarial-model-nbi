@@ -146,7 +146,7 @@ def main():
         '2012 - 2016',
     ]
 
-    yNames = ['average']
+    yNames = ['median']
     title = "Simulation"
     mRates = [median_mrates]
 
