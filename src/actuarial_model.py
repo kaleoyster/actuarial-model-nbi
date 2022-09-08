@@ -315,12 +315,13 @@ def main():
     median_mrates = list()
     for row in df_mrates.itertuples():
         new_list = list(row)
-        median_mrates.append(np.median(new_list[2:]))
+        # median_mrates.append(np.median(new_list[2:]))
+        median_mrates.append(np.mean(new_list[2:]))
 
     title = 'Nebraska'
     yNames = get_yLabels(study_window_years)
 
-    yNames = ['median']
+    yNames = ['mean']
     mRates = [median_mrates]
 
     plot_line(ages, mRates, yNames, title)
