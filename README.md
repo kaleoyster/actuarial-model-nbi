@@ -31,5 +31,3 @@ In the NBI dataset, it is a **challenge** to identify maintenance patterns. Beca
 | [Functions](docs/functions.md) | Reference | List of references for the functions used|
 | [Related Projects](docs/related-projects.md) | Reference | List of projects related to this repository |
 | [Data](docs/data.md) | Reference | List of data items used in implementing this projects |
-
-
