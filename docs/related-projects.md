@@ -7,7 +7,7 @@ This documentation provides the project workflow of the relevant bridge projects
 ## Decision Tree Project
 The workflow for the decision tree project consists of data acquisition, data cleaning and transformation, modeling, and prediction. Figure 1 describes the five-step process of this project.
 
-![methodology for the project](images/decision-tree-process.png)
+![methodology for the project](../images/decision-tree-process.png)
 <p align='center'> <b> Fig. 1 Data process for the Actuarial Life Table </b> </p>
 
 
