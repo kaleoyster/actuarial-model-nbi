@@ -90,7 +90,8 @@ def main():
                           [2010, 2014],
                           [2012, 2016]]
 
-    path = '../data/gravel-nebraska.json'
+    #path = '../data/gravel-nebraska.json'
+    path = '../data/nebraska.json'
     data = read_json(path)
     age_condition_ratings_dict = age_condition_distribution(data)
 
@@ -153,19 +154,19 @@ def main():
     plot_line(ages, mRates, yNames, title)
     plot_heatmap(ages, mRates, yNames, title)
 
-    #plot_line(ages, mRates, yNames, title)
-    #plot_heatmap(ages, mRates, yNames, title)
-    #for df, study_window in zip(dfs, yNames):
-    #    df.columns = ['Age',
-    #                  'Population (P)',
-    #                  'Death (D)',
-    #                  'Death rate (m)',
-    #                  'Conditional Prob. Death (q)',
-    #                  'Conditional Prob. Survival (p)',
-    #                  'Person year lived (L)',
-    #                  'Total year lived (T)',
-    #                  'Life expectancy (E)']
-    #    plot_table(df, study_window)
+    plot_line(ages, mRates, yNames, title)
+    plot_heatmap(ages, mRates, yNames, title)
+    for df, study_window in zip(dfs, yNames):
+        df.columns = ['Age',
+                      'Population (P)',
+                      'Death (D)',
+                      'Death rate (m)',
+                      'Conditional Prob. Death (q)',
+                      'Conditional Prob. Survival (p)',
+                      'Person year lived (L)',
+                      'Total year lived (T)',
+                      'Life expectancy (E)']
+        plot_table(df, study_window)
 
 if __name__ == '__main__':
     main()

@@ -283,6 +283,19 @@ def get_yLabels(study_window_years):
 def main():
     # Path of the Nebraska
     #path = '../data/gravel-nebraska.json'
+    # Computing the median mortality rate across study windows from 1992 to 2016:
+        # The following are the overlapping study windows:
+
+            # 1. 1992 - 1998
+            # 2. 1996 - 2002
+            # 3. 1998 - 2004
+            # 4. 2002 - 2006
+            # 5. 2004 - 2008
+            # 6. 2006 - 2010
+            # 7. 2008 - 2012
+            # 8. 2010 - 2014
+            # 9. 2012 - 2016
+
     path = '../data/nebraska.json'
     data = read_json(path)
     age_condition_dict = age_condition_distribution(data)
