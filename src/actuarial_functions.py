@@ -30,7 +30,6 @@ def read_json(path):
     file_obj.close()
     return data
 
-
 def periodic_lifetable_by_category(data, study_window_years, field, category):
     """
     Description:
@@ -634,6 +633,8 @@ def plot_table(df, study_window):
     """
     Returns a plotly table
     """
+    # Concerting study windows into string
+    # study window = [[1992, 1996]]
     t_title = '<b>Life table</b>'
     t_title =  t_title + ' -- ' + '<b>'+ study_window + '</b>'
     fig = go.Figure(data=[go.Table(

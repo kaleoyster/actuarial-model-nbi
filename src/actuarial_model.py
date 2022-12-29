@@ -285,6 +285,7 @@ def main():
     #path = '../data/gravel-nebraska.json'
     path = '../data/nebraska.json'
     data = read_json(path)
+
     age_condition_dict = age_condition_distribution(data)
     study_window_years = [[1992, 1998],
                           [1996, 2002],
@@ -327,22 +328,42 @@ def main():
     plot_line(ages, mRates, yNames, title)
     plot_heatmap(ages, mRates, yNames, title)
 
-    # Average daily traffic
-    # field = 'adt category'
-    # yNames = ['Ultra Light',
-    #           'Very Light',
-    #           'Light',
-    #           'Moderate',
-    #           'High']
+    new_study_window = []
+    for window in study_window_years:
+        transformed_study_window = str(window[0]) + ' - ' + str(window[1])
+        new_study_window.append(transformed_study_window)
 
-    # heatmaps = []
-    # for category in yNames:
-    #     rates = periodic_lifetable_by_category(data,
-    #                                       study_window_years,
-    #                                       field,
-    #                                       category)
-    #     heatmaps.append(rates[0])
-    # plot_heatmap(ages, heatmaps, yNames)
+    study_window = new_study_window
+
+    for dataframe, study_window in zip(df, study_window):
+        dataframe.columns = ['Age',
+                      'Population (P)',
+                      'Death (D)',
+                      'Death rate (m)',
+                      'Conditional Prob. Death (q)',
+                      'Conditional Prob. Survival (p)',
+                      'Person year lived (L)',
+                      'Total year lived (T)',
+                      'Life expectancy (E)']
+        plot_table(dataframe, study_window)
+
+
+    # Average daily traffic
+    field = 'adt category'
+    yNames = ['Ultra Light',
+              'Very Light',
+              'Light',
+              'Moderate',
+              'High']
+
+    heatmaps = []
+    for category in yNames:
+        rates = periodic_lifetable_by_category(data,
+                                          study_window_years,
+                                          field,
+                                          category)
+        heatmaps.append(rates[0])
+    plot_heatmap(ages, heatmaps, yNames)
 
     # Owner
     #field = 'owner'
