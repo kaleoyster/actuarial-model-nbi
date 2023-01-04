@@ -302,6 +302,7 @@ def main():
                                study_window_years,
                                '',
                               'Repair')
+
     total_length = len(mRates)
     cols_values = []
     mrate_dict = defaultdict()
@@ -325,8 +326,8 @@ def main():
     yNames = ['mean']
     mRates = [median_mrates]
 
-    plot_line(ages, mRates, yNames, title)
-    plot_heatmap(ages, mRates, yNames, title)
+    #plot_line(ages, mRates, yNames, title)
+    #plot_heatmap(ages, mrates, ynames, title)
 
     new_study_window = []
     for window in study_window_years:
@@ -345,10 +346,10 @@ def main():
                       'Person year lived (L)',
                       'Total year lived (T)',
                       'Life expectancy (E)']
-        plot_table(dataframe, study_window)
+        #plot_table(dataframe, study_window)
 
 
-    # Average daily traffic
+    # Average daily traffic - compute life tables
     field = 'adt category'
     yNames = ['Ultra Light',
               'Very Light',
@@ -358,12 +359,16 @@ def main():
 
     heatmaps = []
     for category in yNames:
-        rates = periodic_lifetable_by_category(data,
+        df, rates = periodic_lifetable_by_category(data,
                                           study_window_years,
                                           field,
                                           category)
-        heatmaps.append(rates[0])
-    plot_heatmap(ages, heatmaps, yNames)
+        print("Category:", category)
+        print("\n")
+        print(df)
+        #print("printing rates", rates)
+        #heatmaps.append(rates[0])
+    #plot_heatmap(ages, heatmaps, yNames)
 
     # Owner
     #field = 'owner'

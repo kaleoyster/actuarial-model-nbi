@@ -52,7 +52,7 @@ def periodic_lifetable_by_category(data, study_window_years, field, category):
                                             study_window_years,
                                             category,
                                             intervention)
-    return tempValues
+    return df, tempValues
 
 
 def study_window(data, study_window_year):
