@@ -152,7 +152,6 @@ def main():
 
     plot_line(ages, mRates, yNames, title)
     plot_heatmap(ages, mRates, yNames, title)
-
     #plot_line(ages, mRates, yNames, title)
     #plot_heatmap(ages, mRates, yNames, title)
     #for df, study_window in zip(dfs, yNames):
