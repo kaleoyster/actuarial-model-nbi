@@ -384,6 +384,5 @@ def main():
     #hazard, survival = compute_hazard_score(counts, ages)
     #probabilities = compute_probabilities(hazard)
 
-
 if __name__=='__main__':
     main()
