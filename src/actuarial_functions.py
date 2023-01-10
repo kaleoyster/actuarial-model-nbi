@@ -580,16 +580,16 @@ def plot_line(ages, mRates, yNames, title):
         )
 
     # Add figure title
-    fig.update_layout(
-        title_text = t_text
-    )
+    #fig.update_layout(
+    #    title_text = t_text
+    #)
 
     # Set x-axis title
-    fig.update_xaxes(title_text="Age")
+    #fig.update_xaxes(title_text="Age")
 
     # Set y-axes titles
-    fig.update_yaxes(title_text="<b>Mortality Rates</b> ", secondary_y=False)
-    fig.show()
+    #fig.update_yaxes(title_text="<b>Mortality Rates</b> ", secondary_y=False)
+    #fig.show()
 
 def plot_heatmap(ages, mrates, yNames, title):
     """

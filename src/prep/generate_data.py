@@ -66,14 +66,13 @@ def main():
 
     # Query
     individual_records = query(fields, states, years, collection)
-    #individual_records = sample_records()
 
     # Fixing geo-coordinate by reformating the default values
     individual_records = fix_coordinates(individual_records)
     individual_records = compute_deck_age(individual_records)
     individual_records = compute_age_1(individual_records)
     individual_records = compute_adt_cat(individual_records)
-    paved_ind_rec, gravel_ind_rec = filter_gravel_paved(individual_records)
+    #paved_ind_rec, gravel_ind_rec = filter_gravel_paved(individual_records)
     #individual_records = gravel_ind_rec
 
     # Group records and segmentize
@@ -91,7 +90,9 @@ def main():
                                           component='superstructure')
 
     json_dictionary = {}
+    # TODO: Add attributes - Materials, States
     for record in groupedRecords.values():
+
         structure_number = record['structureNumber'][0]
         owner = record['owner']
         year = record['year']
@@ -108,6 +109,8 @@ def main():
         sub_no_intervention = record['substructureNumberOfInterventions']
         deck_no_intervention = record['deckNumberOfInterventions']
         adt_category = record['adtCategory']
+        material = record['material']
+
         values = {
             'year': year,
             'year built': year_built,
@@ -124,10 +127,11 @@ def main():
             'deck intervention num': deck_no_intervention,
             'adt category': adt_category,
             'owner': owner,
+            'material': material,
         }
 
         json_dictionary[structure_number] = values
-    output_file = open("../../data/nebraska.json", "w")
+    output_file = open("../../data/nebraska_sample.json", "w")
     json.dump(json_dictionary, output_file, indent=3)
     output_file.close()
 
