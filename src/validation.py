@@ -1,5 +1,6 @@
 """
-Description: Validation script for actuarial model
+Description:
+    Validation script for actuarial model on gravel bridges in Nebraska
 Author: Akshay Kale
 Date: August 9th, 2022
 """
