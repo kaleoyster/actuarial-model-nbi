@@ -44,7 +44,8 @@ def periodic_lifetable_by_category(data, study_window_years, field, category):
     # Prepare dataset for only category 
     categoryTemp = defaultdict()
     for key, record in data.items():
-        cat = record['adt category']
+        #cat = record['adt category']
+        cat = record[field]
         if cat[-1] == category:
             categoryTemp[key] = record
 
@@ -134,7 +135,7 @@ def compute_periodic_life_table(ages,
     # Initiation
     initial_population = 100000
 
-    for i in range(5, end_age):
+    for i in range(1, end_age):
         age = ages[i]
 
         # Population
@@ -269,7 +270,7 @@ def compute_life_table_utility(categoryTemp,
     tempValues = []
     dfs = []
     for window in tqdm(study_window_years):
-        csv_file = 'life-table-'+ str(window[0]) + '-' + str(window[1]) + '-' + category + '.csv'
+        csv_file = 'life-table-'+ str(window[0]) + '-' + str(window[1]) + '-' + str(category) + '.csv'
         tempDf = compute_life_table(categoryTemp, window, intervention)
         ages = list(tempDf['Age'])
         tempValues.append(list(tempDf['q']))
@@ -297,7 +298,7 @@ def age_condition_distribution(bridge_data):
     """
     Returns and plot condition ratings with respect to distribution
     """
-    drawFigure = True
+    drawFigure = False
     ages_temp = []
     ratings_temp = []
     temp_dict = defaultdict(list)
@@ -468,7 +469,6 @@ def generate_condition_rating(age, age_condition_dict):
                         98: [3, 5],
                         99: [3, 5],
                         100: [3, 5],
-
                     }
 
     condition_ratings = age_condition_dict
@@ -603,7 +603,7 @@ def plot_heatmap(ages, mrates, yNames, title):
         yNames (list): labels for the y-axis
         title (string):
     """
-    t_text = "<b>(Maintenance: Repair) Bridge categories vs. Age </b>"
+    t_text = "<b> (Maintenance: Repair) Bridge categories vs. Age </b>"
     t_text = t_text + " - <b>"+ title +"</b>"
 
     # Convert into percentages

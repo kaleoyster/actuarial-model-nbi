@@ -309,4 +309,3 @@ from_to_matrix_kent = {
                    ('1', '2'):'Not applicable'
 
                   }
-

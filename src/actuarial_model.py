@@ -15,6 +15,7 @@ import json
 import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
+import plotly.express as px
 from tqdm import tqdm
 from collections import defaultdict
 from collections import Counter
@@ -285,17 +286,26 @@ def main():
     path = '../data/nebraska_sample.json'
     data = read_json(path)
 
-    age_condiion_dict = age_condition_distribution(data)
+    #print(data)
+    kind_of_material = { 1:'Concrete',
+                         2:'Concrete Continuous',
+                         3:'Steel',
+                         4:'Steel Continuous',
+                         5:'Prestressed Concrete',
+                         6:'Prestressed Concrete Continuous',
+                         7:'Wood or Timber',
+                         8:'Masonry',
+                         9:'Aluminum, Wrought Iron, or Cast Iron',
+                         10:'Other'
+                       }
+
+    age_condition_dict = age_condition_distribution(data)
     study_window_years = [[1992, 1998],
                           [1996, 2002],
-                          [1998, 2004],
-                          [2002, 2006],
-                          [2004, 2008],
-                          [2006, 2010],
-                          [2008, 2012],
-                          [2010, 2014],
-                          [2012, 2016]]
-
+                          [2000, 2006],
+                          [2004, 2010],
+                          [2008, 2014],
+                          [2010, 2016]]
     # Overall rates <- baseline
     df, mRates, ages = compute_life_table_utility(data,
                                study_window_years,
@@ -337,108 +347,188 @@ def main():
 
     for dataframe, study_window in zip(df, study_window):
         dataframe.columns = ['Age',
-                      'Population (P)',
-                      'Death (D)',
-                      'Death rate (m)',
-                      'Conditional Prob. Death (q)',
-                      'Conditional Prob. Survival (p)',
-                      'Person year lived (L)',
-                      'Total year lived (T)',
-                      'Life expectancy (E)']
-        #plot_table(dataframe, study_window)
+                     'Population (P)',
+                     'Death (D)',
+                     'Death rate (m)',
+                     'Conditional Prob. Death (q)',
+                     'Conditional Prob. Survival (p)',
+                     'Person year lived (L)',
+                     'Total year lived (T)',
+                     'Life expectancy (E)']
+
+        # Most of the deaths are happening early
+        #fig = px.histogram(dataframe, x="Death rate (m)")
+        fig = px.bar(dataframe, x='Age', y='Death (D)')
+        fig.show()
+        plot_table(dataframe, study_window)
 
 
     # Average daily traffic - compute life tables
-    field = 'adt category'
-    yNames = ['Ultra Light',
-              'Very Light',
-              'Light',
-              'Moderate',
-              'High']
+    #field = 'adt category'
+    #yNames = ['Ultra Light',
+    #          'Very Light',
+    #          'Light',
+    #          'Moderate',
+    #          'High']
 
-    heatmaps = []
-    life_expectancy = []
-    for category in yNames:
-        df, rates = periodic_lifetable_by_category(data,
-                                          study_window_years,
-                                          field,
-                                          category)
-        for adt_df in df:
-            print(adt_df.columns)
-            expectancy = adt_df['E']
-        life_expectancy.append(expectancy)
+    #heatmaps = []
+    #life_expectancy = []
+    #for category in yNames:
+    #    df, rates = periodic_lifetable_by_category(data,
+    #                                      study_window_years,
+    #                                      field,
+    #                                      category)
+    #    for adt_df in df:
+    #        print(adt_df.columns)
+    #        expectancy = adt_df['E']
+    #    life_expectancy.append(expectancy)
 
-    import plotly.graph_objects as go
+    ## year
+    #age = df[0]['Age']
+    #ultra_adt = df[0]['q']
+    #very_adt = df[1]['q']
+    #light_adt = df[2]['q']
+    #moderate_adt = df[3]['q']
+    #high_adt = df[4]['q']
+    #fig = go.Figure()
 
-    # Add data
-    #month = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
-    #         'August', 'September', 'October', 'November', 'December']
+    ## Create and style traces
+    #fig.add_trace(go.Scatter(x=age, y=ultra_adt, name='Ultra ADT',
+    #                         line=dict(color='firebrick', width=4)))
+    #fig.add_trace(go.Scatter(x=age, y=very_adt, name = 'Very Light ADT',
+    #                         line=dict(color='royalblue', width=4)))
+    #fig.add_trace(go.Scatter(x=age, y=light_adt, name='light ADT',
+    #                         line=dict(color='firebrick', width=4,
+    #                              dash='dash') # dash options include 'dash', 'dot', and 'dashdot'
+    #))
+    #fig.add_trace(go.Scatter(x=age, y=moderate_adt, 
+    #                                name='moderate ADT',
+    #                         line = dict(color='royalblue', width=4, dash='dash')))
+    #fig.add_trace(go.Scatter(x=age, y=high_adt, name='High ADT',
+    #                         line = dict(color='firebrick', width=4, dash='dot')))
+    ##fig.add_trace(go.Scatter(x=month, y=low_2000, name='Low 2000',
+    ##                         line=dict(color='royalblue', width=4, dash='dot')))
 
-    # year
-    age = df[0]['Age']
-    ultra_adt = df[0]['q']
-    very_adt = df[1]['q']
-    light_adt = df[2]['q']
-    moderate_adt = df[3]['q']
-    high_adt = df[4]['q']
-    fig = go.Figure()
-
-    # Create and style traces
-    fig.add_trace(go.Scatter(x=age, y=ultra_adt, name='Ultra ADT',
-                             line=dict(color='firebrick', width=4)))
-    fig.add_trace(go.Scatter(x=age, y=very_adt, name = 'Very Light ADT',
-                             line=dict(color='royalblue', width=4)))
-    fig.add_trace(go.Scatter(x=age, y=light_adt, name='light ADT',
-                             line=dict(color='firebrick', width=4,
-                                  dash='dash') # dash options include 'dash', 'dot', and 'dashdot'
-    ))
-    fig.add_trace(go.Scatter(x=age, y=moderate_adt, name='moderate ADT',
-                             line = dict(color='royalblue', width=4, dash='dash')))
-    fig.add_trace(go.Scatter(x=age, y=high_adt, name='High ADT',
-                             line = dict(color='firebrick', width=4, dash='dot')))
-    #fig.add_trace(go.Scatter(x=month, y=low_2000, name='Low 2000',
-    #                         line=dict(color='royalblue', width=4, dash='dot')))
-
-    # Edit the layout
-    fig.update_layout(title='Life Expectancy of bridge w.r.t the average daily traffic',
-                       xaxis_title='Age',
-                       yaxis_title=' Death Rate (q)')
+    ## Edit the layout
+    #fig.update_layout(title='Life Expectancy of bridge w.r.t the average daily traffic',
+    #                   xaxis_title='Age',
+    #                   yaxis_title=' Death Rate (q)')
 
 
-    fig.show()
+    #fig.show()
 
-    df = pd.DataFrame({'Age': age,
-                       'Ultra Light ADT (E)': ultra_adt,
-                       'Very Light ADT (E)': very_adt,
-                       'Light ADT (E)': light_adt,
-                       'Moderate ADT (E)': moderate_adt,
-                       'High ADT (E)': high_adt,
-                      })
+    #df = pd.DataFrame({'Age': age,
+    #                   'Ultra Light ADT (E)': ultra_adt,
+    #                   'Very Light ADT (E)': very_adt,
+    #                   'Light ADT (E)': light_adt,
+    #                   'Moderate ADT (E)': moderate_adt,
+    #                   'High ADT (E)': high_adt,
+    #                  })
 
-    t_title = '<b>Life expectancy </b>'
-    t_title =  t_title + ' -- ' + '<b>'+ study_window + '</b>'
-    fig = go.Figure(data=[go.Table(
-        header=dict(values=list(df.columns),
-                fill_color='paleturquoise',
-                align='left'),
-                cells=dict(values=[df['Age'],
-                           df['Ultra Light ADT (E)'],
-                           df['Very Light ADT (E)'],
-                           df['Light ADT (E)'],
-                           df['Moderate ADT (E)'],
-                           df['High ADT (E)'],
-                          ],
+    #t_title = '<b>Life expectancy </b>'
+    #t_title =  t_title + ' -- ' + '<b>'+ study_window + '</b>'
+    #fig = go.Figure(data=[go.Table(
+    #    header=dict(values=list(df.columns),
+    #            fill_color='paleturquoise',
+    #            align='left'),
+    #            cells=dict(values=[df['Age'],
+    #                       df['Ultra Light ADT (E)'],
+    #                       df['Very Light ADT (E)'],
+    #                       df['Light ADT (E)'],
+    #                       df['Moderate ADT (E)'],
+    #                       df['High ADT (E)'],
+    #                      ],
 
-               fill_color='lavender',
-               align='left'))
-        ])
+    #           fill_color='lavender',
+    #           align='left'))
+    #    ])
 
-    fig.update_layout(title_text=t_title)
-    fig.show()
+    #fig.update_layout(title_text=t_title)
+    #fig.show()
 
 
-        #print("printing rates", rates)
-        #heatmaps.append(rates[0])
+    # Material
+   # field = 'material'
+   # #yNames = [1, 2, 3, 4, 5]
+   # yNames = [1, 2, 3, 4, 5]
+
+   # heatmaps = []
+   # life_expectancy = []
+   # for category in yNames:
+   #     df, rates = periodic_lifetable_by_category(data,
+   #                                       study_window_years,
+   #                                       field,
+   #                                       category)
+   #     for adt_df in df:
+   #         print(adt_df.columns)
+   #         expectancy = adt_df['E']
+   #     life_expectancy.append(expectancy)
+
+   # ## year
+   # age = df[0]['Age']
+   # concrete = df[0]['E']
+   # concrete_continous = df[1]['E']
+   # steel = df[2]['E']
+   # steel_continous = df[3]['E']
+   # prestressed_continous = df[4]['E']
+   # fig = go.Figure()
+
+   # ## Create and style traces
+   # fig.add_trace(go.Scatter(x=age, y=concrete, name='Concrete',
+   #                          line=dict(color='firebrick', width=4)))
+   # fig.add_trace(go.Scatter(x=age, y=concrete_continous, name = 'Concrete Continuous',
+   #                          line=dict(color='royalblue', width=4)))
+   # fig.add_trace(go.Scatter(x=age, y=steel, name='Steel',
+   #                          line=dict(color='firebrick', width=4,
+   #                               dash='dash') # dash options include 'dash', 'dot', and 'dashdot'
+   # ))
+   # fig.add_trace(go.Scatter(x=age, y=steel_continous,
+   #                                 name='Steel Continuous',
+   #                          line = dict(color='royalblue', width=4, dash='dash')))
+   # fig.add_trace(go.Scatter(x=age, y=prestressed_continous, name='Prestressed continuous',
+   #                          line = dict(color='firebrick', width=4, dash='dot')))
+   # #fig.add_trace(go.Scatter(x=month, y=low_2000, name='Low 2000',
+   # #                         line=dict(color='royalblue', width=4, dash='dot')))
+
+   # ## Edit the layout
+   # fig.update_layout(title='Life Expectancy rate of bridge by Material',
+   #                    xaxis_title='Age',
+   #                    yaxis_title=' Life Expectancy  (E)')
+
+
+   # fig.show()
+
+   # df = pd.DataFrame({'Age': age,
+   #                    'Concrete (E)': concrete,
+   #                    'Concrete continous (E)': concrete_continous,
+   #                    'Steel (E)': steel,
+   #                    'Steel continous (E)': steel_continous,
+   #                    'Prestressed Concrete (E)': prestressed_continous,
+   #                   })
+
+   # t_title = '<b>Life expectancy </b>'
+   # t_title =  t_title + ' -- ' + '<b>'+ study_window + '</b>'
+   # fig = go.Figure(data=[go.Table(
+   #     header=dict(values=list(df.columns),
+   #             fill_color='paleturquoise',
+   #             align='left'),
+   #             cells=dict(values=[df['Age'],
+   #                        df['Concrete (E)'],
+   #                        df['Concrete continous (E)'],
+   #                        df['Steel (E)'],
+   #                        df['Steel continous (E)'],
+   #                        df['Prestressed Concrete (E)'],
+   #                       ],
+
+   #            fill_color='lavender',
+   #            align='left'))
+   #     ])
+
+   # fig.update_layout(title_text=t_title)
+   # fig.show()
+
+    #print("printing rates", rates)
+    #heatmaps.append(rates[0])
     #plot_heatmap(ages, heatmaps, yNames)
 
     # Owner
