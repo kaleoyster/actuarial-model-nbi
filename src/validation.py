@@ -191,6 +191,9 @@ def main():
                         100: [3, 5],
                     }
 
+    # TODO: Assumptions
+        #  
+
 #    condition_ratings = {
 #                        1:  [9, 9],
 #                        2:  [9, 9],
